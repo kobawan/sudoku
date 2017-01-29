@@ -1,0 +1,246 @@
+/*TABLES*/
+#tables{
+	display:none;
+	width:347px;
+	height:347px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:100px;
+	padding:41px;
+}
+#coorX{
+	display:none;
+	padding:0;
+	height: auto;
+	width: auto;
+}
+#coorX table{
+	margin:0;
+	padding:0;
+	border:2px solid transparent;
+	border-collapse:collapse;
+	margin-left:41px;
+}
+#coorX table tr {
+	margin:0;
+	padding:0;
+	border:0;
+}
+#coorX table tr td{
+	border:1px solid transparent;
+	margin:0;
+	padding:0;
+	background-color:transparent;
+
+	position:relative;
+	text-align:center;
+	
+	font-size: 22px;
+	line-height: 37px;
+	vertical-align:middle;
+	letter-spacing: 0px;
+	width:37px;
+	height:37px;
+}
+#coorX table tr td:nth-of-type(3n){    
+    border-right: 2px solid transparent;
+}
+#coorY{
+	display:none;
+	padding:0;
+	height: auto;
+	width: auto;
+	float:left;
+}
+#coorY table{
+	margin:0;
+	padding:0;
+	border:2px solid transparent;
+	border-collapse:collapse;
+}
+#coorY table tr {
+	margin:0;
+	padding:0;
+	border:0;	
+}
+#coorY table tr td{
+	border:1px solid transparent;
+	margin:0;
+	padding:0;
+	background-color:transparent;
+	
+	position:relative;
+	text-align:center;
+	
+	font-size: 22px;
+	line-height: 37px;
+	vertical-align:middle;
+	letter-spacing: 0px;
+	width:37px;
+	height:37px;
+}
+#coorY table tr:nth-of-type(3n) td {    
+    border-bottom: 2px solid transparent;
+}
+#sudoku{
+	/* height and width 347px */
+	margin:0;
+	padding:0;
+	border:2px solid black;
+	border-collapse:collapse;
+}
+#sudoku tr {
+	margin:0;
+	padding:0;
+	border:0;
+}
+#sudoku tr td{
+	border:1px solid black;
+	margin:0;
+	padding:0;
+	background-color:white;
+}
+#sudoku tr td:nth-of-type(3n){    
+    border-right: 2px solid black;
+}
+#sudoku tr:nth-of-type(3n) td {    
+    border-bottom: 2px solid black;
+}
+#sudoku tr td textarea{
+	position:relative;
+	text-align:center;
+	margin:0;
+	padding:0;
+	resize: none;
+	vertical-align:middle;
+	overflow:hidden;
+	color:black;
+}
+#sudoku tr td textarea:focus {
+	outline:0;
+}
+/*END TABLES*/
+
+/*BUTTONS*/
+#buttons{
+	display:none;
+	width:419px;
+	height:36px;
+	margin: 0px auto 0px auto;
+	padding: 5px;
+	text-align:center;
+}
+#sideButtons{
+	display:none;
+	width:76px;
+	height:299px;
+	margin: -475px 0px 0px 1180px;
+	text-align:center;
+	padding-top:130px;
+}
+#sideButtons input {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+/*END BUTTONS*/
+
+/*MESSAGE*/
+#answerMessage{
+	display:none;
+	margin: -388px 0px 0px 1400px;
+	padding:20px;
+	width:260px;
+	height:auto;
+	background-image:url('../img/background6.jpg');
+	background-size:100%;
+	border-top-left-radius:30px;
+	border-top-right-radius:30px;
+	border-bottom-left-radius:30px;
+	border-bottom-right-radius:30px;
+	text-align:center;
+	border: 1px solid #FFDEB3;
+}
+#answerMessage #inputAnswer{
+	display:block;
+	text-align:center;
+	font-size:22px;
+	color:#fb9e25;
+	line-height: 170%;
+	vertical-align:middle;
+	font-family:corbel,sans-serif;
+	background-color:transparent;
+	cursor:default;
+}
+#answerMessage #okButton{
+	height:50px;
+	width:50px;
+	line-height:48px;
+}
+/*END MESSAGE*/
+
+/*SIDE MENU*/
+#sideMenu{
+	display:none;
+	position:absolute;
+	margin:0;
+	padding:0;
+	width:auto;
+	height:auto;	
+	top:0;
+	bottom:0;
+	text-align:center;
+	background-color:green;
+}
+#sideMenu #sideMenuWrapper{
+	display:block;
+	position:relative;
+	margin:0;
+	padding:0;
+	width:330px;
+	height:100%;
+	top:0;
+	bottom:0;
+	float:left;
+	background-color:pink;
+}
+#sideMenu #sideMenuButton{
+	display:block;
+	position:relative;
+	margin:0;
+	padding:0;
+	width:20px;
+	height:100%;
+	top:0;
+	bottom:0;
+	float:left;
+	background-color:red;
+}
+#sideMenu input {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+#sideMenu #logo{
+	display:block;
+	position:relative;
+	text-align:center;
+	height:auto;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+#sideMenu #menuWrapper{
+	display:block;
+	position:relative;
+	text-align:center;
+	height:auto;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+#sideMenu #copyright{
+	display:block;
+	position:relative;
+	text-align:center;
+	height:auto;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+/*END SIDE MENU*/

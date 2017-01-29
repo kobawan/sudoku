@@ -1,0 +1,83 @@
+html{
+	margin:0;
+	padding:0;
+	font:16px corbel,sans-serif;
+	background-image:url('../img/background2.jpg');
+	background-size:cover;
+	background-repeat:no-repeat;
+	height:100%;
+	width:100%;
+	overflow:hidden;
+}
+body{
+	margin:0;
+	padding:0;
+	height:100%;
+	width:100%;
+	overflow:hidden;
+}
+
+/*START PAGE*/
+#startWrapper{
+	display:block;
+	position:relative;
+	width:880px;
+	height:460px;
+	margin:0 auto 0 auto;
+	padding:0;
+	left:220px;
+	right:0;
+	top:100px;
+	bottom:0;
+	overflow:hidden;
+}
+#startWrapper #startContent{
+	display:block;
+	position:relative;
+	float:left;
+	width:400px;
+	height:420px;
+	text-align:center;
+	padding:20px;
+	background-color:yellow;
+}
+#startWrapper #startMenu{
+	display:block;
+	position:relative;
+	float:left;
+	width:400px;
+	height:420px;
+	text-align:center;
+	padding:20px;
+	background-color:pink;
+}
+#startWrapper #startMenu input{
+	margin-top:10px;
+	margin-bottom:10px;
+}
+#startWrapper #startMenu #logo{
+	display:block;
+	text-align:center;
+	padding:10px;
+}
+#startWrapper #startMenu #menuWrapper{
+	display:block;
+	text-align:center;
+	padding:10px;
+}
+#startWrapper #startMenu #leftColumn{
+	display:inline-block;
+	text-align:center;
+	padding:10px;
+}
+#startWrapper #startMenu #rightColumn{
+	display:inline-block;
+	text-align:center;
+	padding:10px;
+}
+#startWrapper #startMenu #copyright{
+	display:block;
+	text-align:center;
+	padding:10px;
+}
+/*END START PAGE*/
