@@ -5,6 +5,9 @@ Array.prototype.clear = function() {
     }
 };
 
+var matrix = [];
+var mask = [];
+
 function shuffle(matrix) {
     for (var x = 0; x < 9; x++) {
         for (var z = 0; z < 9; z++) {
@@ -64,37 +67,56 @@ function shuffle(matrix) {
     }
 }
 
-function maskGame(matrix, mask, level) {
-    for(var i = 0; i < 81; i++){
-        mask[i] = matrix[i];
-    }
+function maskGame(matrix, level) {
     var odds;
-    for(var v=0; v<9; v++){
-        for(var w=0; w<level; w++){
-            do{
-               odds = Math.floor(Math.random() * 9);
+
+    for(var rowtable=0; rowtable<7; rowtable+=3){ // 3 rows of grids
+        for(var arrgroup=rowtable, coltable=0; arrgroup<3+rowtable, coltable<7; arrgroup++, coltable+=3){ //3 cols of grids
+            mask.push([]);
+            for(var rowgrid=0; rowgrid<3; rowgrid++){ //3 rows in grid
+                var row2 = rowgrid + rowtable; //rows in table
+                for(var colgrid=0; colgrid<3; colgrid++){ //3 cols in grid
+                    var col2 = colgrid + coltable; //cols in table
+                    var tmp = (row2*9) + col2;
+                    mask[arrgroup].push(matrix[tmp]);
+                }
             }
-            while(mask[odds + (9 * v)] == 0);
-            mask[odds + (9 * v)] = 0;
+            for (var w = 0; w < level; w++) {
+                do {
+                    odds = Math.floor(Math.random() * 9);
+                }
+                while (mask[arrgroup][odds] == 0);
+                mask[arrgroup][odds] = 0;
+            }
         }
     }
 }
 
 function beginPuzzle(mask){
-    for (var x = 0; x < 9; x++) {
-        for (var z = 0; z < 9; z++) {
-            if(mask[x * 9 + z] == 0){
-                inputObj[x * 9 + z].value = "";
+    var pos;
+    var counter = 0;
+    for(var rowtable=0; rowtable<7; rowtable+=3) { // 3 rows of grids
+        for (var arrgroup = rowtable, coltable = 0; arrgroup < 3 + rowtable, coltable < 7; arrgroup++, coltable += 3) { //3 cols of grids
+            for (var rowgrid = 0; rowgrid < 3; rowgrid++) { //3 rows in grid
+                var row2 = rowgrid + rowtable; //rows in table
+                for (var colgrid = 0; colgrid < 3; colgrid++) { //3 cols in grid
+                    var col2 = colgrid + coltable; //cols in table
+                    pos = ((row2 * 9) + col2);
+                    counter = colgrid + (rowgrid * 3);
+                    if(mask[arrgroup][counter] == 0){
+                        inputObj[pos].value = inputObj[pos].defaultValue;
+                    }
+                    else{
+                        inputObj[pos].value = mask[arrgroup][counter];
+                        inputObj[pos].readOnly = true;
+                        inputObj[pos].maxLength = 1;
+                        inputObj[pos].setAttribute("class", "readOnly");
+                    }
+                }
             }
-            else{
-                inputObj[x * 9 + z].value = mask[x * 9 + z];
-                inputObj[x * 9 + z].readOnly = true;
-                inputObj[x * 9 + z].maxLength = 1;
-                inputObj[x * 9 + z].setAttribute("class", "readOnly");
-            }
+            counter = 0;
         }
     }
-    cellMode("sideButton1");
 }
 
 function changePage(){
@@ -106,17 +128,11 @@ function changePage(){
 }
 
 function createPuzzle(level){
-    this.matrix = new Array(81);
-    this.matrix.clear();
-    this.shuffle(this.matrix);
-
-    this.mask = new Array(81);
-    this.mask.clear();
-    this.maskGame(this.matrix, this.mask, level);
-
-    this.beginPuzzle(this.mask);
-    this.changePage();
+    matrix.clear();
+    mask.clear();
+    cellMode("togglepencil");
+    shuffle(matrix);
+    maskGame(matrix, level);
+    beginPuzzle(mask);
+    changePage();
 }
-
-
-
