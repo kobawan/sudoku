@@ -82,3 +82,12 @@ function changeCellMode(){ //input
 }
 
 //END CHANGE MODE/**
+
+function inputError(){
+    if(this.readOnly != true && pencilbutton.className == "buttonTemplate2off") {
+        var filterInput = parseInt(this.value);
+        if (isNaN(filterInput) == true) {
+            this.value = this.defaultValue;
+        }
+    }
+}

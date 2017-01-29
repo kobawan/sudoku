@@ -24,7 +24,7 @@ function removePencilNotesDup(cell,arr,coor){ //remove notes for row, col and gr
     }
 }
 
-function removeNotesDup(arr) {
+function removeDuplicates(arr) {
     if (arr.length!=1){
         for (var j = 0; j < arr.length; j++){
             for (var k = 1; k < arr.length - j; k++) {
@@ -56,7 +56,7 @@ function removeNotes(){
                 noteArray[i]= Number(noteArray[i]);
             }
             var tmp = noteArray.sort(); // sort the numbers
-            var tmp1 = removeNotesDup(tmp); //remove duplicates
+            var tmp1 = removeDuplicates(tmp); //remove duplicates
             var tmp2 = tmp1.filter(Boolean); //remove false values
             var tmp3 = tmp2.filter(Number); //keep only numbers
             this.value = tmp3.join(""); //put the notes array back into cell without commas

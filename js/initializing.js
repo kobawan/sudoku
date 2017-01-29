@@ -44,9 +44,10 @@ for (var j = 0; j < inputObj.length; j++) {
     inputObj[j].addEventListener('keyup', arrowKeys, false); //use arrow keys to move from cell to cell
     inputObj[j].addEventListener('focus', selectValue, false); //selects cell values
     inputObj[j].addEventListener('input', changeCellMode, false); //changed clicked cell into according style
+    inputObj[j].addEventListener('input', inputError, false); //removes unwanted values
 
 	inputObj[j].addEventListener('focus', highlight, false); //finds cells with same values as clicked cell and highlights them
-    inputObj[j].addEventListener('blur', findDuplicates, false); //shows in-game error for same number
+    inputObj[j].addEventListener('keyup', findDuplicates, false); //shows in-game error for same number
     inputObj[j].addEventListener('blur', resetCellMode, false); //update cell styles every time textarea loses focus
 
     inputObj[j].addEventListener('keyup', removeNotes, false); //removes notes from column, row and grid where the pencil value was inserted

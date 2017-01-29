@@ -53,45 +53,55 @@ function solve(){
 //IN-GAME FUNCTION
 
 function win(){
-    var dup = 0;
+	var condition = 0;
     for (var i=0; i<81; i++){
-        if(inputObj[i].classList.contains("errorPencil") || inputObj[i].classList.contains("highlightErrorPencil")){
-            dup++;
-        }
-    }
-    if(dup == 0 && inputObj.length == 81){
+        if(inputObj[i].classList.contains("errorPencil") != true || inputObj[i].classList.contains("highlightErrorPencil") != true){
+        	if(inputObj[i].classList.contains("errorReadOnly") != true || inputObj[i].classList.contains("highlightReadOnly") != true){
+        		if(inputObj[i].value == inputObj[i].defaultValue){
+                    condition = 1;
+                    break;
+				}
+			}
+            else {
+                condition = 1;
+                break;
+            }
+		}
+		else {
+            condition = 1;
+            break;
+		}
+	}
+	if(condition == 0){
         enableMessage("Correct!<br>You have won the game!");
-        return "win";
-    }
+	}
 }
 
 //END IN-GAME FUNCTION
 //CHECK BUTTON
 
 function check() {
-    var result = win();
-    if(result == "win") enableMessage("Correct!<br>You have won the game!");
-    else { //Not all cells have values
-        var wrongCells = [];
-        for (var j = 0; j < pencilRow.length; j++){
-            for (var i = 0; i < pencilRow[j].length; i++) {
-				/*if (pencilRow[j][i].value != arrSol[j][i]) { //if cell is not same as solution
-				 var coorId = document.getElementById(pencilRow[j][i].id);
-				 var coorRow = coorId.parentNode.parentNode.rowIndex; // row
-				 var coorCol = coorId.parentNode.cellIndex; //column
-				 for(var a=0; a<9; a++){
-				 var alphabet = "ABCDEFGHI";
-				 if (coorCol == a) coorCol = alphabet[a]; //assign letter to column
-				 }
-				 wrongCells.push("Cell " + coorCol + (coorRow+1) + " should be " + arrSol[j][i]);
-				 }*/
+    var wrongCells = [];
+	if(rowDup.length != 0 || colDup.length != 0 || gridDup.length != 0){
+		var tmp = rowDup.concat(colDup,gridDup);
+		var allDup = removeDuplicates(tmp);
+		for(var i=0; i<allDup.length; i++){
+            var row = allDup[i].parentNode.parentNode.rowIndex; // row
+            var col = allDup[i].parentNode.cellIndex; //column
+            for(var a=0; a<9; a++){
+                var alphabet = "ABCDEFGHI";
+                if (col == a){
+                    col = alphabet[a]; //assign letter to column
+					break;
+				}
             }
+            wrongCells.push(col + (row+1));
         }
-        if (wrongCells.length > 0){  //if values are not same as solution so far
-            enableMessage("Incorrect!<br>" + wrongCells.join("<br>"));
-        }
-        else enableMessage("Correct so far!"); //if values are same as solution so far
-    }
+	}
+	if (wrongCells.length > 0){  //if values are not same as solution so far
+		enableMessage("Cells " + wrongCells + " are incorrect.");
+	}
+	else enableMessage("Correct so far!"); //if values are same as solution so far
 }
 
 //END CHECK BUTTON

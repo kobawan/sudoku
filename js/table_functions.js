@@ -1,33 +1,38 @@
+var rowDup = [];
+var colDup = [];
+var gridDup = [];
+var cellHigh = [];
+
 //HIGHLIGHT FUNCTION
 
 function highlight(){
     var numObj = this;
     var numValue = numObj.value;
-    var numClass = [];
+    cellHigh.clear();
     if (numValue >=1 && numValue <=9){ //skip empty cells
         if (numObj.maxLength == 1){ //skip notes
             for (var i = 0; i < inputObj.length; i++) {
                 if (inputObj[i].maxLength == 1){ //skip notes
                     if (numValue == inputObj[i].value){
-                        numClass.push(inputObj[i]); //push cell ids with same values to numClass
+                        cellHigh.push(inputObj[i]); //push cell ids with same values to cellHigh
                     }
                 }
             }
-            for (var j = 0; j < numClass.length; j++) {
-                if(numClass[j].readOnly == true){
-                    if(numClass[j].classList.contains("errorReadOnly") == true || numClass[j].classList.contains("highlightErrorReadOnly") == true){
-                        numClass[j].setAttribute("class", "highlightErrorReadOnly");
+            for (var j = 0; j < cellHigh.length; j++) {
+                if(cellHigh[j].readOnly == true){
+                    if(cellHigh[j].classList.contains("errorReadOnly") == true || cellHigh[j].classList.contains("highlightErrorReadOnly") == true){
+                        cellHigh[j].setAttribute("class", "highlightErrorReadOnly");
                     }
                     else{
-                        numClass[j].setAttribute("class", "highlightReadOnly");
+                        cellHigh[j].setAttribute("class", "highlightReadOnly");
                     }
                 }
-                else if(numClass[j].readOnly == false){
-                    if(numClass[j].classList.contains("errorPencil") == true || numClass[j].classList.contains("highlightErrorPencil") == true){
-                        numClass[j].setAttribute("class", "highlightErrorPencil");
+                else if(cellHigh[j].readOnly == false){
+                    if(cellHigh[j].classList.contains("errorPencil") == true || cellHigh[j].classList.contains("highlightErrorPencil") == true){
+                        cellHigh[j].setAttribute("class", "highlightErrorPencil");
                     }
                     else{
-                        numClass[j].setAttribute("class", "highlightPencil");
+                        cellHigh[j].setAttribute("class", "highlightPencil");
                     }
                 }
             }
@@ -39,9 +44,12 @@ function highlight(){
 // SHOW DUPLICATES FUNCTION
 
 function findDuplicates() {
-    showDuplicates(pencilRow);
-    showDuplicates(pencilCol);
-    showDuplicates(pencilGrid);
+    rowDup.clear();
+    colDup.clear();
+    gridDup.clear();
+    rowDup = showDuplicates(pencilRow);
+    colDup = showDuplicates(pencilCol);
+    gridDup = showDuplicates(pencilGrid);
 }
 
 function showDuplicates(arr) {
@@ -65,6 +73,7 @@ function showDuplicates(arr) {
         else if (dup.classList.contains("highlightReadOnly"))dup.setAttribute("class", "highlightErrorReadOnly");
 
     }
+    return duplicates;
 }
 
 //END SHOW DUPLICATES FUNCTION
@@ -75,13 +84,19 @@ function resetCellMode(){
         if (inputObj[i].value != inputObj[i].defaultValue && inputObj[i].maxLength == 1) {
             if (inputObj[i].readOnly == true) {
                 if (inputObj[i].classList.contains("errorReadOnly") || inputObj[i].classList.contains("highlightErrorReadOnly")) {
-                    inputObj[i].setAttribute("class", "errorReadOnly");
+                    if(rowDup.indexOf(inputObj[i]) != -1 || colDup.indexOf(inputObj[i]) != -1 || gridDup.indexOf(inputObj[i]) != -1){
+                        inputObj[i].setAttribute("class", "errorReadOnly");
+                    }
+                    else inputObj[i].setAttribute("class", "readOnly");
                 }
                 else inputObj[i].setAttribute("class", "readOnly");
             }
             else {
                 if (inputObj[i].classList.contains("errorPencil") || inputObj[i].classList.contains("highlightErrorPencil")) {
-                    inputObj[i].setAttribute("class", "errorPencil");
+                    if(rowDup.indexOf(inputObj[i]) != -1 || colDup.indexOf(inputObj[i]) != -1 || gridDup.indexOf(inputObj[i]) != -1){
+                        inputObj[i].setAttribute("class", "errorPencil");
+                    }
+                    else inputObj[i].setAttribute("class", "pencil");
                 }
                 else inputObj[i].setAttribute("class", "pencil");
             }
