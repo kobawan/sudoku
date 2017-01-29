@@ -120,16 +120,29 @@ function beginPuzzle(mask){
 }
 
 function changePage(){
-    document.getElementById("startWrapper").style.display = "none";
-    document.getElementById("tables").style.display = "block";
-    document.getElementById("buttons").style.display = "block";
-    document.getElementById("sideButtons").style.display = "block";
-    document.getElementById("sideMenu").style.display = "block";
+    if(document.getElementById("startWrapper").style.display == "inline-block"){
+        document.getElementById("startWrapper").style.display = "none";
+        document.getElementById("tables").style.display = "block";
+        document.getElementById("sideButtons").style.display = "block";
+        document.getElementById("sideMenu").style.display = "block";
+        document.getElementById("sideMenuWrapper").style.display = "block";
+    }
+    else{
+        document.getElementById("startWrapper").style.display = "inline-block";
+        document.getElementById("tables").style.display = "none";
+        document.getElementById("sideButtons").style.display = "none";
+        document.getElementById("sideMenu").style.display = "none";
+        document.getElementById("sideMenuWrapper").style.display = "none";
+    }
 }
 
 function createPuzzle(level){
-    matrix.clear();
-    mask.clear();
+    matrix = [];
+    mask = [];
+    for (var i=0; i<=80; i++){
+        inputObj[i].value = inputObj[i].defaultValue;
+    }
+    updateArrays();
     cellMode("togglepencil");
     shuffle(matrix);
     maskGame(matrix, level);

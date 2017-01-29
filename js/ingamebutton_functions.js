@@ -130,3 +130,21 @@ function disableMessage(){
 }
 
 //END DISABLE MESSAGE
+
+function slideMenu(){
+    var sideMenu = document.getElementById("sideMenuWrapper");
+    if(sideMenu.style.display == "block"){
+        sideMenu.style.display = "none";
+    }
+    else sideMenu.style.display = "block";
+}
+
+function resumeGame(){
+    if(matrix.length >= 1){
+        document.getElementById("startWrapper").style.display = "none";
+        document.getElementById("tables").style.display = "block";
+        document.getElementById("sideButtons").style.display = "block";
+        document.getElementById("sideMenu").style.display = "block";
+        document.getElementById("sideMenuWrapper").style.display = "block";
+    }
+}

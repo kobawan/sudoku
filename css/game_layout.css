@@ -3,9 +3,7 @@
 	display:none;
 	width:347px;
 	height:347px;
-	margin-left:auto;
-	margin-right:auto;
-	margin-top:100px;
+	margin: 100px auto auto auto;
 	padding:41px;
 }
 #coorX{
@@ -30,10 +28,7 @@
 	margin:0;
 	padding:0;
 	background-color:transparent;
-
 	position:relative;
-	text-align:center;
-	
 	font-size: 22px;
 	line-height: 37px;
 	vertical-align:middle;
@@ -67,10 +62,7 @@
 	margin:0;
 	padding:0;
 	background-color:transparent;
-	
 	position:relative;
-	text-align:center;
-	
 	font-size: 22px;
 	line-height: 37px;
 	vertical-align:middle;
@@ -121,44 +113,30 @@
 /*END TABLES*/
 
 /*BUTTONS*/
-#buttons{
-	display:none;
-	width:419px;
-	height:36px;
-	margin: 0 auto 0 auto;
-	padding: 5px;
-	text-align:center;
-}
 #sideButtons{
 	display:none;
-	width:76px;
-	height:299px;
-	margin: -475px 0 0 1180px;
-	text-align:center;
-	padding-top:130px;
+	padding:20px;
 }
 #sideButtons input {
-	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-left: 15px;
+	margin-right: 15px;
 }
 /*END BUTTONS*/
 
 /*MESSAGE*/
 #answerMessage{
 	display:none;
-	margin: -388px 0 0 1400px;
+	margin:-494px 300px 0 0;
 	padding:20px;
 	width:260px;
 	height:auto;
 	background-image:url('../img/background6.jpg');
 	background-size:100%;
 	border-radius:30px;
-	text-align:center;
 	border: 1px solid #FFDEB3;
+	float:right;
 }
 #answerMessage #inputAnswer{
-	display:block;
-	text-align:center;
 	font-size:22px;
 	color:#fb9e25;
 	line-height: 170%;
@@ -184,11 +162,8 @@
 	height:auto;	
 	top:0;
 	bottom:0;
-	text-align:center;
-	background-color:green;
 }
 #sideMenu #sideMenuWrapper{
-	display:block;
 	position:relative;
 	margin:0;
 	padding:0;
@@ -197,46 +172,53 @@
 	top:0;
 	bottom:0;
 	float:left;
-	background-color:pink;
+}
+#sideMenu #sideMenuWrapper #gameLogo{
+	display:inline-block;
+	position:relative;
+	padding:20px;
+	margin:0;
+}
+#sideMenu #sideMenuWrapper #buttonsWrapper{
+	position:relative;
+	height:auto;
+	padding: 20px;
+}
+#sideMenu #sideMenuWrapper #buttonsWrapper input {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+#sideMenu #sideMenuWrapper #sideMenuCopyright{
+	position:relative;
+	height:auto;
+	padding: 20px;
 }
 #sideMenu #sideMenuButton{
-	display:block;
 	position:relative;
 	margin:0;
 	padding:0;
-	width:20px;
+	width:30px;
 	height:100%;
 	top:0;
 	bottom:0;
 	float:left;
-	background-color:red;
 }
-#sideMenu input {
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-.logo{
-	display:block;
+#sideMenu #sideMenuButton #slideButton{
 	position:relative;
-	text-align:center;
-	height:auto;
-	margin-top:20px;
-	margin-bottom:20px;
+	margin:0;
+	padding:0;
+	width:30px;
+	height:100%;
+	top:0;
+	bottom:0;
+	background-color: #fac576;
+	border:none;
 }
-.menuWrapper{
-	display:block;
-	position:relative;
-	text-align:center;
-	height:auto;
-	margin-top:20px;
-	margin-bottom:20px;
+#sideMenu #sideMenuButton #slideButton:hover {
+	background-color:#fb9e25;
+	cursor:pointer;
 }
-.copyright{
-	display:block;
-	position:relative;
-	text-align:center;
-	height:auto;
-	margin-top:20px;
-	margin-bottom:20px;
+#sideMenu #sideMenuButton #slideButton:focus {
+	outline:0;
 }
 /*END SIDE MENU*/

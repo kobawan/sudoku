@@ -15,30 +15,76 @@
     <div id="startWrapper">
         <div id="startMenu">
 
-            <div>
-                <img src="img/logo.png" class="logo">
+            <div id="startLogo">
+                <img src="img/logo.png">
             </div>
 
-            <div class="menuWrapper">
+            <div id="menuWrapper">
                 <div id="leftColumn">
-                    <input type="button" value="Resume" class="buttonTemplate1"/><br>
+                    <input type="button" id="resumeButton" value="Resume" class="buttonTemplate1"/><br>
                     <input type="button" id="startButton1" value="Easy" class="buttonTemplate1"/><br>
                     <input type="button" id="startButton2" value="Medium" class="buttonTemplate1"/><br>
                     <input type="button" id="startButton3" value="Hard" class="buttonTemplate1"/>
                 </div>
                 <div id="rightColumn">
-                    <input type="button" value="Stats" class="buttonTemplate1"/><br>
-                    <input type="button" value="Settings" class="buttonTemplate1"/><br>
-                    <input type="button" value="Rules" class="buttonTemplate1"/><br>
-                    <input type="button" value="About" class="buttonTemplate1"/>
+                    <input type="button" id="statsButton" value="Stats" class="buttonTemplate1"/><br>
+                    <input type="button" id="settingsButton" value="Settings" class="buttonTemplate1"/><br>
+                    <input type="button" id="ruleButton" value="Rules" class="buttonTemplate1"/><br>
+                    <input type="button" id="aboutButton" value="About" class="buttonTemplate1"/>
                 </div>
             </div>
 
-            <div class="copyright"> Sara Cunha </div>
+            <div id="startCopyright"> Sara Cunha </div>
 
         </div>
 
-        <div id="startContent"></div>
+        <div id="startContent">
+
+            <div id="statsWrapper">
+                <h2>Stats</h2>
+                <p>TBA</p>
+            </div>
+
+            <div id="settingsWrapper">
+                <h2>Settings</h2>
+                <p>TBA</p>
+            </div>
+
+            <div id="ruleWrapper">
+                <h2>Rules</h2>
+                <p>The classic Sudoku game involves a table of 81 squares. The table is divided into nine 3x3 grids, each containing nine squares.</p>
+                <p>To win the game, each of the nine grids has to contain all the numbers 1-9 within its cells. Each number can only appear once in a row, column or grid.</p>
+            </div>
+
+            <div id="aboutWrapper">
+                <div id="aboutSection">
+                    <h2>About</h2>
+                    <p>Hi! My name is Sara, or Kobawan in the interwebz. I've always been a fan of puzzles, so when I started programming, I came up with the idea to combine
+                        my two joys of puzzles and programming, to create this website. </p>
+                    <p>It's been a fun project to create. Sometimes challenging and time-consuming, but in the end, a very good opportunity to learn programming.</p>
+                    <p>Along with creating more projects than I can handle, I also knit, play with my dogs, and binge watch netflix.</p>
+                    <p>I hope you enjoy! Here's some doge tax:</p>
+                    <img src="img/koba.png">
+                </div>
+
+                <input type="button" id="arrowRightButton"/>
+
+                <div id="contactsSection">
+                    <h2>Contacts</h2>
+                    <div id="contactsText">
+                        <p>Name: Sara Nordmyr da Cunha</p>
+                        <p>Email: TBA</p>
+                        <p>Link to portfolio: TBA</p><br>
+                        <p>If you need support or report a bug, please contact the email above.</p>
+                    </div>
+                    <img src="img/profilepic.jpg" id="profilepic">
+                </div>
+
+                <input type="button" id="arrowLeftButton"/>
+
+            </div>
+
+        </div>
 
     </div>
     <!--END START PAGE-->
@@ -48,26 +94,26 @@
 
         <div id="sideMenuWrapper">
 
-            <div>
-                <img src="img/logo.png" class="logo">
+            <div id="gameLogo">
+                <img src="img/logo.png">
             </div>
 
-            <div class="menuWrapper">
-                <input type="button" value="Resume" class="buttonTemplate1"/><br>
-                <input type="button" id="sidemenuButton1" value="Easy" class="buttonTemplate1"/><br>
-                <input type="button" id="sidemenuButton2" value="Medium" class="buttonTemplate1"/><br>
-                <input type="button" id="sidemenuButton3" value="Hard" class="buttonTemplate1"/><br>
-                <input type="button" value="Stats" class="buttonTemplate1"/><br>
-                <input type="button" value="Settings" class="buttonTemplate1"/><br>
-                <input type="button" value="Rules" class="buttonTemplate1"/><br>
-                <input type="button" value="About" class="buttonTemplate1"/>
+            <div id="buttonsWrapper">
+                <input type="button" id="returnButton" value="Return" class="buttonTemplate1"/><br>
+                <input type="button" id="button1" value="Reset" class="buttonTemplate1"/><br>
+                <input type="button" id="button2" value="Check" class="buttonTemplate1"/><br>
+                <input type="button" id="button3" value="Solve" class="buttonTemplate1"/><br>
+                <input type="button" id="button4" value="Undo" class="buttonTemplate1"/><br>
+                <input type="button" id="button5" value="Redo" class="buttonTemplate1"/>
             </div>
 
-            <div class="copyright"> Sara Cunha </div>
+            <div id="sideMenuCopyright"> Sara Cunha </div>
 
         </div>
 
-        <div id="sideMenuButton"></div>
+        <div id="sideMenuButton">
+            <input type="button" id="slideButton"/>
+        </div>
 
     </div>
     <!--END SIDE MENU-->
@@ -197,14 +243,6 @@
     </div>
     <!--END TABLES-->
 
-    <!-- CENTER BUTTONS -->
-    <div id="buttons">
-        <input type="button" id="button1" value="Reset" class="buttonTemplate1"/>
-        <input type="button" id="button2" value="Check" class="buttonTemplate1"/>
-        <input type="button" id="button3" value="Solve" class="buttonTemplate1"/>
-    </div>
-    <!-- END CENTER BUTTONS -->
-
     <!-- SIDE BUTTONS -->
     <div id="sideButtons">
         <input type="button" id="sideButton1" value="Pencil"/>
@@ -219,9 +257,10 @@
     </div>
     <!-- END ANSWER WINDOW -->
 
+    <script type="text/javascript" src="js/menubutton_functions.js"></script>
     <script type="text/javascript" src="js/generator.js"></script>
     <script type="text/javascript" src="js/arrays.js"></script>
-    <script type="text/javascript" src="js/button_functions.js"></script>
+    <script type="text/javascript" src="js/ingamebutton_functions.js"></script>
     <script type="text/javascript" src="js/cell_functions.js"></script>
     <script type="text/javascript" src="js/notes_functions.js"></script>
     <script type="text/javascript" src="js/table_functions.js"></script>

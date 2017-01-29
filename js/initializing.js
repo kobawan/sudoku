@@ -1,13 +1,26 @@
 //GLOBAL VALUES
-var sudokuTable = document.getElementById("sudoku");
-var pencilbutton = document.getElementById("sideButton1");
-var notesbutton = document.getElementById("sideButton2");
+document.getElementById("startWrapper").style.display = "inline-block";
+
+var resumeButton = document.getElementById("resumeButton");
 var starteasybutton = document.getElementById("startButton1");
 var startmediumbutton = document.getElementById("startButton2");
 var starthardbutton = document.getElementById("startButton3");
+var statsButton = document.getElementById("statsButton");
+var settingsButton = document.getElementById("settingsButton");
+var ruleButton = document.getElementById("ruleButton");
+var aboutButton = document.getElementById("aboutButton");
+
+var arrowLeftButton = document.getElementById("arrowLeftButton");
+var arrowRightButton = document.getElementById("arrowRightButton");
+
+var sudokuTable = document.getElementById("sudoku");
+var pencilbutton = document.getElementById("sideButton1");
+var notesbutton = document.getElementById("sideButton2");
+var returnButton = document.getElementById("returnButton");
 var resetbutton = document.getElementById('button1');
 var checkbutton = document.getElementById('button2');
 var solvebutton = document.getElementById('button3');
+var slideButton = document.getElementById('slideButton');
 var okbutton = document.getElementById('okButton');
 
 var inputId; // array of id names of textareas
@@ -24,16 +37,27 @@ var hard = 6;
 //END VALUES
 //EVENT LISTENERS
 
+resumeButton.addEventListener('click', resumeGame, false);
 starteasybutton.addEventListener('click', function(){createPuzzle(easy);}, false);
 startmediumbutton.addEventListener('click', function(){createPuzzle(medium);}, false);
 starthardbutton.addEventListener('click', function(){createPuzzle(hard);}, false);
 
+statsButton.addEventListener('click', function(){showContent("stats");}, false);
+settingsButton.addEventListener('click', function(){showContent("settings");}, false);
+ruleButton.addEventListener('click', function(){showContent("rule");}, false);
+aboutButton.addEventListener('click', function(){showContent("about");}, false);
+
+arrowLeftButton.addEventListener('click', function(){moveSection("left");}, false);
+arrowRightButton.addEventListener('click', function(){moveSection("right");}, false);
+
 pencilbutton.addEventListener('click', function(){cellMode("togglepencil");}, false);
 notesbutton.addEventListener('click', function(){cellMode("togglenotes");}, false);
 
+returnButton.addEventListener('click', changePage, false);
 resetbutton.addEventListener('click', reset, false);
 checkbutton.addEventListener('click', check, false);
 solvebutton.addEventListener('click', solve, false);
+slideButton.addEventListener('click', slideMenu, false);
 okbutton.addEventListener('click', disableMessage, false);
 
 for (var j = 0; j < inputObj.length; j++) {
