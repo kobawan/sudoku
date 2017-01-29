@@ -260,22 +260,22 @@ function updateStyle(){
 	if (arrRowDup.length > 0){
 		for (var i = 0; i < arrRowDup.length; i++) {
 			var dup = document.getElementById(arrRowDup[i]);
-			if(dup.readOnly) dup.setAttribute("class", "error2");
-			else dup.setAttribute("class", "error1");
+			if(dup.readOnly) dup.setAttribute("class", "errorReadOnly");
+			else dup.setAttribute("class", "errorPencil");
 		}
 	}
 	if (arrColDup.length > 0){
 		for (var i = 0; i < arrColDup.length; i++) {
 			var dup = document.getElementById(arrColDup[i]);
-			if(dup.readOnly) dup.setAttribute("class", "error2");
-			else dup.setAttribute("class", "error1");
+			if(dup.readOnly) dup.setAttribute("class", "errorReadOnly");
+			else dup.setAttribute("class", "errorPencil");
 		}
 	}
 	if (arrGridDup.length > 0){
 		for (var i = 0; i < arrGridDup.length; i++) {
 			var dup = document.getElementById(arrGridDup[i]);
-			if(dup.readOnly) dup.setAttribute("class", "error2");
-			else dup.setAttribute("class", "error1");
+			if(dup.readOnly) dup.setAttribute("class", "errorReadOnly");
+			else dup.setAttribute("class", "errorPencil");
 		}
 	}
 }
@@ -299,10 +299,22 @@ function highlight(){
 			}
 			for (var i = 0; i < numClass.length; i++) {
 				var numClass2 = document.getElementById(numClass[i]);
-				if(numClass2.className === "error1" || numClass2.className === "error2" || numClass2.className === "highlight2"){
-					numClass2.setAttribute("class", "highlight2");
+				if(numClass2.readOnly == true){
+					if(numClass2.classList.contains("errorReadOnly") == true || numClass2.classList.contains("highlightErrorReadOnly") == true){
+						numClass2.setAttribute("class", "highlightErrorReadOnly");
+					}
+					else{
+						numClass2.setAttribute("class", "highlightReadOnly");
+					}
 				}
-				else numClass2.setAttribute("class", "highlight1");
+				else if(numClass2.readOnly == false){
+					if(numClass2.classList.contains("errorPencil") == true || numClass2.classList.contains("highlightErrorPencil") == true){
+						numClass2.setAttribute("class", "highlightErrorPencil");
+					}
+					else{
+						numClass2.setAttribute("class", "highlightPencil");
+					} 
+				}
 			}
 		}			
 	}			
@@ -341,8 +353,8 @@ function findDuplicates(arrValue, arrId) {
 	}
 	for (var i = 0; i < duplicates.length; i++) {
 		var dup = document.getElementById(duplicates[i]);
-		if(dup.readOnly) dup.setAttribute("class", "error2");
-		else dup.setAttribute("class", "error1");
+		if(dup.readOnly) dup.setAttribute("class", "errorReadOnly");
+		else dup.setAttribute("class", "errorPencil");
 	}
 	return duplicates;
 }

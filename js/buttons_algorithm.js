@@ -41,10 +41,47 @@ function begin(){
 }
 
 //END BEGIN FUNCTION
+//START ARRAY
+/*function startArray(){
+	var moves = []; //array of moves in objects
+	for (var i = 0; i < inputNumber.length; i++) {
+		var inputNumber2 = document.getElementById(inputNumber[i]);
+		inputNumber2.addEventListener('input', saveMove, false);
+	}
+	
+	function saveMove(){
+	
+		var num = this;
+		
+		function mode(){
+			if(num.maxLength == 1){
+				return "pencil";
+			}
+			else if(num.maxlength == 9){
+				return "notes";
+			}
+			else return "error";
+		}
+		
+		var numObj = {
+			numID:this.id, 
+			numValue:this.value, 
+			numMode:mode()
+		}; 
+		
+		moves.push(numObj);	
+		
+		//alert(numObj.numID + " : " + numObj.numValue + " : " + numObj.numMode);
+		
+	}
+	
+}*/
+//END START ARRAY
 //START BUTTON
 
 function startButton(){
 	begin();
+	//startArray();
 	document.getElementById("startWrapper").style.display = "none";
 	document.getElementById("tables").style.display = "block";
 	document.getElementById("buttons").style.display = "block";

@@ -26,7 +26,8 @@
 	height:37px;
 	background-color:#FFFFFF;
 }
-.highlight1{
+
+.highlightPencil{
 	font-size: 22px;
 	line-height: 37px;
 	letter-spacing: 0px;
@@ -35,7 +36,17 @@
 	height:37px;
 	background-color:#FFCE70;
 }
-.highlight2{
+.highlightReadOnly{
+	font-size: 22px;
+	line-height: 37px;
+	letter-spacing: 0px;
+	border: none;
+	width:37px;
+	height:37px;
+	background-color:#FFCE70;
+	cursor:default;
+}
+.highlightErrorPencil{
 	font-size: 22px;
 	line-height: 29px;
 	letter-spacing: 0px;
@@ -44,7 +55,17 @@
 	height:29px;
 	background-color:#FFCE70;
 }
-.error1{
+.highlightErrorReadOnly{
+	font-size: 22px;
+	line-height: 29px;
+	letter-spacing: 0px;
+	border: 4px solid #F75B5B;
+	width:29px;
+	height:29px;
+	background-color:#FFCE70;
+	cursor:default;
+}
+.errorPencil{
 	font-size: 22px;
 	line-height: 29px;
 	letter-spacing: 0px;
@@ -53,7 +74,7 @@
 	height: 29px;
 	background-color:#FFFFFF;
 }
-.error2{
+.errorReadOnly{
 	font-size: 22px;
 	line-height: 29px;
 	letter-spacing: 0px;
