@@ -1,230 +1,230 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Sudoku</title>
-	<link rel="icon" type="image/png" href="img/favicon2.gif">
-	
-	<link rel="stylesheet" type="text/css" href="css/start_layout.css"/>
-	<link rel="stylesheet" type="text/css" href="css/button_templates.css"/>
-	<link rel="stylesheet" type="text/css" href="css/game_layout.css"/>
-	<link rel="stylesheet" type="text/css" href="css/cell_styles.css"/>
-	
+    <meta charset="UTF-8">
+    <title>Sudoku</title>
+    <link rel="icon" type="image/png" href="img/favicon2.gif">
+
+    <link rel="stylesheet" type="text/css" href="css/start_layout.css"/>
+    <link rel="stylesheet" type="text/css" href="css/button_templates.css"/>
+    <link rel="stylesheet" type="text/css" href="css/game_layout.css"/>
+    <link rel="stylesheet" type="text/css" href="css/cell_styles.css"/>
 </head>
-
 <body>
+    <!--START PAGE-->
+    <div id="startWrapper">
+        <div id="startMenu">
 
-	<!--START PAGE-->
-	<div id="startWrapper">
-		<div id="startMenu">	
-		
-			<div id="logo">
-				<img src="img/logo.png">
-			</div>
-			
-			<div id="menuWrapper">
-				<div id="leftColumn">
-					<input type="button" value="Resume" class="buttonTemplate1"/><br>
-					<input type="button" id="startButton1" value="Easy" class="buttonTemplate1"/><br>
-					<input type="button" id="startButton2" value="Medium" class="buttonTemplate1"/><br>
-					<input type="button" id="startButton3" value="Hard" class="buttonTemplate1"/>
-				</div>
-				<div id="rightColumn">
-					<input type="button" value="Stats" class="buttonTemplate1"/><br>
-					<input type="button" value="Settings" class="buttonTemplate1"/><br>
-					<input type="button" value="Rules" class="buttonTemplate1"/><br>
-					<input type="button" value="About" class="buttonTemplate1"/>
-				</div>
-			</div>
-			
-			<div id="copyright"> © Sara Cunha </div>
-			
-		</div>
-		
-		<div id="startContent"></div>
-		
-	</div>
-	<!--END START PAGE-->
-	
-	<!--SIDE MENU-->
-	<div id="sideMenu">
-	
-		<div id="sideMenuWrapper">
-		
-			<div id="logo">
-				<img src="img/logo.png">
-			</div>
-			
-			<div id="menuWrapper">
-				<input type="button" value="Resume" class="buttonTemplate1"/><br>
-				<input type="button" id="startButton1" value="Easy" class="buttonTemplate1"/><br>
-				<input type="button" id="startButton2" value="Medium" class="buttonTemplate1"/><br>
-				<input type="button" id="startButton3" value="Hard" class="buttonTemplate1"/><br>
-				<input type="button" value="Stats" class="buttonTemplate1"/><br>
-				<input type="button" value="Settings" class="buttonTemplate1"/><br>
-				<input type="button" value="Rules" class="buttonTemplate1"/><br>
-				<input type="button" value="About" class="buttonTemplate1"/>
-			</div>
-			
-			<div id="copyright"> © Sara Cunha </div>
-			
-		</div>
-		
-		<div id="sideMenuButton"></div>
-		
-	</div>
-	<!--END SIDE MENU-->
-	
-	<!--TABLES-->
-	<div id="tables">
-	
-		<!--COORDINATE AXIS-->
-		<div id="coorX">
-			<table><tr>
-				<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td>
-			</tr></table>
-		</div>
-		
-		<div id="coorY">
-			<table>
-				<tr><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr>
-				<tr><td>4</td></tr><tr><td>5</td></tr><tr><td>6</td></tr>
-				<tr><td>7</td></tr><tr><td>8</td></tr><tr><td>9</td></tr>
-			</table>
-		</div>
-		<!--END COORDINATE AXIS-->
-		
-		<!--TABLE-->
-		<table id="sudoku">
-			<tr>
-				<td><textarea id="input1"></textarea></td>
-				<td><textarea id="input2"></textarea></td>
-				<td><textarea id="input3"></textarea></td>
-				<td><textarea id="input4"></textarea></td>
-				<td><textarea id="input5"></textarea></td>
-				<td><textarea id="input6"></textarea></td>
-				<td><textarea id="input7"></textarea></td>
-				<td><textarea id="input8"></textarea></td>
-				<td><textarea id="input9"></textarea></td>
-			</tr>
-			<tr>
-				<td><textarea id="input10"></textarea></td>
-				<td><textarea id="input11"></textarea></td>
-				<td><textarea id="input12"></textarea></td>
-				<td><textarea id="input13"></textarea></td>
-				<td><textarea id="input14"></textarea></td>
-				<td><textarea id="input15"></textarea></td>
-				<td><textarea id="input16"></textarea></td>
-				<td><textarea id="input17"></textarea></td>
-				<td><textarea id="input18"></textarea></td>
-			</tr>
-			<tr>
-				<td><textarea id="input19"></textarea></td>
-				<td><textarea id="input20"></textarea></td>
-				<td><textarea id="input21"></textarea></td>
-				<td><textarea id="input22"></textarea></td>
-				<td><textarea id="input23"></textarea></td>
-				<td><textarea id="input24"></textarea></td>
-				<td><textarea id="input25"></textarea></td>
-				<td><textarea id="input26"></textarea></td>
-				<td><textarea id="input27"></textarea></td>
-			</tr>
-			<tr>
-				<td><textarea id="input28"></textarea></td>
-				<td><textarea id="input29"></textarea></td>
-				<td><textarea id="input30"></textarea></td>
-				<td><textarea id="input31"></textarea></td>
-				<td><textarea id="input32"></textarea></td>
-				<td><textarea id="input33"></textarea></td>
-				<td><textarea id="input34"></textarea></td>
-				<td><textarea id="input35"></textarea></td>
-				<td><textarea id="input36"></textarea></td>
-			</tr>
-			<tr>
-				<td><textarea id="input37"></textarea></td>
-				<td><textarea id="input38"></textarea></td>
-				<td><textarea id="input39"></textarea></td>
-				<td><textarea id="input40"></textarea></td>
-				<td><textarea id="input41"></textarea></td>
-				<td><textarea id="input42"></textarea></td>
-				<td><textarea id="input43"></textarea></td>
-				<td><textarea id="input44"></textarea></td>
-				<td><textarea id="input45"></textarea></td>
-			</tr>
-			<tr>
-				<td><textarea id="input46"></textarea></td>
-				<td><textarea id="input47"></textarea></td>
-				<td><textarea id="input48"></textarea></td>
-				<td><textarea id="input49"></textarea></td>
-				<td><textarea id="input50"></textarea></td>
-				<td><textarea id="input51"></textarea></td>
-				<td><textarea id="input52"></textarea></td>
-				<td><textarea id="input53"></textarea></td>
-				<td><textarea id="input54"></textarea></td>
-			</tr>
-			<tr>
-				<td><textarea id="input55"></textarea></td>
-				<td><textarea id="input56"></textarea></td>
-				<td><textarea id="input57"></textarea></td>
-				<td><textarea id="input58"></textarea></td>
-				<td><textarea id="input59"></textarea></td>
-				<td><textarea id="input60"></textarea></td>
-				<td><textarea id="input61"></textarea></td>
-				<td><textarea id="input62"></textarea></td>
-				<td><textarea id="input63"></textarea></td>
-			</tr>
-			<tr>
-				<td><textarea id="input64"></textarea></td>
-				<td><textarea id="input65"></textarea></td>
-				<td><textarea id="input66"></textarea></td>
-				<td><textarea id="input67"></textarea></td>
-				<td><textarea id="input68"></textarea></td>
-				<td><textarea id="input69"></textarea></td>
-				<td><textarea id="input70"></textarea></td>
-				<td><textarea id="input71"></textarea></td>
-				<td><textarea id="input72"></textarea></td>
-			</tr> 
-			<tr>
-				<td><textarea id="input73"></textarea></td>
-				<td><textarea id="input74"></textarea></td>
-				<td><textarea id="input75"></textarea></td>
-				<td><textarea id="input76"></textarea></td>
-				<td><textarea id="input77"></textarea></td>
-				<td><textarea id="input78"></textarea></td>
-				<td><textarea id="input79"></textarea></td>
-				<td><textarea id="input80"></textarea></td>
-				<td><textarea id="input81"></textarea></td>
-			</tr>
-		</table>
-		<!--END TABLE-->
-	</div>
-	<!--END TABLES-->
-	
-	<!-- CENTER BUTTONS -->
-	<div id="buttons">
-		<input type="button" id="button1" value="Reset" class="buttonTemplate1"/>
-		<input type="button" id="button2" value="Check" class="buttonTemplate1"/>
-		<input type="button" id="button3" value="Solve" class="buttonTemplate1"/>
-	</div>
-	<!-- END CENTER BUTTONS -->
+            <div>
+                <img src="img/logo.png" class="logo">
+            </div>
 
-	<!-- SIDE BUTTONS -->
-	<div id="sideButtons">
-		<input type="button" id="sideButton1" value="Pencil"/>
-		<input type="button" id="sideButton2" value="Notes"/>
-	</div>
-	<!-- END BUTTONS -->
-	
-	<!-- ANSWER WINDOW -->
-	<div id="answerMessage">
-		<div id="inputAnswer"></div><br>
-		<input type="button" id="okButton" value="OK" class="buttonTemplate2on"/>
-	</div>
-	<!-- END ANSWER WINDOW -->
-	
-	<script type="text/javascript" src="js/buttons_algorithm.js"></script>
-	<script type="text/javascript" src="js/cells_algorithm.js"></script>
-	<script type="text/javascript" src="js/initializing.js"></script>
-	<!--<script type="text/javascript" src="js/table_size.js"></script>-->
-	
+            <div class="menuWrapper">
+                <div id="leftColumn">
+                    <input type="button" value="Resume" class="buttonTemplate1"/><br>
+                    <input type="button" id="startButton1" value="Easy" class="buttonTemplate1"/><br>
+                    <input type="button" id="startButton2" value="Medium" class="buttonTemplate1"/><br>
+                    <input type="button" id="startButton3" value="Hard" class="buttonTemplate1"/>
+                </div>
+                <div id="rightColumn">
+                    <input type="button" value="Stats" class="buttonTemplate1"/><br>
+                    <input type="button" value="Settings" class="buttonTemplate1"/><br>
+                    <input type="button" value="Rules" class="buttonTemplate1"/><br>
+                    <input type="button" value="About" class="buttonTemplate1"/>
+                </div>
+            </div>
+
+            <div class="copyright"> Sara Cunha </div>
+
+        </div>
+
+        <div id="startContent"></div>
+
+    </div>
+    <!--END START PAGE-->
+
+    <!--SIDE MENU-->
+    <div id="sideMenu">
+
+        <div id="sideMenuWrapper">
+
+            <div>
+                <img src="img/logo.png" class="logo">
+            </div>
+
+            <div class="menuWrapper">
+                <input type="button" value="Resume" class="buttonTemplate1"/><br>
+                <input type="button" id="sidemenuButton1" value="Easy" class="buttonTemplate1"/><br>
+                <input type="button" id="sidemenuButton2" value="Medium" class="buttonTemplate1"/><br>
+                <input type="button" id="sidemenuButton3" value="Hard" class="buttonTemplate1"/><br>
+                <input type="button" value="Stats" class="buttonTemplate1"/><br>
+                <input type="button" value="Settings" class="buttonTemplate1"/><br>
+                <input type="button" value="Rules" class="buttonTemplate1"/><br>
+                <input type="button" value="About" class="buttonTemplate1"/>
+            </div>
+
+            <div class="copyright"> Sara Cunha </div>
+
+        </div>
+
+        <div id="sideMenuButton"></div>
+
+    </div>
+    <!--END SIDE MENU-->
+
+    <!--TABLES-->
+    <div id="tables">
+
+        <!--COORDINATE AXIS-->
+        <div id="coorX">
+            <table><tr>
+                <td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td>
+            </tr></table>
+        </div>
+
+        <div id="coorY">
+            <table>
+                <tr><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr>
+                <tr><td>4</td></tr><tr><td>5</td></tr><tr><td>6</td></tr>
+                <tr><td>7</td></tr><tr><td>8</td></tr><tr><td>9</td></tr>
+            </table>
+        </div>
+        <!--END COORDINATE AXIS-->
+
+        <!--TABLE-->
+        <table id="sudoku">
+            <tr>
+                <td><textarea id="input1"></textarea></td>
+                <td><textarea id="input2"></textarea></td>
+                <td><textarea id="input3"></textarea></td>
+                <td><textarea id="input4"></textarea></td>
+                <td><textarea id="input5"></textarea></td>
+                <td><textarea id="input6"></textarea></td>
+                <td><textarea id="input7"></textarea></td>
+                <td><textarea id="input8"></textarea></td>
+                <td><textarea id="input9"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea id="input10"></textarea></td>
+                <td><textarea id="input11"></textarea></td>
+                <td><textarea id="input12"></textarea></td>
+                <td><textarea id="input13"></textarea></td>
+                <td><textarea id="input14"></textarea></td>
+                <td><textarea id="input15"></textarea></td>
+                <td><textarea id="input16"></textarea></td>
+                <td><textarea id="input17"></textarea></td>
+                <td><textarea id="input18"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea id="input19"></textarea></td>
+                <td><textarea id="input20"></textarea></td>
+                <td><textarea id="input21"></textarea></td>
+                <td><textarea id="input22"></textarea></td>
+                <td><textarea id="input23"></textarea></td>
+                <td><textarea id="input24"></textarea></td>
+                <td><textarea id="input25"></textarea></td>
+                <td><textarea id="input26"></textarea></td>
+                <td><textarea id="input27"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea id="input28"></textarea></td>
+                <td><textarea id="input29"></textarea></td>
+                <td><textarea id="input30"></textarea></td>
+                <td><textarea id="input31"></textarea></td>
+                <td><textarea id="input32"></textarea></td>
+                <td><textarea id="input33"></textarea></td>
+                <td><textarea id="input34"></textarea></td>
+                <td><textarea id="input35"></textarea></td>
+                <td><textarea id="input36"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea id="input37"></textarea></td>
+                <td><textarea id="input38"></textarea></td>
+                <td><textarea id="input39"></textarea></td>
+                <td><textarea id="input40"></textarea></td>
+                <td><textarea id="input41"></textarea></td>
+                <td><textarea id="input42"></textarea></td>
+                <td><textarea id="input43"></textarea></td>
+                <td><textarea id="input44"></textarea></td>
+                <td><textarea id="input45"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea id="input46"></textarea></td>
+                <td><textarea id="input47"></textarea></td>
+                <td><textarea id="input48"></textarea></td>
+                <td><textarea id="input49"></textarea></td>
+                <td><textarea id="input50"></textarea></td>
+                <td><textarea id="input51"></textarea></td>
+                <td><textarea id="input52"></textarea></td>
+                <td><textarea id="input53"></textarea></td>
+                <td><textarea id="input54"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea id="input55"></textarea></td>
+                <td><textarea id="input56"></textarea></td>
+                <td><textarea id="input57"></textarea></td>
+                <td><textarea id="input58"></textarea></td>
+                <td><textarea id="input59"></textarea></td>
+                <td><textarea id="input60"></textarea></td>
+                <td><textarea id="input61"></textarea></td>
+                <td><textarea id="input62"></textarea></td>
+                <td><textarea id="input63"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea id="input64"></textarea></td>
+                <td><textarea id="input65"></textarea></td>
+                <td><textarea id="input66"></textarea></td>
+                <td><textarea id="input67"></textarea></td>
+                <td><textarea id="input68"></textarea></td>
+                <td><textarea id="input69"></textarea></td>
+                <td><textarea id="input70"></textarea></td>
+                <td><textarea id="input71"></textarea></td>
+                <td><textarea id="input72"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea id="input73"></textarea></td>
+                <td><textarea id="input74"></textarea></td>
+                <td><textarea id="input75"></textarea></td>
+                <td><textarea id="input76"></textarea></td>
+                <td><textarea id="input77"></textarea></td>
+                <td><textarea id="input78"></textarea></td>
+                <td><textarea id="input79"></textarea></td>
+                <td><textarea id="input80"></textarea></td>
+                <td><textarea id="input81"></textarea></td>
+            </tr>
+        </table>
+        <!--END TABLE-->
+    </div>
+    <!--END TABLES-->
+
+    <!-- CENTER BUTTONS -->
+    <div id="buttons">
+        <input type="button" id="button1" value="Reset" class="buttonTemplate1"/>
+        <input type="button" id="button2" value="Check" class="buttonTemplate1"/>
+        <input type="button" id="button3" value="Solve" class="buttonTemplate1"/>
+    </div>
+    <!-- END CENTER BUTTONS -->
+
+    <!-- SIDE BUTTONS -->
+    <div id="sideButtons">
+        <input type="button" id="sideButton1" value="Pencil"/>
+        <input type="button" id="sideButton2" value="Notes"/>
+    </div>
+    <!-- END BUTTONS -->
+
+    <!-- ANSWER WINDOW -->
+    <div id="answerMessage">
+        <div id="inputAnswer"></div><br>
+        <input type="button" id="okButton" value="OK" class="buttonTemplate2on"/>
+    </div>
+    <!-- END ANSWER WINDOW -->
+
+    <script type="text/javascript" src="js/generator.js"></script>
+    <script type="text/javascript" src="js/arrays.js"></script>
+    <script type="text/javascript" src="js/buttons_ingame.js"></script>
+    <script type="text/javascript" src="js/notesRemoval.js"></script>
+    <script type="text/javascript" src="js/algorithms.js"></script>
+    <script type="text/javascript" src="js/initializing.js"></script>
+    <!--<script type="text/javascript" src="js/other/table_size.js"></script>-->
 </body>
 </html>

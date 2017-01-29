@@ -15,7 +15,6 @@
 	width: auto;
 }
 #coorX table{
-	margin:0;
 	padding:0;
 	border:2px solid transparent;
 	border-collapse:collapse;
@@ -38,7 +37,7 @@
 	font-size: 22px;
 	line-height: 37px;
 	vertical-align:middle;
-	letter-spacing: 0px;
+	letter-spacing: 0;
 	width:37px;
 	height:37px;
 }
@@ -75,7 +74,7 @@
 	font-size: 22px;
 	line-height: 37px;
 	vertical-align:middle;
-	letter-spacing: 0px;
+	letter-spacing: 0;
 	width:37px;
 	height:37px;
 }
@@ -126,7 +125,7 @@
 	display:none;
 	width:419px;
 	height:36px;
-	margin: 0px auto 0px auto;
+	margin: 0 auto 0 auto;
 	padding: 5px;
 	text-align:center;
 }
@@ -134,7 +133,7 @@
 	display:none;
 	width:76px;
 	height:299px;
-	margin: -475px 0px 0px 1180px;
+	margin: -475px 0 0 1180px;
 	text-align:center;
 	padding-top:130px;
 }
@@ -147,16 +146,13 @@
 /*MESSAGE*/
 #answerMessage{
 	display:none;
-	margin: -388px 0px 0px 1400px;
+	margin: -388px 0 0 1400px;
 	padding:20px;
 	width:260px;
 	height:auto;
 	background-image:url('../img/background6.jpg');
 	background-size:100%;
-	border-top-left-radius:30px;
-	border-top-right-radius:30px;
-	border-bottom-left-radius:30px;
-	border-bottom-right-radius:30px;
+	border-radius:30px;
 	text-align:center;
 	border: 1px solid #FFDEB3;
 }
@@ -219,7 +215,7 @@
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-#sideMenu #logo{
+.logo{
 	display:block;
 	position:relative;
 	text-align:center;
@@ -227,7 +223,7 @@
 	margin-top:20px;
 	margin-bottom:20px;
 }
-#sideMenu #menuWrapper{
+.menuWrapper{
 	display:block;
 	position:relative;
 	text-align:center;
@@ -235,7 +231,7 @@
 	margin-top:20px;
 	margin-bottom:20px;
 }
-#sideMenu #copyright{
+.copyright{
 	display:block;
 	position:relative;
 	text-align:center;

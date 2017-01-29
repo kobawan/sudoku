@@ -2,9 +2,8 @@ html{
 	margin:0;
 	padding:0;
 	font:16px corbel,sans-serif;
-	background-image:url('../img/background2.jpg');
+	background:	#FFFFFF url('../img/background2.jpg') no-repeat fixed;
 	background-size:cover;
-	background-repeat:no-repeat;
 	height:100%;
 	width:100%;
 	overflow:hidden;
@@ -55,12 +54,12 @@ body{
 	margin-top:10px;
 	margin-bottom:10px;
 }
-#startWrapper #startMenu #logo{
+.logo{
 	display:block;
 	text-align:center;
 	padding:10px;
 }
-#startWrapper #startMenu #menuWrapper{
+.menuWrapper{
 	display:block;
 	text-align:center;
 	padding:10px;
@@ -75,7 +74,7 @@ body{
 	text-align:center;
 	padding:10px;
 }
-#startWrapper #startMenu #copyright{
+.copyright{
 	display:block;
 	text-align:center;
 	padding:10px;
