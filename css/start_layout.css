@@ -23,12 +23,20 @@ body{
 	position:relative;
 	top:100px;
 	overflow:hidden;
+	width:1320px;
+}
+#startWrapper #startSpace{
+	position:relative;
+	float:left;
+	width:400px;
+	height:484px;
+	padding:20px;
 }
 #startWrapper #startMenu{
 	position:relative;
 	float:left;
-	min-width:400px;
-	min-height:420px;
+	width:400px;
+	min-height:484px;
 	padding:20px;
 }
 #startWrapper #startMenu #startLogo{
@@ -65,7 +73,7 @@ body{
 	position:relative;
 	float:left;
 	width:400px;
-	min-height:420px;
+	height:484px;
 	padding:20px;
 }
 #startWrapper #startContent h2{
@@ -103,6 +111,8 @@ body{
 }
 #startWrapper #startContent #aboutWrapper #aboutSection{
 	position:relative;
+	height:424px;
+	overflow-y: auto;
 }
 #startWrapper #startContent #aboutWrapper #arrowRightButton{
 	position:relative;
@@ -130,6 +140,7 @@ body{
 #startWrapper #startContent #aboutWrapper #contactsSection{
 	display:none;
 	position:relative;
+	height:424px;
 }
 #startWrapper #startContent #aboutWrapper #contactsSection #contactsText{
 	position:relative;

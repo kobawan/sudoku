@@ -141,6 +141,7 @@ function createPuzzle(level){
     mask = [];
     for (var i=0; i<=80; i++){
         inputObj[i].value = inputObj[i].defaultValue;
+        inputObj[i].readOnly = false;
     }
     updateArrays();
     cellMode("togglepencil");
