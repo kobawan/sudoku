@@ -11,11 +11,6 @@
     "watch": "./node_modules/.bin/webpack --watch",
     "lint": "./node_modules/.bin/eslint src/js/**"
   },
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kobawan/Sudoku.git"
@@ -28,7 +23,8 @@
   "homepage": "https://github.com/kobawan/Sudoku#readme",
   "dependencies": {},
   "devDependencies": {
-    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
     "babel-preset-es2015": "^6.24.1",
     "css-loader": "^0.28.4",
     "eslint": "^4.4.1",
