@@ -1,82 +1,110 @@
+import { showContent, moveSection } from "./menubutton_functions";
+import { removeNotes } from "./notes_functions";
+import { highlight, findDuplicates, resetCellMode } from "./table_functions";
+import { arrowKeys, selectValue, changeCellMode, inputError } from "./cell_functions";
+import { changePage, createPuzzle } from "./generator";
+import { updateArrays } from "./arrays";
+import {
+	disableMessage,
+	cellMode,
+	reset,
+	solve,
+	win,
+	check,
+	slideMenu,
+	resumeGame
+} from "./ingamebutton_functions";
+
 //GLOBAL VALUES
 document.getElementById("startWrapper").style.display = "inline-block";
 
-var resumeButton = document.getElementById("resumeButton");
-var starteasybutton = document.getElementById("startButton1");
-var startmediumbutton = document.getElementById("startButton2");
-var starthardbutton = document.getElementById("startButton3");
-var statsButton = document.getElementById("statsButton");
-var settingsButton = document.getElementById("settingsButton");
-var ruleButton = document.getElementById("ruleButton");
-var aboutButton = document.getElementById("aboutButton");
+const resumeButton = document.getElementById("resumeButton");
+const starteasybutton = document.getElementById("startButton1");
+const startmediumbutton = document.getElementById("startButton2");
+const starthardbutton = document.getElementById("startButton3");
+const statsButton = document.getElementById("statsButton");
+const settingsButton = document.getElementById("settingsButton");
+const ruleButton = document.getElementById("ruleButton");
+const aboutButton = document.getElementById("aboutButton");
 
-var arrowLeftButton = document.getElementById("arrowLeftButton");
-var arrowRightButton = document.getElementById("arrowRightButton");
+export const arrowLeftButton = document.getElementById("arrowLeftButton");
+export const arrowRightButton = document.getElementById("arrowRightButton");
 
-var sudokuTable = document.getElementById("sudoku");
-var pencilbutton = document.getElementById("sideButton1");
-var notesbutton = document.getElementById("sideButton2");
-var returnButton = document.getElementById("returnButton");
-var resetbutton = document.getElementById('button1');
-var checkbutton = document.getElementById('button2');
-var solvebutton = document.getElementById('button3');
-var slideButton = document.getElementById('slideButton');
-var okbutton = document.getElementById('okButton');
+export const sudokuTable = document.getElementById("sudoku");
+export const pencilbutton = document.getElementById("sideButton1");
+export const notesbutton = document.getElementById("sideButton2");
+const returnButton = document.getElementById("returnButton");
+const resetbutton = document.getElementById("button1");
+const checkbutton = document.getElementById("button2");
+const solvebutton = document.getElementById("button3");
+const slideButton = document.getElementById("slideButton");
+const okbutton = document.getElementById("okButton");
 
-var inputId; // array of id names of textareas
-var inputObj = []; // array of id's of textareas
-for (var i=1; i<=81; i++){
-	inputId = "input" + i;
-    inputObj[i-1] = document.getElementById(inputId);
-}
+const getInputElements = () => {
+	const inputElements = []; // array of ids of textareas
+	for (let i=1; i<=81; i++) {
+		inputElements[i-1] = document.getElementById("input" + i);
+	}
+	return inputElements;
+};
+export const inputEl = getInputElements();
 
-var easy = 4;
-var medium = 5;
-var hard = 6;
+const easy = 4;
+const medium = 5;
+const hard = 6;
 
 //END VALUES
 //EVENT LISTENERS
 
-resumeButton.addEventListener('click', resumeGame, false);
-starteasybutton.addEventListener('click', function(){createPuzzle(easy);}, false);
-startmediumbutton.addEventListener('click', function(){createPuzzle(medium);}, false);
-starthardbutton.addEventListener('click', function(){createPuzzle(hard);}, false);
+resumeButton.addEventListener("click", resumeGame, false);
+starteasybutton.addEventListener("click", () => createPuzzle(easy), false);
+startmediumbutton.addEventListener("click", () => createPuzzle(medium), false);
+starthardbutton.addEventListener("click", () => createPuzzle(hard), false);
 
-statsButton.addEventListener('click', function(){showContent("stats");}, false);
-settingsButton.addEventListener('click', function(){showContent("settings");}, false);
-ruleButton.addEventListener('click', function(){showContent("rule");}, false);
-aboutButton.addEventListener('click', function(){showContent("about");}, false);
+statsButton.addEventListener("click", () => showContent("stats"), false);
+settingsButton.addEventListener("click", () => showContent("settings"), false);
+ruleButton.addEventListener("click", () => showContent("rule"), false);
+aboutButton.addEventListener("click", () => showContent("about"), false);
 
-arrowLeftButton.addEventListener('click', function(){moveSection("left");}, false);
-arrowRightButton.addEventListener('click', function(){moveSection("right");}, false);
+arrowLeftButton.addEventListener("click", () => moveSection("left"), false);
+arrowRightButton.addEventListener("click", () => moveSection("right"), false);
 
-pencilbutton.addEventListener('click', function(){cellMode("togglepencil");}, false);
-notesbutton.addEventListener('click', function(){cellMode("togglenotes");}, false);
+pencilbutton.addEventListener("click", () => cellMode("togglepencil"), false);
+notesbutton.addEventListener("click", () => cellMode("togglenotes"), false);
 
-returnButton.addEventListener('click', changePage, false);
-resetbutton.addEventListener('click', reset, false);
-checkbutton.addEventListener('click', check, false);
-solvebutton.addEventListener('click', solve, false);
-slideButton.addEventListener('click', slideMenu, false);
-okbutton.addEventListener('click', disableMessage, false);
+returnButton.addEventListener("click", changePage, false);
+resetbutton.addEventListener("click", reset, false);
+checkbutton.addEventListener("click", check, false);
+solvebutton.addEventListener("click", solve, false);
+slideButton.addEventListener("click", slideMenu, false);
+okbutton.addEventListener("click", disableMessage, false);
 
-for (var j = 0; j < inputObj.length; j++) {
-    inputObj[j].addEventListener('blur', updateArrays, false);
-    inputObj[j].addEventListener('focus', updateArrays, false);
-    inputObj[j].addEventListener('keyup', updateArrays, false);
+for (let j = 0; j < inputEl.length; j++) {
+	inputEl[j].addEventListener("blur", updateArrays, false);
+	inputEl[j].addEventListener("focus", updateArrays, false);
+	inputEl[j].addEventListener("keyup", updateArrays, false);
 
-    inputObj[j].addEventListener('keyup', arrowKeys, false); //use arrow keys to move from cell to cell
-    inputObj[j].addEventListener('focus', selectValue, false); //selects cell values
-    inputObj[j].addEventListener('input', changeCellMode, false); //changed clicked cell into according style
-    inputObj[j].addEventListener('input', inputError, false); //removes unwanted values
+	//use arrow keys to move from cell to cell
+	inputEl[j].addEventListener("keyup", arrowKeys, false);
+	//selects cell values
+	inputEl[j].addEventListener("focus", selectValue, false);
+	//changed clicked cell into according style
+	inputEl[j].addEventListener("input", changeCellMode, false);
+	//removes unwanted values
+	inputEl[j].addEventListener("input", inputError, false);
 
-	inputObj[j].addEventListener('focus', highlight, false); //finds cells with same values as clicked cell and highlights them
-    inputObj[j].addEventListener('keyup', findDuplicates, false); //shows in-game error for same number
-    inputObj[j].addEventListener('blur', resetCellMode, false); //update cell styles every time textarea loses focus
+	//finds cells with same values as clicked cell and highlights them
+	inputEl[j].addEventListener("focus", highlight, false);
+	//shows in-game error for same number
+	inputEl[j].addEventListener("keyup", findDuplicates, false);
+	//update cell styles every time textarea loses focus
+	inputEl[j].addEventListener("blur", resetCellMode, false);
 
-    inputObj[j].addEventListener('keyup', removeNotes, false); //removes notes from column, row and grid where the pencil value was inserted
+	//removes notes from column, row and grid where the pencil value was inserted
+	inputEl[j].addEventListener("keyup", removeNotes, false);
 
-    inputObj[j].addEventListener('keyup', win, false); // automatic win message
+	// automatic win message
+	inputEl[j].addEventListener("keyup", win, false);
 }
 
 //END EVENT LISTENERS
