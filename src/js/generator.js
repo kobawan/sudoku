@@ -1,171 +1,198 @@
-import { inputEl } from "./initializing";
-import { updateArrays } from "./arrays";
-import { cellMode } from "./ingamebutton_functions";
+import { compose } from "./utils/generalUtils";
+import { GameConfig } from "./consts";
 
-Array.prototype.clear = () => {
-	let i = this.length;
-	while (i--) {
-		this[i] = 0;
+export default class {
+	constructor (gameType, difficulty) {
+		this.gameType = gameType;
+		this.difficulty = difficulty;
+		this.ratio = Math.sqrt(gameType);
+		this.matrix = undefined; // Array of result ordered by rows
+		this.mask = undefined; // 2d array of masked result ordered by grids
+		this._generate();
 	}
-};
-
-let matrix = [];
-let mask = [];
-
-//to randomize values as different as possible from previous puzzle
-const shuffle = (matrix) => {
-	for (let x = 0; x < 9; x++) {
-		for (let z = 0; z < 9; z++) {
-			matrix[x * 9 + z] = (x * 3 + Math.floor(x / 3) + z) % 9 + 1;
-		}
-	}
-	//shuffle values
-	for(let j = 0; j < 77; j++) {
-		const n1 = Math.ceil(Math.random() * 9);
-		let n2;
-		do {
-			n2 = Math.ceil(Math.random() * 9);
-		}
-		while (n1 == n2); //to make sure n1 does not equal n2
-
-		for (let row1 = 0; row1 < 9; row1++) {
-			for (let col1 = 0; col1 < 9; col1++) {
-				if (matrix[row1 * 9 + col1] == n1)
-					matrix[row1 * 9 + col1] = n2;
-				else if (matrix[row1 * 9 + col1] == n2)
-					matrix[row1 * 9 + col1] = n1;
+	/*
+	 * Creates array ordered by row with values: 
+	 * 123|456|789
+	 * 456|789|123
+	 * 789|123|456
+	 * ---|---|---
+	 * 234|567|891
+	 * 567|891|234
+	 * 891|234|567
+	 * ---|---|---
+	 * 345|678|912
+	 * 678|912|345
+	 * 912|345|678
+	 */
+	_createTemplate () {
+		const gameTemplate = [];
+		let pos, val;
+		for (let row = 0; row < this.gameType; row++) {
+			for (let col = 0; col < this.gameType; col++) {
+				/**
+				 * row * this.ratio = amount to skip each row. increments of row per grid size
+				 * Math.floor(row / this.ratio) = amount to skip each grid-row. increments of 1 per grid-row
+				 * col = column number to iterate
+				 * % this.gameType + 1 = divisible by 9, and add 1
+				 */
+				val = (row * this.ratio + Math.floor(row / this.ratio) + col) % this.gameType + 1;
+				pos = row * this.gameType + col;
+				gameTemplate[pos] = val;
 			}
 		}
+		return gameTemplate;
 	}
-	//shuffle columns of grids
-	for (let s = 0; s < 42; s++) {
-		const s1 = Math.floor(Math.random() * 3);
-		const s2 = Math.floor(Math.random() * 3);
 
-		for(let row2 = 0; row2 < 9; row2++) {
-			const tmp1 = this.matrix[row2 * 9 + (s1 * 3 + s % 3)];
-			this.matrix[row2 * 9 + (s1 * 3 + s % 3)] = this.matrix[row2 * 9 + (s2 * 3 + s % 3)];
-			this.matrix[row2 * 9 + (s2 * 3 + s % 3)] = tmp1;
-		}
-	}
-	//shuffle columns inside a column of grids
-	for (let y = 0; y < 42; y++) {
-		const c1 = Math.floor(Math.random() * 3);
-		const c2 = Math.floor(Math.random() * 3);
+	/*
+	 * Replaces values in temp from rand1-to-rand2 and rand2-to-rand1
+	 * and creates random combos of rand1 and rand2 to switch places
+	 */
+	_shufflePairs (arr) {
+		let rand1, rand2;
+		const newArr = arr.slice();
+		for(let randomize = 0; randomize < GameConfig.SHUFFLE; randomize++) {
+			rand1 = Math.ceil(Math.random() * this.gameType);
+			do {
+				rand2 = Math.ceil(Math.random() * this.gameType);
+			}
+			while (rand1 == rand2); // as long as rand1 equals rand2 recalculate rand2
 
-		for(let row3 = 0; row3 < 9; row3++) {
-			const tmp2 = this.matrix[row3 * 9 + (y % 3 * 3 + c1)];
-			this.matrix[row3 * 9 + (y % 3 * 3 + c1)] = this.matrix[row3 * 9 + (y % 3 * 3 + c2)];
-			this.matrix[row3 * 9 + (y % 3 * 3 + c2)] = tmp2;
-		}
-	}
-	//shuffle rows inside a row of grids
-	for (let r = 0; r < 42; r++) {
-		const r1 = Math.floor(Math.random() * 3);
-		const r2 = Math.floor(Math.random() * 3);
-
-		for(let col2 = 0; col2 < 9; col2++) {
-			const tmp3 = this.matrix[(r % 3 * 3 + r1) * 9 + col2];
-			this.matrix[(r % 3 * 3 + r1) * 9 + col2] = this.matrix[(r % 3 * 3 + r2) * 9 + col2];
-			this.matrix[(r % 3 * 3 + r2) * 9 + col2] = tmp3;
-		}
-	}
-};
-
-const maskGame = (matrix, level) => {
-	let odds;
-
-	for(let rowtable=0; rowtable<7; rowtable+=3) { // 3 rows of grids
-		for(
-			let arrgroup=rowtable, coltable=0;
-			arrgroup<3+rowtable, coltable<7;
-			arrgroup++, coltable+=3
-		) { //3 cols of grids
-			mask.push([]);
-			for(let rowgrid=0; rowgrid<3; rowgrid++) { //3 rows in grid
-				const row2 = rowgrid + rowtable; //rows in table
-				for(let colgrid=0; colgrid<3; colgrid++) { //3 cols in grid
-					const col2 = colgrid + coltable; //cols in table
-					const tmp = (row2*9) + col2;
-					mask[arrgroup].push(matrix[tmp]);
+			for (let pos = 0; pos < newArr.length; pos++) {
+				if (newArr[pos] == rand1) {
+					newArr[pos] = rand2;
+				}
+				else if (newArr[pos] == rand2) {
+					newArr[pos] = rand1;
 				}
 			}
-			for (let w = 0; w < level; w++) {
-				do {
-					odds = Math.floor(Math.random() * 9);
-				}
-				while (mask[arrgroup][odds] == 0);
-				mask[arrgroup][odds] = 0;
+		}
+		return newArr;
+	}
+
+	/*
+	 * Replaces columns from rand1-to-rand2 and rand2-to-rand1
+	 * and creates random combos of rand1 and rand2 to switch places
+	 */
+	_shuffleColumns (arr) {
+		let rand1, rand2, pos1, pos2, originalVal;
+		const newArr = arr.slice();
+		for(let randomize = 0; randomize < GameConfig.SHUFFLE; randomize++) {
+			rand1 = Math.floor(Math.random() * this.ratio);
+			do {
+				rand2 = Math.floor(Math.random() * this.ratio);
+			}
+			while (rand1 == rand2); // as long as rand1 equals rand2 recalculate rand2
+
+			for(let pos = 0; pos < this.gameType; pos++) {
+				/**
+				 * pos * this.gameType = pos of value in col, iterates through column
+				 * rand1 * this.ratio = picks first column from random grid
+				 * randomize % this.ratio = adds to picked column by iterating through divisibles of ratio
+				 */
+				pos1 = pos * this.gameType + (rand1 * this.ratio + randomize % this.ratio);
+				pos2 = pos * this.gameType + (rand2 * this.ratio + randomize % this.ratio);
+				originalVal = newArr[pos1];
+				newArr[pos1] = newArr[pos2];
+				newArr[pos2] = originalVal;
 			}
 		}
+		return newArr;
 	}
-};
 
-const beginPuzzle = (mask) => {
-	let pos;
-	let counter = 0;
-	for (let rowtable=0; rowtable<7; rowtable+=3) { // 3 rows of grids
-		for (
-			let arrgroup = rowtable, coltable = 0;
-			arrgroup < 3 + rowtable, coltable < 7;
-			arrgroup++, coltable += 3
-		) { //3 cols of grids
-			for (let rowgrid = 0; rowgrid < 3; rowgrid++) { //3 rows in grid
-				const row2 = rowgrid + rowtable; //rows in table
-				for (let colgrid = 0; colgrid < 3; colgrid++) { //3 cols in grid
-					const col2 = colgrid + coltable; //cols in table
-					pos = ((row2 * 9) + col2);
-					counter = colgrid + (rowgrid * 3);
-					if(mask[arrgroup][counter] == 0) {
-						inputEl[pos].value = inputEl[pos].defaultValue;
+	/*
+	 * Replaces columns inside grids from rand1-to-rand2 and rand2-to-rand1
+	 * and creates random combos of rand1 and rand2 to switch places
+	 */
+	_shuffleColumnsInGrid (arr) {
+		let rand1, rand2, pos1, pos2, originalVal;
+		const newArr = arr.slice();
+		for (let randomize = 0; randomize < GameConfig.SHUFFLE; randomize++) {
+			rand1 = Math.floor(Math.random() * this.ratio);
+			do {
+				rand2 = Math.floor(Math.random() * this.ratio);
+			}
+			while (rand1 == rand2); // as long as rand1 equals rand2 recalculate rand2
+
+			for(let pos = 0; pos < this.gameType; pos++) {
+				/**
+				 * pos * this.gameType = pos of value in col, iterates through column
+				 * randomize % this.ratio * this.ratio = iterates first column of each grid
+				 * rand1 = picks which column in grid to shuffle
+				 */
+				pos1 = pos * this.gameType + (randomize % this.ratio * this.ratio + rand1);
+				pos2 = pos * this.gameType + (randomize % this.ratio * this.ratio + rand2);
+				originalVal = newArr[pos1];
+				newArr[pos1] = newArr[pos2];
+				newArr[pos2] = originalVal;
+			}
+		}
+		return newArr;
+	}
+
+	_shuffleRowsInGrid (arr) {
+		let rand1, rand2, pos1, pos2, originalVal;
+		const newArr = arr.slice();
+		for (let randomize = 0; randomize < GameConfig.SHUFFLE; randomize++) {
+			rand1 = Math.floor(Math.random() * this.ratio);
+			do {
+				rand2 = Math.floor(Math.random() * this.ratio);
+			}
+			while (rand1 == rand2); // as long as rand1 equals rand2 recalculate rand2
+
+			for(let pos = 0; pos < this.gameType; pos++) {
+				/**
+				 * pos = pos of value in first row, iterates through row
+				 * this.gameType = moves pos to first value in picked row
+				 * randomize % this.ratio * this.ratio = picks first row from random grid
+				 * rand1 = adds to picked row by iterating through divisibles of ratio
+				 */
+				pos1 = pos + this.gameType * (randomize % this.ratio * this.ratio + rand1);
+				pos2 = pos + this.gameType * (randomize % this.ratio * this.ratio + rand2);
+				originalVal = newArr[pos1];
+				newArr[pos1] = newArr[pos2];
+				newArr[pos2] = originalVal;
+			}
+		}
+		return newArr;
+	}
+
+	_maskGame (matrix) {
+		const arr = [];
+		let grid, rowPos, colPos, pos, rand;
+		for(let rowGrid=0; rowGrid<this.ratio; rowGrid++) {
+			for(let colGrid=0; colGrid<this.ratio; colGrid++) {
+				arr.push([]);
+				grid = rowGrid * this.ratio + colGrid;
+				for(let row=0; row<this.ratio; row++) {
+					rowPos = (row + rowGrid * this.ratio) * this.gameType;
+					for(let col=0; col<this.ratio; col++) {
+						colPos = col + colGrid * this.ratio;
+						pos = rowPos + colPos;
+						arr[grid].push(matrix[pos]);
 					}
-					else{
-						inputEl[pos].value = mask[arrgroup][counter];
-						inputEl[pos].readOnly = true;
-						inputEl[pos].maxLength = 1;
-						inputEl[pos].setAttribute("class", "readOnly");
+				}
+				for (let dif = 0; dif < this.difficulty; dif++) {
+					do {
+						rand = Math.floor(Math.random() * this.gameType);
 					}
+					while (arr[grid][rand] == 0);
+					arr[grid][rand] = 0;
 				}
 			}
-			counter = 0;
 		}
+		return arr;
 	}
-};
 
-const changePage = () => {
-	if(document.getElementById("startWrapper").style.display == "inline-block") {
-		document.getElementById("startWrapper").style.display = "none";
-		document.getElementById("tables").style.display = "block";
-		document.getElementById("sideButtons").style.display = "block";
-		document.getElementById("sideMenu").style.display = "block";
-		document.getElementById("sideMenuWrapper").style.display = "block";
-	}
-	else{
-		document.getElementById("startWrapper").style.display = "inline-block";
-		document.getElementById("tables").style.display = "none";
-		document.getElementById("sideButtons").style.display = "none";
-		document.getElementById("sideMenu").style.display = "none";
-		document.getElementById("sideMenuWrapper").style.display = "none";
-	}
-};
+	_generate () {
+		const template = this._createTemplate();
+		this.matrix = compose(
+			this._shuffleRowsInGrid.bind(this),
+			this._shuffleColumnsInGrid.bind(this),
+			this._shuffleColumns.bind(this),
+			this._shufflePairs.bind(this)
+		)(template);
 
-const createPuzzle = (level) => {
-	matrix = [];
-	mask = [];
-	for (let i=0; i<=80; i++) {
-		inputEl[i].value = inputEl[i].defaultValue;
-		inputEl[i].readOnly = false;
+		this.mask = this._maskGame(this.matrix);
 	}
-	updateArrays();
-	cellMode("togglepencil");
-	shuffle(matrix);
-	maskGame(matrix, level);
-	beginPuzzle(mask);
-	changePage();
-};
+}
 
-export {
-	beginPuzzle,
-	changePage,
-	createPuzzle
-};

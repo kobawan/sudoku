@@ -5,6 +5,7 @@ module.exports = {
     },
     "extends": "eslint:recommended",
     "parserOptions": {
+        "ecmaVersion": 6,
         "sourceType": "module"
     },
     "rules": {
@@ -24,6 +25,7 @@ module.exports = {
         "no-trailing-spaces": "warn",
         "space-before-blocks": ["warn", { "functions": "always", "keywords": "always", "classes": "always" }],
         "space-before-function-paren": ["warn", {"anonymous": "always", "named": "always", "asyncArrow": "always"}],
-        "arrow-spacing": "warn"
+        "arrow-spacing": "warn",
+        "no-console": "warn"
     }
 };
