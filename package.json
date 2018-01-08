@@ -6,10 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "echo \"Error: no start specified\" && exit 1",
-    "build": "./node_modules/.bin/webpack",
-    "watch": "./node_modules/.bin/webpack --watch",
-    "lint": "./node_modules/.bin/eslint src/js/**"
+    "start": "webpack-dev-server",
+    "lint": "eslint src/js/**"
   },
   "repository": {
     "type": "git",
@@ -31,6 +29,8 @@
     "extract-loader": "^1.0.0",
     "file-loader": "^0.11.2",
     "html-loader": "^0.5.1",
-    "webpack": "^3.5.4"
+    "style-loader": "^0.19.1",
+    "webpack": "^3.5.4",
+    "webpack-dev-server": "^2.10.0"
   }
 }

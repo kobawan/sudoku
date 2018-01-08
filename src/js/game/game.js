@@ -53,7 +53,10 @@ let game = undefined;
  * @param {GameConfig.TYPE} gameType size of sudoku
  * @param {GameConfig.DIFFICULTY} difficulty difficulty of sudoku
  */
-export const initGame = (gameType = GameConfig.TYPE.DEFAULT, difficulty = GameConfig.DIFFICULTY.EASY) => {
+export const initGame = (
+	gameType = GameConfig.TYPE.DEFAULT,
+	difficulty = GameConfig.DIFFICULTY.EASY
+) => {
 	game = new Game(gameType, difficulty);
 	resetCells();
 	toggleCellMode();

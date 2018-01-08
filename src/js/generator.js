@@ -11,7 +11,7 @@ export default class {
 		this._generate();
 	}
 	/*
-	 * Creates array ordered by row with values: 
+	 * Creates array ordered by row with values:
 	 * 123|456|789
 	 * 456|789|123
 	 * 789|123|456

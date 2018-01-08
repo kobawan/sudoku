@@ -4,11 +4,11 @@ const indexHtml = path.join(__dirname, "src", "index.html");
 module.exports = {
 	entry: [
         path.join(__dirname, "src", "js", "initializing.js"),
-        indexHtml
+        indexHtml,
     ],
 	output: {
 		filename: "bundle.js",
-		path: path.resolve(__dirname, "dist")
+		path: path.resolve(__dirname, "dist"),
 	},
 	module: {
 		rules: [
@@ -18,9 +18,9 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["es2015"]
-                    }
-                }
+                        presets: ["es2015"],
+                    },
+                },
             },
 			{
                 test: indexHtml,
@@ -28,7 +28,7 @@ module.exports = {
                     {
                         loader: "file-loader",
                         options: {
-                            name: "[name]-dist.[ext]",
+                            name: "index.html",
                         },
                     },
                     {
@@ -45,20 +45,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loaders: [
-                    {
-						loader: "file-loader",
-						options: {
-                        	name: "styles/[name].[ext]",
-                        },
-                    },
-                    {
-                        loader: "extract-loader",
-                    },
-                    {
-                        loader: "css-loader",
-                    },
-                ],
+                loaders: ["style-loader", "css-loader"],
             },
             {
                 test: /\.(png|svg|jpg|gif)$/,
@@ -71,6 +58,9 @@ module.exports = {
                     },
                 ],
             },
-		]
-	}
+		],
+	},
+	devServer: {
+		contentBase: path.join(__dirname, "dist", "index.html"),
+	},
 };
