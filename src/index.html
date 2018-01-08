@@ -3,12 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Sudoku</title>
-    <link rel="icon" type="image/png" href="img/favicon2.gif">
-
-    <link rel="stylesheet" type="text/css" href="css/start_layout.css"/>
-    <link rel="stylesheet" type="text/css" href="css/button_templates.css"/>
-    <link rel="stylesheet" type="text/css" href="css/game_layout.css"/>
-    <link rel="stylesheet" type="text/css" href="css/cell_styles.css"/>
+    <link rel="icon" type="image/png" href="./images/favicon2.gif">
 </head>
 <body>
     <!--START PAGE-->
@@ -17,21 +12,21 @@
         <div id="startMenu">
 
             <div id="startLogo">
-                <img src="img/logo.png">
+                <img src="./images/logo.png">
             </div>
 
             <div id="menuWrapper">
                 <div id="leftColumn">
-                    <input type="button" id="resumeButton" value="Resume" class="buttonTemplate1"/><br>
-                    <input type="button" id="startButton1" value="Easy" class="buttonTemplate1"/><br>
-                    <input type="button" id="startButton2" value="Medium" class="buttonTemplate1"/><br>
-                    <input type="button" id="startButton3" value="Hard" class="buttonTemplate1"/>
+                    <input type="button" id="resumeButton" value="Resume" class="menu-button"/><br>
+                    <input type="button" id="startButton1" value="Easy" class="menu-button"/><br>
+                    <input type="button" id="startButton2" value="Medium" class="menu-button"/><br>
+                    <input type="button" id="startButton3" value="Hard" class="menu-button"/>
                 </div>
                 <div id="rightColumn">
-                    <input type="button" id="statsButton" value="Stats" class="buttonTemplate1"/><br>
-                    <input type="button" id="settingsButton" value="Settings" class="buttonTemplate1"/><br>
-                    <input type="button" id="ruleButton" value="Rules" class="buttonTemplate1"/><br>
-                    <input type="button" id="aboutButton" value="About" class="buttonTemplate1"/>
+                    <input type="button" id="statsButton" value="Stats" class="menu-button"/><br>
+                    <input type="button" id="settingsButton" value="Settings" class="menu-button"/><br>
+                    <input type="button" id="ruleButton" value="Rules" class="menu-button"/><br>
+                    <input type="button" id="aboutButton" value="About" class="menu-button"/>
                 </div>
             </div>
 
@@ -65,7 +60,7 @@
                     <p>It's been a fun project to create. Sometimes challenging and time-consuming, but in the end, a very good opportunity to learn programming.</p>
                     <p>Along with creating more projects than I can handle, I also knit, play with my dogs, and binge watch netflix.</p>
                     <p>I hope you enjoy! Here's some doge tax:</p>
-                    <img src="img/koba.png">
+                    <img src="./images/koba.png">
                 </div>
 
                 <input type="button" id="arrowRightButton"/>
@@ -78,7 +73,7 @@
                         <p>Link to portfolio: TBA</p><br>
                         <p>If you need support or report a bug, please contact the email above.</p>
                     </div>
-                    <img src="img/profilepic.jpg" id="profilepic">
+                    <img src="./images/profilepic.jpg" id="profilepic">
                 </div>
 
                 <input type="button" id="arrowLeftButton"/>
@@ -96,16 +91,16 @@
         <div id="sideMenuWrapper">
 
             <div id="gameLogo">
-                <img src="img/logo.png">
+                <img src="./images/logo.png">
             </div>
 
             <div id="buttonsWrapper">
-                <input type="button" id="returnButton" value="Return" class="buttonTemplate1"/><br>
-                <input type="button" id="button1" value="Reset" class="buttonTemplate1"/><br>
-                <input type="button" id="button2" value="Check" class="buttonTemplate1"/><br>
-                <input type="button" id="button3" value="Solve" class="buttonTemplate1"/><br>
-                <input type="button" id="button4" value="Undo" class="buttonTemplate1"/><br>
-                <input type="button" id="button5" value="Redo" class="buttonTemplate1"/>
+                <input type="button" id="returnButton" value="Return" class="menu-button"/><br>
+                <input type="button" id="button1" value="Reset" class="menu-button"/><br>
+                <input type="button" id="button2" value="Check" class="menu-button"/><br>
+                <input type="button" id="button3" value="Solve" class="menu-button"/><br>
+                <input type="button" id="button4" value="Undo" class="menu-button"/><br>
+                <input type="button" id="button5" value="Redo" class="menu-button"/>
             </div>
 
             <div id="sideMenuCopyright"> Sara Cunha </div>
@@ -254,17 +249,10 @@
     <!-- ANSWER WINDOW -->
     <div id="answerMessage">
         <div id="inputAnswer"></div><br>
-        <input type="button" id="okButton" value="OK" class="buttonTemplate2on"/>
+        <input type="button" id="okButton" value="OK" class="game-button-unselected"/>
     </div>
     <!-- END ANSWER WINDOW -->
 
-    <script type="text/javascript" src="js/menubutton_functions.js"></script>
-    <script type="text/javascript" src="js/generator.js"></script>
-    <script type="text/javascript" src="js/arrays.js"></script>
-    <script type="text/javascript" src="js/ingamebutton_functions.js"></script>
-    <script type="text/javascript" src="js/cell_functions.js"></script>
-    <script type="text/javascript" src="js/notes_functions.js"></script>
-    <script type="text/javascript" src="js/table_functions.js"></script>
-    <script type="text/javascript" src="js/initializing.js"></script>
+    <script type="text/javascript" src="bundle.js"></script>
 </body>
 </html>

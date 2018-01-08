@@ -1,0 +1,79 @@
+input[type="button"] {
+	display: inline-block;
+	text-decoration: none;
+	text-align: center;
+	font-family: corbel, sans-serif;
+	padding: 0;
+	margin: 0;
+	font-size:20px;
+	font-weight:normal;
+	font-style:normal;
+	cursor:pointer;
+}
+input[type="button"]:focus {
+	outline: 0;
+}
+.menu-button{
+	background: linear-gradient(#eea1fc 5%, #ce72e0 100%);
+	background:-webkit-linear-gradient(#eea1fc 5%, #ce72e0 100%);
+	background:-moz-linear-gradient(#eea1fc 5%, #ce72e0 100%);
+	background-color:#eea1fc;
+	-webkit-border-radius:12px;
+	-moz-border-radius:12px;
+	border-radius:12px;
+	border:1px solid #dd5df4;
+	color:#ffffff;
+	height:36px;
+	line-height:30px;
+	min-width: 87px;
+	width:auto;
+	text-shadow:1px #dd5df4;
+	padding: 0 5px 0 5px;
+}
+.menu-button:hover {
+	background: linear-gradient(#ce72e0 5%, #eea1fc 100%);
+	background:-webkit-linear-gradient(#ce72e0 5%, #eea1fc 100%);
+	background:-moz-linear-gradient(#ce72e0 5%, #eea1fc 100%);
+	background-color:#ce72e0;
+}
+
+.game-button-unselected{
+	background: linear-gradient(#ffc477 5%, #fb9e25 100% );
+	background:-webkit-linear-gradient(#ffc477 5%, #fb9e25 100% );
+	background:-moz-linear-gradient(#ffc477 5%, #fb9e25 100% );
+	background-color:#ffc477;
+	-webkit-border-radius:42px;
+	-moz-border-radius:42px;
+	border-radius:42px;
+	border:1px solid #eeb44f;
+	color:#ffffff;
+	height:67px;
+	line-height:60px;
+	width:66px;
+	text-shadow:1px #cc9f52;
+}
+.game-button-unselected:hover {
+	background: linear-gradient(#faecd5 5%, #f5c182 100% );
+	background:-webkit-linear-gradient(#faecd5 5%, #f5c182 100% );
+	background:-moz-linear-gradient(#faecd5 5%, #f5c182 100% );
+	background-color:#faecd5;
+	border:1px solid #fad291;
+	color:#fb9e25;
+	text-shadow:1px #fac576;
+}
+
+.game-button-selected{
+	background: linear-gradient(#faecd5 5%, #f5c182 100% );
+	background:-webkit-linear-gradient(#faecd5 5%, #f5c182 100% );
+	background:-moz-linear-gradient(#faecd5 5%, #f5c182 100% );
+	background-color:#faecd5;
+	-webkit-border-radius:42px;
+	-moz-border-radius:42px;
+	border-radius:42px;
+	border:1px solid #fad291;
+	color:#fb9e25;
+	height:67px;
+	line-height:60px;
+	width:66px;
+	text-shadow:1px #fac576;
+}

@@ -1,0 +1,19 @@
+export const menuWrapper = document.getElementById("startWrapper");
+export const tabsWrapper = document.getElementById("startContent");
+export const statsWrapper = document.getElementById("statsWrapper");
+export const settingsWrapper = document.getElementById("settingsWrapper");
+export const rulesWrapper = document.getElementById("ruleWrapper");
+export const aboutWrapper = document.getElementById("aboutWrapper");
+export const aboutSection = document.getElementById("aboutSection");
+export const contactsSection = document.getElementById("contactsSection");
+
+export const resumeButton = document.getElementById("resumeButton");
+export const startEasyButton = document.getElementById("startButton1");
+export const startMediumButton = document.getElementById("startButton2");
+export const startHardButton = document.getElementById("startButton3");
+export const statsButton = document.getElementById("statsButton");
+export const settingsButton = document.getElementById("settingsButton");
+export const rulesButton = document.getElementById("ruleButton");
+export const aboutButton = document.getElementById("aboutButton");
+export const arrowLeftButton = document.getElementById("arrowLeftButton");
+export const arrowRightButton = document.getElementById("arrowRightButton");
