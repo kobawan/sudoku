@@ -3,8 +3,6 @@ export const coorXTable = document.getElementById("coorX");
 export const coorYTable = document.getElementById("coorY");
 export const tables = document.getElementById("tables");
 
-export const pencilButton = document.getElementById("sideButton1");
-export const notesButton = document.getElementById("sideButton2");
 export const returnButton = document.getElementById("returnButton");
 export const resetButton = document.getElementById("button1");
 export const checkButton = document.getElementById("button2");

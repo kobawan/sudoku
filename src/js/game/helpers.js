@@ -1,5 +1,3 @@
-import { pencilButton } from "./consts";
-
 export const isEmptyCell = (cell) => {
 	return cell.value === cell.defaultValue;
 };
@@ -17,5 +15,6 @@ export const isPencilCell = (cell) => {
 };
 
 export const isPencilModeSelected = () => {
-	return pencilButton.className === "game-button-selected";
+	return document.querySelector("input[value=Pencil]")
+		.classList.contains("selected");
 };

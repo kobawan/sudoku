@@ -1,4 +1,3 @@
-import * as GameIds from "./consts";
 import { getGame, assignValues } from "./game";
 import { inputEl, resetCells, removeDuplicates } from "../utils/generalUtils";
 import { sortByGrids } from "../utils/arrayUtils";
@@ -19,24 +18,28 @@ export const Mode = {
  */
 export const toggleCellMode = (buttonMode = Mode.Pencil) => {
 	if (buttonMode === Mode.Pencil) {
-		GameIds.pencilButton.setAttribute("class", "game-button-selected");
-		GameIds.notesButton.setAttribute("class", "game-button-unselected");
-		inputEl.filter(cell =>
-			isEmptyCell(cell)
-		).forEach(cell => {
-			cell.maxLength = 1;
-			cell.setAttribute("class", CellType.PENCIL);
-		});
+		document.querySelector("input[value=Pencil]").classList.add("selected");
+		document.querySelector("input[value=Notes]").classList.remove("selected");
+		inputEl.filter(
+			cell => isEmptyCell(cell)
+		).forEach(
+			cell => {
+				cell.maxLength = 1;
+				cell.setAttribute("class", CellType.PENCIL);
+			}
+		);
 	}
 	else if (buttonMode === Mode.Notes) {
-		GameIds.pencilButton.setAttribute("class", "game-button-unselected");
-		GameIds.notesButton.setAttribute("class", "game-button-selected");
-		inputEl.filter(cell =>
-			isEmptyCell(cell)
-		).forEach(cell => {
-			cell.maxLength = 9;
-			cell.setAttribute("class", CellType.NOTES);
-		});
+		document.querySelector("input[value=Pencil]").classList.remove("selected");
+		document.querySelector("input[value=Notes]").classList.add("selected");
+		inputEl.filter(
+			cell => isEmptyCell(cell)
+		).forEach(
+			cell => {
+				cell.maxLength = 9;
+				cell.setAttribute("class", CellType.NOTES);
+			}
+		);
 	}
 };
 

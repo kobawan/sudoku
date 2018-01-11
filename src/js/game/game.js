@@ -87,8 +87,12 @@ export const addGameButtonListeners = () => {
 
 	GameIds.okButton.addEventListener("click", disableMessagePopup);
 
-	GameIds.pencilButton.addEventListener("click", () => toggleCellMode());
-	GameIds.notesButton.addEventListener("click", () => toggleCellMode(Mode.Notes));
+	document.querySelector("input[value=Pencil]").addEventListener(
+		"click", () => toggleCellMode()
+	);
+	document.querySelector("input[value=Notes]").addEventListener(
+		"click", () => toggleCellMode(Mode.Notes)
+	);
 };
 
 export const addTableCellListeners = () => {
