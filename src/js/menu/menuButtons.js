@@ -1,4 +1,3 @@
-import * as MenuIds from "./consts";
 import { getGame } from "../game/game";
 import { changePage } from "../utils/visibilityUtils";
 
@@ -13,29 +12,17 @@ export const resumeGame = () => {
 	}
 };
 
-export const MenuTabs = {
-	Stats: 0,
-	Settings: 1,
-	Rules: 2,
-	About: 3,
-};
-
 /**
  * Iterates through menu tabs to show/hide according to button clicked in menu.
- * @param {MenuTabs} menuTab tab to open in menu
  */
-export const showContent = (menuTab) => {
-	MenuIds.tabsWrapper.style.display = "block";
-	const tabs = [
-		MenuIds.statsWrapper,
-		MenuIds.settingsWrapper,
-		MenuIds.rulesWrapper,
-		MenuIds.aboutWrapper,
-	];
-	tabs.forEach((tab, i) => {
-		i === menuTab
-			? tab.style.display = "block"
-			: tab.style.display = "none";
+export const showContent = (event) => {
+	const tabs = document.querySelector(".lobby-content-box.menu-content").children;
+
+	Array.from(tabs).forEach(tab => {
+		// Checks if button value is same as menu content title
+		tab.querySelector("h2").innerText === event.target.value
+			? tab.classList.remove("hidden")
+			: tab.classList.add("hidden");
 	});
 };
 
@@ -50,15 +37,11 @@ export const ArrowButton = {
  */
 export const moveSection = (dir) => {
 	if(dir == ArrowButton.Right) {
-		MenuIds.arrowLeftButton.style.display = "block";
-		MenuIds.arrowRightButton.style.display = "none";
-		MenuIds.aboutSection.style.display = "none";
-		MenuIds.contactsSection.style.display = "inline-block";
+		document.querySelector(".lobby #aboutSection").classList.add("hidden");
+		document.querySelector(".lobby #contactsSection").classList.remove("hidden");
 	}
 	else if(dir == ArrowButton.Left) {
-		MenuIds.arrowLeftButton.style.display = "none";
-		MenuIds.arrowRightButton.style.display = "block";
-		MenuIds.aboutSection.style.display = "block";
-		MenuIds.contactsSection.style.display = "none";
+		document.querySelector(".lobby #aboutSection").classList.remove("hidden");
+		document.querySelector(".lobby #contactsSection").classList.add("hidden");
 	}
 };

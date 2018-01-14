@@ -1,0 +1,29 @@
+@import "./colors";
+
+.message-popup {
+    position: absolute;
+    top: 11.21875rem;
+    right: 9rem;
+	padding: 1.25rem;
+	width: 16.25rem;
+	background-image: url("../images/background6.jpg");
+	border-radius: 1.875rem;
+    border: 1px solid @gameLightBorderColor;
+    text-align: center;
+
+    &.hidden {
+        display: none;
+    }
+
+    .message {
+        font-size: 20px;
+        color: @gameDarkColor;
+        cursor: default;
+    }
+
+    #okButton {
+        height: 3.125rem;
+        width: 3.125rem;
+        line-height: 3rem;
+    }
+}

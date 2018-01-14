@@ -8,7 +8,6 @@ import {
 import Game from "../Generator";
 import { GameConfig, CellType } from "../consts";
 import { sortByGrids } from "../utils/arrayUtils";
-import * as GameIds from "./consts";
 import {
 	toggleCellMode,
 	reset,
@@ -79,13 +78,17 @@ export const getGame = () => {
  * Adds click event listeners to game buttons
  */
 export const addGameButtonListeners = () => {
-	GameIds.returnButton.addEventListener("click", () => changePage(Page.Menu));
-	GameIds.resetButton.addEventListener("click", reset);
-	GameIds.checkButton.addEventListener("click", check);
-	GameIds.solveButton.addEventListener("click", solve);
-	GameIds.slideButton.addEventListener("click", toggleSideMenu);
+	document.querySelector(".game input[value=Return]").addEventListener("click",
+		() => changePage(Page.Menu)
+	);
+	document.querySelector(".game input[value=Reset]").addEventListener("click", reset);
+	document.querySelector(".game input[value=Check]").addEventListener("click", check);
+	document.querySelector(".game input[value=Solve]").addEventListener("click", solve);
+	document.querySelector("#side-menu-button").addEventListener("click", toggleSideMenu);
 
-	GameIds.okButton.addEventListener("click", disableMessagePopup);
+	document.querySelector(".game .message-popup #okButton").addEventListener("click",
+		disableMessagePopup
+	);
 
 	document.querySelector("input[value=Pencil]").addEventListener(
 		"click", () => toggleCellMode()

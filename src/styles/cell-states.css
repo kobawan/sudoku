@@ -1,40 +1,44 @@
+@import "./colors";
+
 @height: 37px;
 
 #cell-mixin() {
-	border: none;
+	border: 0;
 	width: @height;
 	height: @height;
 	box-sizing: border-box;
 }
 
-.pencil{
+.pencil {
 	#cell-mixin();
 	font-size: 22px;
 	letter-spacing: 0;
 	line-height: @height;
-	background-color:#FFFFFF;
+	background-color: @whiteColor;
 }
-.readOnly{
+
+.readOnly {
 	#cell-mixin();
 	font-size: 22px;
 	letter-spacing: 0;
 	line-height: @height;
-	background-color:#FFC2F1;
-	cursor:default;
+	background-color: @menuLightColor;
+	cursor: default;
 }
-.notes{
+
+.notes {
 	#cell-mixin();
 	font-size: 12px;
 	line-height: 12px;
 	letter-spacing: 3px;
-	background-color:#FFFFFF;
+	background-color: @whiteColor;
 }
 
-.highlight{
-	background-color:#FFCE70;
+.highlight {
+	background-color: @gameLightColor;
 }
 
-.error{
+.error {
 	line-height: @height - (4px * 2);
-	border: 4px solid #F75B5B;
+	border: 4px solid @errorColor;
 }

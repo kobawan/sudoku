@@ -1,8 +1,6 @@
-import * as MenuIds from "./consts";
 import {
 	resumeGame,
 	showContent,
-	MenuTabs,
 	moveSection,
 	ArrowButton,
 } from "./menuButtons";
@@ -13,20 +11,24 @@ import { GameConfig } from "../consts";
  * Adds click event listeners to menu buttons
  */
 export const addMenuButtonListeners = () => {
-	MenuIds.resumeButton.addEventListener("click", resumeGame);
-	MenuIds.startEasyButton.addEventListener("click", () => initGame());
-	MenuIds.startMediumButton.addEventListener("click",
+	document.querySelector(".lobby input[value=Resume]").addEventListener("click", resumeGame);
+	document.querySelector(".lobby input[value=Easy]").addEventListener("click", () => initGame());
+	document.querySelector(".lobby input[value=Medium]").addEventListener("click",
 		() => initGame(GameConfig.TYPE.DEFAULT, GameConfig.DIFFICULTY.MEDIUM)
 	);
-	MenuIds.startHardButton.addEventListener("click",
+	document.querySelector(".lobby input[value=Hard]").addEventListener("click",
 		() => initGame(GameConfig.TYPE.DEFAULT, GameConfig.DIFFICULTY.HARD)
 	);
 
-	MenuIds.statsButton.addEventListener("click", () => showContent(MenuTabs.Stats));
-	MenuIds.settingsButton.addEventListener("click", () => showContent(MenuTabs.Settings));
-	MenuIds.rulesButton.addEventListener("click", () => showContent(MenuTabs.Rules));
-	MenuIds.aboutButton.addEventListener("click", () => showContent(MenuTabs.About));
+	document.querySelector(".lobby input[value=Stats]").addEventListener("click", showContent);
+	document.querySelector(".lobby input[value=Settings]").addEventListener("click", showContent);
+	document.querySelector(".lobby input[value=Rules]").addEventListener("click", showContent);
+	document.querySelector(".lobby input[value=About]").addEventListener("click", showContent);
 
-	MenuIds.arrowLeftButton.addEventListener("click", () => moveSection(ArrowButton.Left));
-	MenuIds.arrowRightButton.addEventListener("click", () => moveSection(ArrowButton.Right));
+	document.querySelector(".lobby #arrowLeftButton").addEventListener("click",
+		() => moveSection(ArrowButton.Left)
+	);
+	document.querySelector(".lobby #arrowRightButton").addEventListener("click",
+		() => moveSection(ArrowButton.Right)
+	);
 };

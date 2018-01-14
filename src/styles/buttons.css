@@ -1,51 +1,19 @@
-@menuLightColor: #eea1fc;
-@menuDarkColor: #ce72e0;
-@menuBorderColor: #cc72c0;
-
-@gameSuperLightColor: #faecd5;
-@gameLightColor: #ffc477;
-@gameDarkColor: #fb9e25;
-@gameLightBorderColor: #fad291;
-@gameDarkBorderColor: #eeb44f;
+@import "./colors";
 
 #button-mixin(@lightColor, @darkColor, @borderColor, @fontColor) {
-	background: linear-gradient(@lightColor 5%, @darkColor 100% );
+	background: linear-gradient(@lightColor 5%, @darkColor 100%);
 	background-color: @lightColor;
-	border:1px solid @borderColor;
+	border: 0.0625rem solid @borderColor;
 	color: @fontColor;
-	text-shadow:1px @borderColor;
-}
-
-input[type="button"] {
-	display: inline-block;
-	text-decoration: none;
-	text-align: center;
-	font-family: corbel, sans-serif;
-	padding: 0;
-	margin: 0;
-	font-size:20px;
-	font-weight:normal;
-	font-style:normal;
-	cursor:pointer;
-
-	&:focus {
-		outline: 0;
-	}
+	text-shadow: 0.0625rem @borderColor;
 }
 
 .menu-button {
-	#button-mixin(
-		@menuLightColor,
-		@menuDarkColor,
-		@menuBorderColor,
-		#ffffff,
-	);
-	border-radius:12px;
-	height:36px;
-	line-height:30px;
-	min-width: 87px;
-	width:auto;
-	padding: 0 5px 0 5px;
+	#button-mixin(@menuLightColor, @menuDarkColor, @menuBorderColor, @whiteColor);
+	border-radius: 0.75rem;
+	height: 2.25rem;
+	min-width: 5.5rem;
+	padding: 0 0.3125rem;
 
 	&:hover {
 		background: linear-gradient(@menuDarkColor 5%, @menuLightColor 100%);
@@ -53,26 +21,15 @@ input[type="button"] {
 	}
 }
 
-.game-button{
-	#button-mixin(
-		@gameLightColor,
-		@gameDarkColor,
-		@gameDarkBorderColor,
-		#ffffff,
-	);
-	border-radius:42px;
-	height:67px;
-	line-height:60px;
-	width:66px;
-	
+.game-button {
+	#button-mixin(@gameLightColor, @gameDarkColor, @gameDarkBorderColor, @whiteColor);
+	border-radius: 2.625rem;
+	height: 4.1875rem;
+	width: 4.125rem;
+
 	&:hover,
 	&.selected {
-		#button-mixin(
-			@gameSuperLightColor,
-			@gameLightColor,
-			@gameLightBorderColor,
-			@gameDarkColor,
-		);
+		#button-mixin(@gameSuperLightColor, @gameLightColor, @gameLightBorderColor, @gameDarkColor);
 	}
 }
 

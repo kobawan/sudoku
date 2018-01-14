@@ -9,13 +9,12 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-        "indent": ["warn", "tab"],
         "linebreak-style": ["warn", "unix"],
         "quotes": ["warn", "double"],
         "semi": ["warn", "always", { "omitLastInOneLineBlock": true}],
         "func-style": ["warn", "expression", { "allowArrowFunctions": true }],
         "max-depth": ["warn", 4],
-        "max-len": ["warn", 100],
+        "max-len": ["warn", { "code": 100, "comments": 120 }],
         "block-spacing": "warn",
         "brace-style": ["warn", "stroustrup", { "allowSingleLine": true }],
         "camelcase": "warn",

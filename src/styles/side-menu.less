@@ -1,0 +1,39 @@
+@import "./colors";
+
+.side-menu {
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+
+    .menu {
+        background:	@gameSuperLightColor url("../images/background6.jpg");
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 1.25rem 14rem 1.25rem;
+
+        &.hidden {
+            display: none;
+        }
+
+        input {
+            margin: 0.625rem 0;
+        }
+    }
+
+    #side-menu-button {
+        width: 1.5625rem;
+        background-color: @gameLightColor;
+        border: 0;
+
+        &:hover {
+            background-color: @gameDarkColor;
+        }
+    }
+}
