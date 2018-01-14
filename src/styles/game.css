@@ -1,3 +1,20 @@
+#coordinates-table-mixin() {
+	table {
+		border: 0.125rem solid transparent;
+		border-collapse: collapse;
+		background-color: transparent;
+
+		td {
+			border: 0.0625rem solid transparent;
+			padding: 0;
+			font-size: 1.375rem;
+			width: 2.3125rem;
+			height: 2.3125rem;
+			text-align: center;
+		}
+	}
+}
+
 .game {
 	width: 100%;
 	height: 100%;
@@ -21,23 +38,10 @@
 			visibility: hidden;
 		}
 
-		table {
-			border: 2px solid transparent;
-			border-collapse: collapse;
-			background-color: transparent;
+		#coordinates-table-mixin();
 
-			td {
-				border: 1px solid transparent;
-				padding: 0;
-				font-size: 22px;
-				width: 37px;
-				height: 37px;
-				text-align: center;
-
-				&:nth-of-type(3n) {
-					border-right: 2px solid transparent;
-				}
-			}
+		table td :nth-of-type(3n) {
+			border-right: 0.125rem solid transparent;
 		}
 	}
 
@@ -52,41 +56,28 @@
 				visibility: hidden;
 			}
 
-			table {
-				border: 2px solid transparent;
-				border-collapse: collapse;
-				background-color: transparent;
+			#coordinates-table-mixin();
 
-				tr:nth-of-type(3n) td {
-					border-bottom: 2px solid transparent;
-				}
-
-				td {
-					border: 1px solid transparent;
-					padding: 0;
-					font-size: 22px;
-					width: 37px;
-					height: 37px;
-					text-align: center;
-				}
+			table tr :nth-of-type(3n) td {
+				border-bottom: 0.125rem solid transparent;
 			}
 		}
 
 		.sudoku {
-			border: 2px solid black;
+			border: 0.125rem solid black;
 			border-collapse: collapse;
 
 			tr {
 				&:nth-of-type(3n) td {
-					border-bottom: 2px solid black;
+					border-bottom: 0.125rem solid black;
 				}
 
 				td {
-					border: 1px solid black;
+					border: 0.0625rem solid black;
 					padding: 0;
 
 					&:nth-of-type(3n) {
-						border-right: 2px solid black;
+						border-right: 0.125rem solid black;
 					}
 
 					textarea {
@@ -104,8 +95,8 @@
 		}
 
 		.dummy-block {
-			width: 41px;
-			height: 347px;
+			width: 2.5625rem;
+			height: 21.6875rem;
 		}
 	}
 

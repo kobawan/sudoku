@@ -28,10 +28,15 @@
 		flex-flow: column nowrap;
 		align-items: center;
 		justify-content: space-between;
+		min-width: 25rem;
 	}
 
 	.menu {
 		flex: 2 33%;
+
+		img {
+			width: 17.5rem;
+		}
 
 		.column {
 			display: inline-block;
@@ -44,71 +49,76 @@
 	}
 
 	.menu-content {
-		.menu-content-wrapper {
+		.section {
+			height: 100%;
+			width: 100%;
+			display: flex;
+			flex-flow: column nowrap;
+			justify-content: space-between;
+
 			h2 {
 				color: @menuDarkColor;
 				font-size: 1.25rem;
 				text-align: center;
 				margin: 0;
-				padding-bottom: 20px;
+				padding-bottom: 1.25rem;
 			}
 
 			p {
 				color: @blackColor;
-				text-align: justify;
 				margin: 0;
 				padding: 0.3125rem 0;
 			}
-
+			
 			&.hidden {
 				display: none;
 			}
 
-			&.about {
-				.section {
+			.scrollable {
+				flex-grow: 2;
+				overflow-y: scroll;
+
+				.columns {
 					display: flex;
-					flex-flow: column nowrap;
+					flex-flow: row nowrap;
 					justify-content: space-between;
 
-					&.hidden {
-						display: none;
+					.column {
+						padding: 0 0.625rem;
 					}
+				}
+			}
 
-					// .scrollable {
-					// 	overflow-y: scroll;
-					// 	height: 10%;
-					// }
+			.footer {
+				padding-top: 1.25rem;
+				text-align: center;
 
-					.columns {
-						display: flex;
-						flex-flow: row nowrap;
-						justify-content: space-between;
+				.arrow {
+					height: 1.875rem;
+					width: 1.875rem;
+					border-radius: 0.625rem;
+					border: 0;
 
-						.column {
-							padding: 0 0.625rem;
-						}
-					}
-
-					.arrow {
-						height: 30px;
-						width: 30px;
-						border-radius: 10px;
-						border: 0;
-					}
-
-					#arrowRightButton {
+					&.right {
 						background-image: url("../images/rightarrow.png");
 						background-size: contain;
 					}
 
-					#arrowLeftButton {
+					&.left {
 						background-image: url("../images/leftarrow.png");
 						background-size: contain;
 					}
 				}
 			}
-		}
 
+			#dogeTax {
+				width: 13.75rem;
+			}
+
+			#contactsImg {
+				width: 9.6875rem;
+			}
+		}
 	}
 }
 /*END START PAGE*/

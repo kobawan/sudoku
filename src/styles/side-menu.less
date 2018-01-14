@@ -15,15 +15,23 @@
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
-        justify-content: space-between;
-        padding: 1.25rem 1.25rem 14rem 1.25rem;
+        justify-content: flex-start;
+        padding: 1.25rem;
 
         &.hidden {
             display: none;
         }
+        
+        img {
+            width: 17.5rem;
+        }
 
-        input {
-            margin: 0.625rem 0;
+        .buttons-wrapper {
+            margin: 1.875rem 0;
+
+            input {
+                margin: 0.625rem 0;
+            }
         }
     }
 
