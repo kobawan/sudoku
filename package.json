@@ -7,8 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
-    "build": "eslint src/js/** && lesshint src/styles/** && webpack",
     "watch": "webpack --watch",
+    "dist": "webpack --devtool false",
     "lint": "eslint src/js/** && lesshint src/styles/**"
   },
   "repository": {
