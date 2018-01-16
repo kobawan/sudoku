@@ -25,10 +25,10 @@ export const addMenuButtonListeners = () => {
 	document.querySelector(".lobby input[value=Rules]").addEventListener("click", showContent);
 	document.querySelector(".lobby input[value=About]").addEventListener("click", showContent);
 
-	document.querySelector(".lobby .arrow.left").addEventListener("click",
+	document.querySelector("#arrowLeft").addEventListener("click",
 		() => moveSection(ArrowButton.Left)
 	);
-	document.querySelector(".lobby .arrow.right").addEventListener("click",
+	document.querySelector("#arrowRight").addEventListener("click",
 		() => moveSection(ArrowButton.Right)
 	);
 };

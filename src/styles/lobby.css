@@ -96,18 +96,10 @@
 				.arrow {
 					height: 1.875rem;
 					width: 1.875rem;
-					border-radius: 0.625rem;
-					border: 0;
-
-					&.right {
-						background-image: url("../images/rightarrow.png");
-						background-size: contain;
-					}
-
-					&.left {
-						background-image: url("../images/leftarrow.png");
-						background-size: contain;
-					}
+					fill: @menuDarkColor;
+					stroke: @blackColor;
+					stroke-linejoin: round;
+					stroke-width: 3.333%;
 				}
 			}
 

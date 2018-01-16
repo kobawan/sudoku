@@ -5,6 +5,8 @@
     <title>Sudoku</title>
     <link rel="icon" type="image/png" href="images/favicon2.gif">
     <link rel="stylesheet" href="styles.css">
+
+    <style>.icon{width:1rem;height:1rem}</style>
 </head>
 <body>
     <!--LOBBY PAGE-->
@@ -71,7 +73,7 @@
                             <img id="dogeTax" src="images/koba.png">
                         </div>
                         <div class="footer">
-                            <input type="button" class="arrow right"/>
+                            <svg class="icon arrow"><use xlink:href="#arrowRight" /></svg>
                         </div>
                     </div>
 
@@ -91,7 +93,7 @@
                             </div>
                         </div>
                         <div class="footer">
-                            <input type="button" class="arrow left"/>
+                            <svg class="icon arrow"><use xlink:href="#arrowLeft" /></svg>
                         </div>
                     </div>
 
@@ -259,6 +261,17 @@
         </div>
     </div>
     <!--END GAME PAGE-->
+
+    <!--SVG SPRITE-->
+    <svg xmlns="http://www.w3.org/2000/svg" id="svgSprite" style="display:none">
+        <symbol viewBox="0 0 30 30" id="arrowLeft">
+            <path d="m0.4685,15l14.063,14.063l0,-8.438l15,0l0,-11.25l-15,0l0,-8.438l-14.063,14.063z"></path>
+        </symbol>
+        <symbol viewBox="0 0 30 30" id="arrowRight">
+            <path d="m29.5315,15l-14.063,-14.063l0,8.438l-15,0l0,11.25l15,0l0,8.438l14.063,-14.063z"></path>
+        </symbol>
+    </svg>
+    <!--END SVG SPRITE-->
 
     <script type="text/javascript" src="bundle.js"></script>
 </body>
