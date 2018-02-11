@@ -1,6 +1,4 @@
 import { addMenuButtonListeners } from "./menu/menu";
-import { changePage, Page } from "./utils/visibilityUtils";
-
 import {
 	addGameButtonListeners,
 	addTableCellListeners,
@@ -9,9 +7,8 @@ import {
 // eslint-disable-next-line no-unused-vars
 import styles from "../styles";
 
-// Initialize menu event listeners and show menu
+// Initialize menu event listeners
 addMenuButtonListeners();
-changePage(Page.Menu);
 
 // Initialize game event listeners
 addGameButtonListeners();

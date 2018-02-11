@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kobawan/Sudoku.git"
+    "url": "git+https://github.com/kobawan/sudoku.git"
   },
   "author": "Sara Nordmyr da Cunha",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/kobawan/Sudoku/issues"
+    "url": "https://github.com/kobawan/sudoku/issues"
   },
-  "homepage": "https://github.com/kobawan/Sudoku#readme",
+  "homepage": "https://github.com/kobawan/sudoku",
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.25.0",

@@ -49,12 +49,12 @@ let game = undefined;
 
 /**
  * Initializes game and sets game singleton. Changes page when game is initialized.
- * @param {GameConfig.TYPE} gameType size of sudoku
  * @param {GameConfig.DIFFICULTY} difficulty difficulty of sudoku
+ * @param {GameConfig.TYPE} gameType size of sudoku
  */
 export const initGame = (
-	gameType = GameConfig.TYPE.DEFAULT,
-	difficulty = GameConfig.DIFFICULTY.EASY
+	difficulty,
+	gameType = GameConfig.TYPE.DEFAULT
 ) => {
 	game = new Game(gameType, difficulty);
 	resetCells();
@@ -90,11 +90,11 @@ export const addGameButtonListeners = () => {
 		disableMessagePopup
 	);
 
-	document.querySelector("input[value=Pencil]").addEventListener(
-		"click", () => toggleCellMode()
+	document.querySelector("input[value=Pencil]").addEventListener("click",
+		() => toggleCellMode()
 	);
-	document.querySelector("input[value=Notes]").addEventListener(
-		"click", () => toggleCellMode(Mode.Notes)
+	document.querySelector("input[value=Notes]").addEventListener("click",
+		() => toggleCellMode(Mode.Notes)
 	);
 };
 
