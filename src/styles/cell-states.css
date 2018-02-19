@@ -22,7 +22,7 @@
 	font-size: 1.375rem;
 	letter-spacing: 0;
 	line-height: @height;
-	background-color: @menuLightColor;
+	background-color: @cellDisabledColor;
 	cursor: default;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .highlight {
-	background-color: @gameLightColor;
+	background-color: @cellHighlightedColor;
 }
 
 .error {

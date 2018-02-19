@@ -6,9 +6,9 @@
     right: 9rem;
 	padding: 1.25rem;
 	width: 16.25rem;
-	background-image: url("../images/background6.jpg");
-	border-radius: 1.875rem;
-    border: 0.0625rem solid @gameLightBorderColor;
+	background-color: @cellDisabledColor;
+    border-radius: 0.937rem 0;
+    box-shadow: 0 0 1.25rem;
     text-align: center;
 
     &.hidden {
@@ -17,13 +17,13 @@
 
     .message {
         font-size: 1.25rem;
-        color: @gameDarkColor;
+        color: @blackColor;
         cursor: default;
     }
 
     #okButton {
-        height: 3.125rem;
-        width: 3.125rem;
-        line-height: 3rem;
+        height: 2.5rem;
+        width: 2.5rem;
+        font-size: 1rem;
     }
 }

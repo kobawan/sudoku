@@ -37,7 +37,7 @@ export const addMenuButtonListeners = () => {
 	document.querySelectorAll(".lobby .arrow").forEach(
 		arrow => arrow.addEventListener("click", () => {
 			toggleAboutSection(event.path.find(
-				el => el.classList && el.classList.contains("section")
+				el => el.classList && el.classList.contains("sub-section")
 			).id);
 		})
 	);

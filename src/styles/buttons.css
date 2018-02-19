@@ -1,35 +1,36 @@
 @import "./colors";
 
-#button-mixin(@lightColor, @darkColor, @borderColor, @fontColor) {
-	background: linear-gradient(@lightColor 5%, @darkColor 100%);
-	background-color: @lightColor;
-	border: 0.0625rem solid @borderColor;
-	color: @fontColor;
-	text-shadow: 0.0625rem @borderColor;
-}
-
 .menu-button {
-	#button-mixin(@menuLightColor, @menuDarkColor, @menuBorderColor, @whiteColor);
-	border-radius: 0.75rem;
+	background-color: @blackColor;
+	border: 0;
+	color: @whiteColor;
+	border-radius: 0 0.75rem;
 	height: 2.25rem;
-	min-width: 5.5rem;
+	min-width: 6rem;
 	padding: 0 0.3125rem;
+	transition: 0.5s;
+
+	&.reversed {
+		border-radius: 0.75rem 0;
+	}
 
 	&:hover {
-		background: linear-gradient(@menuDarkColor 5%, @menuLightColor 100%);
-		background-color: @menuDarkColor;
+		background-color: @pinkColor;
 	}
 }
 
 .game-button {
-	#button-mixin(@gameLightColor, @gameDarkColor, @gameDarkBorderColor, @whiteColor);
+	background-color: @blackColor;
+	border: 0;
+	color: @whiteColor;
 	border-radius: 2.625rem;
 	height: 4.1875rem;
 	width: 4.125rem;
+	transition: 0.5s;
 
 	&:hover,
 	&.selected {
-		#button-mixin(@gameSuperLightColor, @gameLightColor, @gameLightBorderColor, @gameDarkColor);
+		background-color: @pinkColor;
 	}
 }
 

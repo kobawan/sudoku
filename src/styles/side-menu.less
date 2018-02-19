@@ -11,7 +11,7 @@
     justify-content: flex-start;
 
     .menu {
-        background:	@gameSuperLightColor url("../images/background6.jpg");
+        background-color: fade(@cellDisabledColor, 80%);
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
@@ -41,11 +41,12 @@
 
     #side-menu-button {
         width: 1.5625rem;
-        background-color: @gameLightColor;
+        background-color: @blackColor;
         border: 0;
+        transition: 0.5s;
 
         &:hover {
-            background-color: @gameDarkColor;
+            background-color: @pinkColor;
         }
     }
 }
