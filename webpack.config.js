@@ -28,6 +28,10 @@ module.exports = {
                 ],
             },
             {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                loader: "file-loader?name=[name].[ext]",
+            },
+            {
                 test: /\.less$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",

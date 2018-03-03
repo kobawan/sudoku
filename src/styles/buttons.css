@@ -5,9 +5,8 @@
 	border: 0;
 	color: @whiteColor;
 	border-radius: 0 0.75rem;
-	height: 2.25rem;
-	min-width: 6rem;
-	padding: 0 0.3125rem;
+	min-width: 6.875rem;
+	padding: 0.4375rem;
 	transition: 0.5s;
 
 	&.reversed {
@@ -26,6 +25,7 @@
 	border-radius: 2.625rem;
 	height: 4.1875rem;
 	width: 4.125rem;
+	padding: 0;
 	transition: 0.5s;
 
 	&:hover,

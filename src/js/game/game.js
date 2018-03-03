@@ -86,7 +86,7 @@ export const addGameButtonListeners = () => {
 	document.querySelector(".game input[value=Solve]").addEventListener("click", solve);
 	document.querySelector("#side-menu-button").addEventListener("click", toggleSideMenu);
 
-	document.querySelector(".game .message-popup #okButton").addEventListener("click",
+	document.querySelector(".game .message-popup input").addEventListener("click",
 		disableMessagePopup
 	);
 

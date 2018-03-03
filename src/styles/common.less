@@ -1,7 +1,14 @@
 @import "./colors";
 
+@font-face {
+	font-family: "dekiru";
+	src: url("../fonts/Dekiru.ttf") format("truetype");
+	font-weight: normal;
+  	font-style: normal;
+}
+
 html {
-	font: 16px corbel, sans-serif;
+	font: 16px "dekiru", corbel, sans-serif;
 	height: 100%;
 	width: 100%;
 	margin: 0;
@@ -18,10 +25,8 @@ body {
 }
 
 input[type="button"] {
-	font: 1.25rem corbel, sans-serif;
+	font: 1.25rem "dekiru", corbel, sans-serif;
 	cursor: pointer;
-	margin: 0;
-	padding: 0;
 
 	&:focus {
 		outline: 0;
