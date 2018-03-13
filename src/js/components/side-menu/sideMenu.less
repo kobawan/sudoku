@@ -1,4 +1,4 @@
-@import "./colors";
+@import "../../../styles/colors";
 
 .side-menu {
 	position: absolute;
@@ -33,6 +33,8 @@
 		}
 
         .buttons-wrapper {
+            display: flex;
+            flex-flow: column nowrap;
             margin: 1.875rem 0;
 
             input {
@@ -45,7 +47,7 @@
 		}
     }
 
-    #side-menu-button {
+    .close-button {
         width: 1.5625rem;
         background-color: @blackColor;
         border: 0;

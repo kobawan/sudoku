@@ -1,17 +1,12 @@
 import { inputEl, resetCells } from "../utils/generalUtils";
 import {
 	changePage,
-	Page,
-	toggleSideMenu,
 } from "../utils/visibilityUtils";
 import Game from "../Generator";
 import { GameConfig, CellType } from "../consts";
 import { sortByGrids } from "../utils/arrayUtils";
 import {
 	toggleCellMode,
-	reset,
-	solve,
-	check,
 	Mode,
 } from "./gameButtons";
 import {
@@ -77,14 +72,6 @@ export const getGame = () => {
  * Adds click event listeners to game buttons
  */
 export const addGameButtonListeners = () => {
-	document.querySelector(".game input[value=Return]").addEventListener("click",
-		() => changePage(Page.Menu)
-	);
-	document.querySelector(".game input[value=Reset]").addEventListener("click", reset);
-	document.querySelector(".game input[value=Check]").addEventListener("click", check);
-	document.querySelector(".game input[value=Solve]").addEventListener("click", solve);
-	document.querySelector("#side-menu-button").addEventListener("click", toggleSideMenu);
-
 	document.querySelector("input[value=Pencil]").addEventListener("click",
 		() => toggleCellMode()
 	);

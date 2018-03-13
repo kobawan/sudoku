@@ -2,6 +2,7 @@ import * as React from "react";
 import ReactDOM from "react-dom";
 
 import { Popup } from "../components/popup/Popup.jsx";
+import { SideMenu } from "../components/side-menu/SideMenu.jsx";
 
 /**
  * Toggles sections of about tab in menu. Hides according arrow button.
@@ -39,9 +40,16 @@ export const changePage = (page = Page.Game) => {
 		document.querySelector(".lobby").classList.add("hidden");
         document.querySelector(".game").classList.remove("hidden");
 
-        toggleContent(); // Resets menu content and its sections to default visibility
+        ReactDOM.render(
+            <SideMenu />,
+            document.getElementById("gameMenu")
+        );
+
+		toggleContent(); // Resets menu content and its sections to default visibility
 	}
 	else if (page === Page.Menu) {
+        ReactDOM.unmountComponentAtNode(document.getElementById("gameMenu"));
+        ReactDOM.unmountComponentAtNode(document.getElementById("gamePopup"));
 		document.querySelector(".lobby").classList.remove("hidden");
 		document.querySelector(".game").classList.add("hidden");
 	}
@@ -59,12 +67,4 @@ export const enableMessagePopup = (text) => {
 export const disableCoordinates = () => {
 	document.querySelector(".game .coorX").classList.add("hidden");
 	document.querySelector(".game .coorY").classList.add("hidden");
-};
-
-export const toggleSideMenu = () => {
-	const sideMenu = document.querySelector(".game .menu");
-	if(sideMenu.classList.contains("hidden")) {
-		sideMenu.classList.remove("hidden");
-	}
-	else sideMenu.classList.add("hidden");
 };
