@@ -1,3 +1,8 @@
+import * as React from "react";
+import ReactDOM from "react-dom";
+
+import { Popup } from "../components/popup/Popup.jsx";
+
 /**
  * Toggles sections of about tab in menu. Hides according arrow button.
  * @param {string} sectionToHide Id of the about section that should hide
@@ -32,9 +37,9 @@ export const Page = {
 export const changePage = (page = Page.Game) => {
 	if(page === Page.Game) {
 		document.querySelector(".lobby").classList.add("hidden");
-		document.querySelector(".game").classList.remove("hidden");
+        document.querySelector(".game").classList.remove("hidden");
 
-		toggleContent(); // Resets menu content and its sections to default visibility
+        toggleContent(); // Resets menu content and its sections to default visibility
 	}
 	else if (page === Page.Menu) {
 		document.querySelector(".lobby").classList.remove("hidden");
@@ -44,15 +49,16 @@ export const changePage = (page = Page.Game) => {
 
 export const enableMessagePopup = (text) => {
 	document.querySelector(".game .coorX").classList.remove("hidden");
-	document.querySelector(".game .coorY").classList.remove("hidden");
-	document.querySelector(".game .message").innerHTML = text;
-	document.querySelector(".game .message-popup").classList.remove("hidden");
+    document.querySelector(".game .coorY").classList.remove("hidden");
+    ReactDOM.render(
+        <Popup hidden={false} text={text} onClick={disableCoordinates} />,
+        document.getElementById("gamePopup")
+    );
 };
 
-export const disableMessagePopup = () => {
+export const disableCoordinates = () => {
 	document.querySelector(".game .coorX").classList.add("hidden");
 	document.querySelector(".game .coorY").classList.add("hidden");
-	document.querySelector(".game .message-popup").classList.add("hidden");
 };
 
 export const toggleSideMenu = () => {

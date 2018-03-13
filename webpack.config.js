@@ -1,21 +1,19 @@
 const path = require("path");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const htmlPath = path.join(__dirname, "src", "index.html");
-
 module.exports = {
-	entry: [
+    entry: [
         path.join(__dirname, "src", "js", "initializing.js"),
-        htmlPath,
+        path.join(__dirname, "src", "index.html"),
         "webpack-dev-server/client?http://localhost:8080",
     ],
-	output: {
-		filename: "bundle.js",
+    output: {
+        filename: "bundle.js",
         path: path.resolve(__dirname, "dist"),
     },
     devtool: "source-map",
-	module: {
-		rules: [
+    module: {
+        rules: [
             {
                 test: /\.(png|svg|jpg|gif)$/,
                 loaders: [
@@ -43,17 +41,17 @@ module.exports = {
                 }),
             },
             {
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["es2015"],
+                        presets: ["es2015", "react"],
                     },
                 },
             },
-			{
-                test: htmlPath,
+            {
+                test: /index\.html/,
                 use: [
                     {
                         loader: "file-loader",
@@ -65,12 +63,12 @@ module.exports = {
                     "html-loader",
                 ],
             },
-		],
+        ],
     },
     plugins: [
         new ExtractTextPlugin("styles.css"),
     ],
-	devServer: {
-		contentBase: path.join(__dirname, "dist", "index.html"),
-	},
+    devServer: {
+        contentBase: path.join(__dirname, "dist"),
+    },
 };

@@ -2,7 +2,6 @@ import { inputEl, resetCells } from "../utils/generalUtils";
 import {
 	changePage,
 	Page,
-	disableMessagePopup,
 	toggleSideMenu,
 } from "../utils/visibilityUtils";
 import Game from "../Generator";
@@ -85,10 +84,6 @@ export const addGameButtonListeners = () => {
 	document.querySelector(".game input[value=Check]").addEventListener("click", check);
 	document.querySelector(".game input[value=Solve]").addEventListener("click", solve);
 	document.querySelector("#side-menu-button").addEventListener("click", toggleSideMenu);
-
-	document.querySelector(".game .message-popup input").addEventListener("click",
-		disableMessagePopup
-	);
 
 	document.querySelector("input[value=Pencil]").addEventListener("click",
 		() => toggleCellMode()

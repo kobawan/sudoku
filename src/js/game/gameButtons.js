@@ -67,7 +67,7 @@ export const solve = () => {
 		toggleCellMode();
 		sortByGrids(game, assignValues);
 		inputEl.forEach((cell, index) => cell.value = game.matrix[index]);
-		enableMessagePopup("Correct!<br>You have won the game!");
+		enableMessagePopup("Correct!<br />You have won the game!");
 	}
 };
 
