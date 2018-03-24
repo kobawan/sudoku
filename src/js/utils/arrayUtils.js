@@ -10,7 +10,7 @@ export const sortByRows = (game, callback) => {
 		arr.push([]);
 		for (let col = 0; col < game.gameType; col++) {
 			pos = row * game.gameType + col;
-			values = { game, row, col, pos, arr};
+			values = { row, pos, arr };
 			callback(values);
 		}
 	}
@@ -29,7 +29,7 @@ export const sortByCols = (game, callback) => {
 		arr.push([]);
 		for (let row = 0; row < game.gameType; row++) {
 			pos = col + game.gameType * row;
-			values = { game, row, col, pos, arr};
+			values = { col, pos, arr };
 			callback(values);
 		}
 	}
@@ -61,7 +61,7 @@ export const sortByGrids = (game, callback) => {
 					colPos = col + colGrid * game.ratio;
 					// final position
 					pos = rowPos + colPos;
-					values = { game, row, col, grid, pos, arr};
+					values = { row, col, grid, pos, arr };
 					callback(values);
 				}
 			}

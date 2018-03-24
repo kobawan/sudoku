@@ -10,8 +10,15 @@ export const GameConfig = {
 	SHUFFLE: 60,
 };
 
-export const CellType = {
+export const CellClassType = {
 	READONLY: "readOnly",
 	PENCIL: "pencil",
-	NOTES: "notes",
+    NOTES: "notes",
+    HIGHLIGHT: "highlight",
+    ERROR: "error",
+};
+
+export const CellMode = {
+	Pencil: 0,
+	Notes: 1,
 };

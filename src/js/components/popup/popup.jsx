@@ -3,27 +3,13 @@ import * as React from "react";
 import "./popup.less";
 
 /**
- * @param { text: string, hidden: boolean, onClick: Function }
+ * @param { text: string, hidden: boolean }
  */
 export class Popup extends React.Component {
-    constructor (props) {
-        super(props);
-        this.onClick = this.onClick.bind(this);
-        this.state = {
-            hidden: undefined,
-        };
-    }
-
-    componentWillUpdate (nextProps, nextState) {
-        if (this.state.hidden && this.state.hidden === nextState.hidden) {
-            this.setState({ hidden: nextProps.hidden });
-        }
-    }
-
     render () {
         const containerClasses = [
             "message-popup",
-            this.state.hidden || this.props.hidden ? "hidden" : null
+            this.props.hidden ? "hidden" : null
         ].join(" ");
 
         /* eslint-disable max-len */
@@ -40,16 +26,9 @@ export class Popup extends React.Component {
                 <div className="message" dangerouslySetInnerHTML={{ __html: this.props.text }} />
                 <label>
                     {checkSVG}
-                    <input type="button" className="game-button" onClick={this.onClick} />
+                    <input type="button" className="game-button" onClick={this.props.onClick} />
                 </label>
             </div>
         );
-    }
-
-    onClick (e) {
-        if (this.props.onClick) {
-            this.props.onClick(e);
-        }
-        this.setState({ hidden: true });
     }
 }

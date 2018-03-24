@@ -1,102 +1,101 @@
 import {
-	isPencilCell,
-	isNotesCell,
-	isReadOnlyCell,
-	isPencilModeSelected,
-	isEmptyCell,
+    isPencilCell,
+    isNotesCell,
+    isEmptyCell,
 } from "./helpers";
-import { getGame } from "./game";
-import { removeDuplicates, inputEl } from "../utils/generalUtils";
+import { removeDuplicates } from "../utils/generalUtils";
 import {
-	sortByRows,
-	sortByCols,
-	sortByGrids,
+    sortByRows,
+    sortByCols,
+    sortByGrids,
 } from "../utils/arrayUtils";
+import { CellMode } from "../consts";
 
 /**
  * Returns coordinates of selected cell
  * @param {object} game current game
- * @param {*} cell selected cell
+ * @param {EventTarget} selectedCell
+ * @param {NodeListOf<HTMLTextAreaElement>} cells
  */
-const findCoordinates = (game, cell) => {
-	const coorRow = cell.parentNode.parentNode.rowIndex;
-	const coorCol = cell.parentNode.cellIndex;
-	let coorGrid;
-	sortByGrids(game, (values) => {
-		const { grid, pos } = values;
-		if(cell === inputEl[pos]) {
-			coorGrid = grid;
-			return;
-		}
-	});
-	return { x: coorRow, y: coorCol, grid: coorGrid };
+const findCoordinates = (game, selectedCell, cells) => {
+    const coorRow = selectedCell.parentNode.parentNode.rowIndex;
+    const coorCol = selectedCell.parentNode.cellIndex;
+    let coorGrid;
+    sortByGrids(game, ({ grid, pos }) => {
+        if(selectedCell === cells[pos]) {
+            coorGrid = grid;
+            return;
+        }
+    });
+    return { x: coorRow, y: coorCol, grid: coorGrid };
 };
 
 /**
  * Removes numbers from notes that are related to selected cell
- * @param {*} selectedCell selected cell
- * @param {array} arr array of arranged cells
- * @param {number} coor row, col, or grid of changed selected cell
+ * @param {EventTarget} selectedCell
+ * @param {HTMLTextAreaElement[]} arr array of row, col, or grid of changed selected cell
  */
-const removeNotesDup = (selectedCell, arr, coor) => {
-	if(arr[coor].length !== 0) {
-		let pos;
-		arr[coor].forEach( cell => {
-			pos = cell.value.indexOf(selectedCell.value);
-			if(pos !== -1) {
-				cell.value =
-					cell.value.substr(0, pos) + cell.value.substr(pos + 1, cell.value.length);
-			}
-		});
-	}
+const removeNotesDup = (selectedCell, arr) => {
+    if(arr.length !== 0) {
+        let pos;
+        arr.forEach(cell => {
+            pos = cell.value.indexOf(selectedCell.value);
+            if(pos !== -1) {
+                cell.value =
+                    cell.value.substr(0, pos) + cell.value.substr(pos + 1, cell.value.length);
+            }
+        });
+    }
 };
 
 /**
  * Removes value from notes if new pencil value has been inputted and
  * Filters notes if game is in notes mode
+ * @param {CellMode} cellMode
+ * @param {object} game
+ * @param {NodeListOf<HTMLTextAreaElement>} cells
  */
-export const updateNotesCells = () => {
-	const cell = event.target;
-	// Removes note duplicates when new pencil value is added
-	if (
-		isPencilModeSelected() &&
-		isPencilCell(cell) &&
-		!isReadOnlyCell(cell) &&
-		!isEmptyCell(cell)
-	) { // pencil mode and selected cell is pencil with value
-		const game = getGame();
-		const coor = findCoordinates(game, cell);
-		const notesCellsRows = sortByRows(game, (values) => {
-			const { arr, row, pos } = values;
-			if(isNotesCell(inputEl[pos]) && !isEmptyCell(inputEl[pos])) {
-				arr[row].push(inputEl[pos]);
-			}
-		});
-		const notesCellsCols = sortByCols(game, (values) => {
-			const { arr, col, pos } = values;
-			if(isNotesCell(inputEl[pos]) && !isEmptyCell(inputEl[pos])) {
-				arr[col].push(inputEl[pos]);
-			}
-		});
-		const notesCellsGrids = sortByGrids(game, (values) => {
-			const { arr, grid, pos } = values;
-			if(isNotesCell(inputEl[pos]) && !isEmptyCell(inputEl[pos])) {
-				arr[grid].push(inputEl[pos]);
-			}
-		});
-		removeNotesDup(cell, notesCellsRows, coor.x);
-		removeNotesDup(cell, notesCellsCols, coor.y);
-		removeNotesDup(cell, notesCellsGrids, coor.grid);
-	}
-	// filters and sorts notes cell when new note value is added
-	if (!isPencilModeSelected() && isNotesCell(cell)) { // notes mode and selected cell is notes
-		const notes = cell.value
-			.split("")
-			.map(val => parseInt(val))
-			.filter(val => !!val)
-			.sort()
-		;
-		const result = removeDuplicates(notes).join("");
-		cell.value = result;
-	}
+export const updateNotesCells = (cellMode, game, cells) => {
+    const selectedCell = event.target;
+    // Removes note duplicates when new pencil value is added
+    if (
+        cellMode === CellMode.Pencil
+        && isPencilCell(selectedCell)
+        && !isEmptyCell(selectedCell)
+    ) { // pencil mode and selected cell is pencil with value
+        const coor = findCoordinates(game, selectedCell, cells);
+        const notesCellsRows = sortByRows(game, ({ arr, row, pos }) => {
+            if(isNotesCell(cells[pos]) && !isEmptyCell(cells[pos])) {
+                arr[row].push(cells[pos]);
+            }
+        });
+        const notesCellsCols = sortByCols(game, ({ arr, col, pos }) => {
+            if(isNotesCell(cells[pos]) && !isEmptyCell(cells[pos])) {
+                arr[col].push(cells[pos]);
+            }
+        });
+        const notesCellsGrids = sortByGrids(game, ({ arr, grid, pos }) => {
+            if(isNotesCell(cells[pos]) && !isEmptyCell(cells[pos])) {
+                arr[grid].push(cells[pos]);
+            }
+        });
+        const duplicates = removeDuplicates([].concat(
+            notesCellsRows[coor.x],
+            notesCellsCols[coor.y],
+            notesCellsGrids[coor.grid]
+        ));
+        removeNotesDup(selectedCell, duplicates);
+    }
+    // filters and sorts notes cell when new note value is added
+    if (
+        cellMode === CellMode.Notes && isNotesCell(selectedCell)
+    ) { // notes mode and selected cell is notes
+        const notes = selectedCell.value
+            .split("")
+            .map(val => parseInt(val))
+            .filter(val => !!val)
+            .sort()
+        ;
+        selectedCell.value = removeDuplicates(notes).join("");
+    }
 };
