@@ -1,11 +1,11 @@
-import * as MenuIds from "./consts";
 import {
 	resumeGame,
-	showContent,
-	MenuTabs,
-	moveSection,
-	ArrowButton,
+	closeContent,
 } from "./menuButtons";
+import {
+	toggleAboutSection,
+	toggleContent,
+} from "../utils/visibilityUtils";
 import { initGame } from "../game/game";
 import { GameConfig } from "../consts";
 
@@ -13,20 +13,36 @@ import { GameConfig } from "../consts";
  * Adds click event listeners to menu buttons
  */
 export const addMenuButtonListeners = () => {
-	MenuIds.resumeButton.addEventListener("click", resumeGame);
-	MenuIds.startEasyButton.addEventListener("click", () => initGame());
-	MenuIds.startMediumButton.addEventListener("click",
-		() => initGame(GameConfig.TYPE.DEFAULT, GameConfig.DIFFICULTY.MEDIUM)
+	document.querySelector(".lobby input[value=Resume]").addEventListener("click", resumeGame);
+	document.querySelector(".lobby input[value=Easy]").addEventListener("click",
+		() => initGame(GameConfig.DIFFICULTY.EASY)
 	);
-	MenuIds.startHardButton.addEventListener("click",
-		() => initGame(GameConfig.TYPE.DEFAULT, GameConfig.DIFFICULTY.HARD)
+	document.querySelector(".lobby input[value=Medium]").addEventListener("click",
+		() => initGame(GameConfig.DIFFICULTY.MEDIUM)
+	);
+	document.querySelector(".lobby input[value=Hard]").addEventListener("click",
+		() => initGame(GameConfig.DIFFICULTY.HARD)
 	);
 
-	MenuIds.statsButton.addEventListener("click", () => showContent(MenuTabs.Stats));
-	MenuIds.settingsButton.addEventListener("click", () => showContent(MenuTabs.Settings));
-	MenuIds.rulesButton.addEventListener("click", () => showContent(MenuTabs.Rules));
-	MenuIds.aboutButton.addEventListener("click", () => showContent(MenuTabs.About));
+	const menuContentButtons =
+		document.querySelectorAll(".lobby .lobby-content-box.menu .column")[1]
+		.querySelectorAll("input");
 
-	MenuIds.arrowLeftButton.addEventListener("click", () => moveSection(ArrowButton.Left));
-	MenuIds.arrowRightButton.addEventListener("click", () => moveSection(ArrowButton.Right));
+	menuContentButtons.forEach(
+		button => button.addEventListener("click",
+			event => toggleContent(`${event.target.value.toLowerCase()}Content`)
+		)
+	);
+
+	document.querySelectorAll(".lobby .arrow").forEach(
+		arrow => arrow.addEventListener("click", () => {
+			toggleAboutSection(event.path.find(
+				el => el.classList && el.classList.contains("sub-section")
+			).id);
+		})
+	);
+
+	document.querySelectorAll(".lobby .cross").forEach(
+		cross => cross.addEventListener("click", closeContent)
+	);
 };

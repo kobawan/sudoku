@@ -1,0 +1,63 @@
+{
+    "fileExtensions": [".less", ".css"],
+    "attributeQuotes": true,
+    "colorVariables": true,
+    "decimalZero": {
+        "enabled": true,
+        "style": "leading"
+    },
+    "duplicateProperty": true,
+    "finalNewline": true,
+    "importantRule": true,
+    "newlineAfterBlock": true,
+    "selectorNaming": true,
+    "singleLinePerProperty": true,
+    "singleLinePerSelector": true,
+    "spaceAfterPropertyColon": {
+        "enabled": true,
+        "style": "one_space"
+    },
+    "spaceAfterPropertyName": {
+        "enabled": true,
+        "style": "no_space"
+    },
+    "spaceAfterPropertyValue": {
+        "enabled": true,
+        "style": "no_space"
+    },
+    "spaceAroundComma": {
+        "enabled": true,
+        "style": "after",
+        "allowNewLine": false
+    },
+    "spaceAroundOperator": {
+        "enabled": true,
+        "style": "both"
+    },
+    "spaceBeforeBrace": {
+        "enabled": true,
+        "style": "one_space"
+    },
+    "spaceBetweenParens": {
+        "enabled": true,
+        "style": "no_space"
+    },
+    "stringQuotes": {
+        "enabled": true,
+        "style": "double"
+    },
+    "trailingSemicolon": true,
+    "urlQuotes": true,
+    "zeroUnit": {
+        "enabled": true,
+        "style": "no_unit"
+    },
+    "idSelector": false,
+    "propertyOrdering": false,
+    "qualifyingElement": {
+        "enabled": true,
+        "allowWithAttribute": true,
+        "allowWithClass": false,
+        "allowWithId": false
+    }
+}

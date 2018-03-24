@@ -8,7 +8,6 @@ import {
 import Game from "../Generator";
 import { GameConfig, CellType } from "../consts";
 import { sortByGrids } from "../utils/arrayUtils";
-import * as GameIds from "./consts";
 import {
 	toggleCellMode,
 	reset,
@@ -50,12 +49,12 @@ let game = undefined;
 
 /**
  * Initializes game and sets game singleton. Changes page when game is initialized.
- * @param {GameConfig.TYPE} gameType size of sudoku
  * @param {GameConfig.DIFFICULTY} difficulty difficulty of sudoku
+ * @param {GameConfig.TYPE} gameType size of sudoku
  */
 export const initGame = (
-	gameType = GameConfig.TYPE.DEFAULT,
-	difficulty = GameConfig.DIFFICULTY.EASY
+	difficulty,
+	gameType = GameConfig.TYPE.DEFAULT
 ) => {
 	game = new Game(gameType, difficulty);
 	resetCells();
@@ -79,16 +78,24 @@ export const getGame = () => {
  * Adds click event listeners to game buttons
  */
 export const addGameButtonListeners = () => {
-	GameIds.returnButton.addEventListener("click", () => changePage(Page.Menu));
-	GameIds.resetButton.addEventListener("click", reset);
-	GameIds.checkButton.addEventListener("click", check);
-	GameIds.solveButton.addEventListener("click", solve);
-	GameIds.slideButton.addEventListener("click", toggleSideMenu);
+	document.querySelector(".game input[value=Return]").addEventListener("click",
+		() => changePage(Page.Menu)
+	);
+	document.querySelector(".game input[value=Reset]").addEventListener("click", reset);
+	document.querySelector(".game input[value=Check]").addEventListener("click", check);
+	document.querySelector(".game input[value=Solve]").addEventListener("click", solve);
+	document.querySelector("#side-menu-button").addEventListener("click", toggleSideMenu);
 
-	GameIds.okButton.addEventListener("click", disableMessagePopup);
+	document.querySelector(".game .message-popup input").addEventListener("click",
+		disableMessagePopup
+	);
 
-	GameIds.pencilButton.addEventListener("click", () => toggleCellMode());
-	GameIds.notesButton.addEventListener("click", () => toggleCellMode(Mode.Notes));
+	document.querySelector("input[value=Pencil]").addEventListener("click",
+		() => toggleCellMode()
+	);
+	document.querySelector("input[value=Notes]").addEventListener("click",
+		() => toggleCellMode(Mode.Notes)
+	);
 };
 
 export const addTableCellListeners = () => {

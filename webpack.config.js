@@ -1,17 +1,47 @@
 const path = require("path");
-const indexHtml = path.join(__dirname, "src", "index.html");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+const htmlPath = path.join(__dirname, "src", "index.html");
 
 module.exports = {
 	entry: [
         path.join(__dirname, "src", "js", "initializing.js"),
-        indexHtml,
+        htmlPath,
+        "webpack-dev-server/client?http://localhost:8080",
     ],
 	output: {
 		filename: "bundle.js",
-		path: path.resolve(__dirname, "dist"),
-	},
+        path: path.resolve(__dirname, "dist"),
+    },
+    devtool: "source-map",
 	module: {
 		rules: [
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                loaders: [
+                    {
+                        loader: "file-loader",
+                        options: {
+                            name: "images/[name].[ext]",
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                loader: "file-loader?name=[name].[ext]",
+            },
+            {
+                test: /\.less$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: [
+                        "css-loader",
+                        "postcss-loader",
+                        "less-loader",
+                    ],
+                }),
+            },
             {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
@@ -23,7 +53,7 @@ module.exports = {
                 },
             },
 			{
-                test: indexHtml,
+                test: htmlPath,
                 use: [
                     {
                         loader: "file-loader",
@@ -31,35 +61,15 @@ module.exports = {
                             name: "index.html",
                         },
                     },
-                    {
-                        loader: "extract-loader",
-                    },
-                    {
-                        loader: "html-loader",
-                        options: {
-                            attrs: ["img:src", "link:href"],
-                            interpolate: true,
-                        },
-                    },
-                ],
-            },
-            {
-                test: /\.css$/,
-                loaders: ["style-loader", "css-loader"],
-            },
-            {
-                test: /\.(png|svg|jpg|gif)$/,
-                loaders: [
-                    {
-						loader: "file-loader",
-						options: {
-                            name: "images/[name].[ext]",
-                        },
-                    },
+                    "extract-loader",
+                    "html-loader",
                 ],
             },
 		],
-	},
+    },
+    plugins: [
+        new ExtractTextPlugin("styles.css"),
+    ],
 	devServer: {
 		contentBase: path.join(__dirname, "dist", "index.html"),
 	},

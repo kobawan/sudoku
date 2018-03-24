@@ -1,0 +1,44 @@
+@import "./colors";
+
+.message-popup {
+    position: absolute;
+    top: 11.21875rem;
+    right: 9rem;
+	padding: 1.25rem;
+	width: 16.25rem;
+	background-color: @cellDisabledColor;
+    border-radius: 0.937rem 0;
+    box-shadow: 0 0 1.25rem;
+    text-align: center;
+    transition: 0.2s;
+
+    &.hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .message {
+        font-size: 1.25rem;
+        color: @blackColor;
+        cursor: default;
+    }
+
+    label {
+        position: relative;
+        display: inline-block;
+        
+        svg {
+            position: absolute;
+            transform: translate(75%, 75%);
+            fill: @whiteColor;
+            cursor: pointer;
+            pointer-events: none;
+        }
+    
+        input {
+            height: 2.5rem;
+            width: 2.5rem;
+            font-size: 1rem;
+        }
+    }
+}

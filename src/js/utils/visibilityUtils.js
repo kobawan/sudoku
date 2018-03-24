@@ -1,5 +1,28 @@
-import { menuWrapper } from "../menu/consts";
-import * as GameIds from "../game/consts";
+/**
+ * Toggles sections of about tab in menu. Hides according arrow button.
+ * @param {string} sectionToHide Id of the about section that should hide
+ */
+export const toggleAboutSection = (sectionToHide = "contactsSection") => {
+	const sectionToShow = sectionToHide === "aboutSection" ? "contactsSection" : "aboutSection";
+
+	document.querySelector(`.lobby #${sectionToHide}`).classList.add("hidden");
+	document.querySelector(`.lobby #${sectionToShow}`).classList.remove("hidden");
+};
+
+/**
+ * Iterates through menu tabs to show/hide according to button clicked in menu.
+ * @param {string} contentId
+ */
+export const toggleContent = (contentId = "") => {
+	const tabs = document.querySelector(".lobby-content-box.menu-content").children;
+
+	Array.from(tabs).forEach(tab => {
+		toggleAboutSection();
+		tab.id === contentId
+			? tab.classList.remove("hidden")
+			: tab.classList.add("hidden");
+	});
+};
 
 export const Page = {
 	Game: 0,
@@ -8,43 +31,34 @@ export const Page = {
 
 export const changePage = (page = Page.Game) => {
 	if(page === Page.Game) {
-		menuWrapper.style.display = "none";
-		document.getElementById("tables").style.display = "block";
-		document.getElementById("sideButtons").style.display = "block";
-		document.getElementById("sideMenu").style.display = "block";
-		document.getElementById("sideMenuWrapper").style.display = "block";
+		document.querySelector(".lobby").classList.add("hidden");
+		document.querySelector(".game").classList.remove("hidden");
+
+		toggleContent(); // Resets menu content and its sections to default visibility
 	}
 	else if (page === Page.Menu) {
-		menuWrapper.style.display = "inline-block";
-		document.getElementById("tables").style.display = "none";
-		document.getElementById("sideButtons").style.display = "none";
-		document.getElementById("sideMenu").style.display = "none";
-		document.getElementById("sideMenuWrapper").style.display = "none";
+		document.querySelector(".lobby").classList.remove("hidden");
+		document.querySelector(".game").classList.add("hidden");
 	}
 };
 
 export const enableMessagePopup = (text) => {
-	GameIds.messagePopup.style.display = "block";
-	GameIds.coorXTable.style.display = "block";
-	GameIds.coorYTable.style.display = "block";
-	GameIds.tables.style.width = "429px";
-	GameIds.tables.style.height = "429px";
-	GameIds.tables.style.padding = "0px";
-	GameIds.messagePopupText.innerHTML = text;
+	document.querySelector(".game .coorX").classList.remove("hidden");
+	document.querySelector(".game .coorY").classList.remove("hidden");
+	document.querySelector(".game .message").innerHTML = text;
+	document.querySelector(".game .message-popup").classList.remove("hidden");
 };
 
 export const disableMessagePopup = () => {
-	GameIds.messagePopup.style.display = "none";
-	GameIds.coorXTable.style.display = "none";
-	GameIds.coorYTable.style.display = "none";
-	GameIds.tables.style.width = "347px";
-	GameIds.tables.style.height = "347px";
-	GameIds.tables.style.padding = "41px";
+	document.querySelector(".game .coorX").classList.add("hidden");
+	document.querySelector(".game .coorY").classList.add("hidden");
+	document.querySelector(".game .message-popup").classList.add("hidden");
 };
 
 export const toggleSideMenu = () => {
-	if(GameIds.sideMenu.style.display == "block") {
-		GameIds.sideMenu.style.display = "none";
+	const sideMenu = document.querySelector(".game .menu");
+	if(sideMenu.classList.contains("hidden")) {
+		sideMenu.classList.remove("hidden");
 	}
-	else GameIds.sideMenu.style.display = "block";
+	else sideMenu.classList.add("hidden");
 };

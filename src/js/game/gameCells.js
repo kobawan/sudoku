@@ -1,4 +1,3 @@
-import { sudokuTable } from "./consts";
 import {
 	isPencilCell,
 	isReadOnlyCell,
@@ -11,6 +10,7 @@ import { CellType } from "../consts";
  */
 export const arrowKeys = () => {
 	// TODO highlight readonly cells instead of skipping over them
+	const sudokuTable = document.querySelector(".game .sudoku");
 	let coorRow = event.target.parentNode.parentNode.rowIndex;
 	let coorCol = event.target.parentNode.cellIndex;
 	const key = event.keyCode;

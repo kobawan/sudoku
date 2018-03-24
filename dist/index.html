@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Sudoku</title>
-    <link rel="icon" href="images/heart.png">
+    <link rel="icon" type="image/png" href="images/favicon2.gif">
     <link rel="stylesheet" href="styles.css">
 
     <style>.icon{width:1rem;height:1rem}</style>
@@ -15,9 +15,9 @@
             <div class="lobby-content-box"></div>
 
             <div class="lobby-content-box menu">
-                <svg xmlns="http://www.w3.org/2000/svg" class="menu-logo">
-                    <text>Sudoku</text>
-                </svg>
+
+                <img src="images/logo.png">
+
                 <div>
                     <div class="column">
                         <input type="button" value="Resume" class="menu-button"/><br>
@@ -26,97 +26,79 @@
                         <input type="button" value="Hard" class="menu-button"/>
                     </div>
                     <div class="column">
-                        <input type="button" value="Stats" class="menu-button reversed"/><br>
-                        <input type="button" value="Settings" class="menu-button reversed"/><br>
-                        <input type="button" value="Rules" class="menu-button reversed"/><br>
-                        <input type="button" value="About" class="menu-button reversed"/>
+                        <input type="button" value="Stats" class="menu-button"/><br>
+                        <input type="button" value="Settings" class="menu-button"/><br>
+                        <input type="button" value="Rules" class="menu-button"/><br>
+                        <input type="button" value="About" class="menu-button"/>
                     </div>
                 </div>
-                <span><a href="https://github.com/kobawan">@kobawan</a></span>
+
+                <span> Sara Cunha </span>
+
             </div>
 
             <div class="lobby-content-box menu-content">
-                <div class="section hidden" id="statsContent">
-                    <div class="header">
-                        <h2>Stats</h2>
-                        <div class="cross">
-                            <svg class="icon"><use xlink:href="#cross" /></svg>
-                        </div>
-                    </div>
+
+                <div class="section hidden">
+                    <h2>Stats</h2>
                     <div class="scrollable">
                         <p>TBA</p>
                     </div>
                 </div>
 
-                <div class="section hidden" id="settingsContent">
-                    <div class="header">
-                        <h2>Settings</h2>
-                        <div class="cross">
-                            <svg class="icon"><use xlink:href="#cross" /></svg>
-                        </div>
-                    </div>
+                <div class="section hidden">
+                    <h2>Settings</h2>
                     <div class="scrollable">
                         <p>TBA</p>
                     </div>
                 </div>
 
-                <div class="section hidden" id="rulesContent">
-                    <div class="header">
-                        <h2>Rules</h2>
-                        <div class="cross">
-                            <svg class="icon"><use xlink:href="#cross" /></svg>
-                        </div>
-                    </div>
+                <div class="section hidden">
+                    <h2>Rules</h2>
                     <div class="scrollable">
                         <p>The classic Sudoku game involves a table of 81 squares. The table is divided into nine 3x3 grids, each containing nine squares.</p>
                         <p>To win the game, each of the nine grids has to contain all the numbers 1-9 within its cells. Each number can only appear once in a row, column or grid.</p>
                     </div>
                 </div>
 
-                <div class="section hidden" id="aboutContent">
-                    <div id="aboutSection" class="sub-section">
-                        <div class="header">
-                            <h2>About</h2>
-                            <div class="cross">
-                                <svg class="icon"><use xlink:href="#cross" /></svg>
-                            </div>
-                        </div>
+                <div class="section hidden">
+                    <div id="aboutSection" class="section">
+                        <h2>About</h2>
                         <div class="scrollable">
                             <p>Hi! My name is Sara, or Kobawan in the interwebz. I've always been a fan of puzzles, so when I started programming, I came up with the idea to combine
                                 my two joys of puzzles and programming, to create this website. </p>
                             <p>It's been a fun project to create. Sometimes challenging and time-consuming, but in the end, a very good opportunity to learn programming.</p>
                             <p>Along with creating more projects than I can handle, I also knit, play with my dogs, and binge watch netflix.</p>
-                            <p>I hope you enjoy!</p>
+                            <p>I hope you enjoy! Here's some doge tax:</p>
+                            <img id="dogeTax" src="images/koba.png">
                         </div>
                         <div class="footer">
-                            <div class="arrow">
-                                <svg class="icon"><use xlink:href="#arrowRight" /></svg>
-                            </div>
+                            <svg class="icon arrow"><use xlink:href="#arrowRight" /></svg>
                         </div>
                     </div>
 
-                    <div id="contactsSection" class="sub-section hidden">
-                        <div class="header">
-                            <h2>Contacts</h2>
-                            <div class="cross">
-                                <svg class="icon"><use xlink:href="#cross" /></svg>
-                            </div>
-                        </div>
+                    <div id="contactsSection" class="section hidden">
+                        <h2>Contacts</h2>
                         <div class="scrollable">
-                            <p>Developer: Sara Nordmyr da Cunha
-                                (<a href="https://github.com/kobawan">@kobawan</a>)
-                            </p>
-                            <p>Bug reporting: 
-                                <a href="https://github.com/kobawan/sudoku/issues">https://github.com/kobawan/sudoku/issues</a>
-                            </p>
+                            <div class="columns">
+                                <div class="column">
+                                    <p>Name: Sara Nordmyr da Cunha</p>
+                                    <p>Email: TBA</p>
+                                    <p>Link to portfolio: TBA</p><br>
+                                    <p>If you need support or report a bug, please contact the email above.</p>
+                                </div>
+                                <div class="column">
+                                    <img id="contactsImg" src="images/profilepic.jpg">
+                                </div>
+                            </div>
                         </div>
                         <div class="footer">
-                            <div class="arrow">
-                                <svg class="icon"><use xlink:href="#arrowLeft" /></svg>
-                            </div>
+                            <svg class="icon arrow"><use xlink:href="#arrowLeft" /></svg>
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
     </div>
@@ -255,9 +237,8 @@
 
         <div class="side-menu">
             <div class="menu hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="side-menu-logo">
-                    <text>Sudoku</text>
-                </svg>
+                <img src="images/logo.png">
+    
                 <div class="buttons-wrapper">
                     <input type="button" value="Return" class="menu-button"/><br>
                     <input type="button" value="Reset" class="menu-button"/><br>
@@ -266,17 +247,17 @@
                     <input type="button" value="Undo" class="menu-button"/><br>
                     <input type="button" value="Redo" class="menu-button"/>
                 </div>
-                <span><a href="https://github.com/kobawan">@kobawan</a></span>
+    
+                <span> Sara Cunha </span>
+    
             </div>
+    
             <input type="button" id="side-menu-button"/>
         </div>
     
         <div class="message-popup hidden">
             <div class="message"></div><br>
-            <label>
-                <svg class="icon"><use xlink:href="#checkMark"></use></svg>
-                <input type="button" class="game-button" />
-            </label>
+            <input type="button" id="okButton" value="OK" class="game-button"/>
         </div>
     </div>
     <!--END GAME PAGE-->
@@ -288,12 +269,6 @@
         </symbol>
         <symbol viewBox="0 0 30 30" id="arrowRight">
             <path d="m29.5315,15l-14.063,-14.063l0,8.438l-15,0l0,11.25l15,0l0,8.438l14.063,-14.063z"></path>
-        </symbol>
-        <symbol viewBox="0 0 30 30" id="cross">
-            <path d="m29.082202,23.702671c0,0 0,0 0,0l-8.702823,-8.702823l8.702823,-8.702823c0,0 0,0 0,0c0.093712,-0.093712 0.161606,-0.203681 0.204637,-0.319387c0.118575,-0.318431 0.050681,-0.691368 -0.205594,-0.947643l-4.110915,-4.110915c-0.256275,-0.256275 -0.629212,-0.324168 -0.947643,-0.204637c-0.116662,0.043031 -0.225675,0.110925 -0.320343,0.204637c0,0 0,0 0,0l-8.702823,8.702823l-8.702823,-8.702823c0,0 0,0 0,0c-0.093712,-0.093712 -0.203681,-0.161606 -0.319387,-0.204637c-0.318431,-0.118575 -0.691368,-0.050681 -0.947643,0.204637l-4.110915,4.110915c-0.256275,0.256275 -0.324168,0.629212 -0.205594,0.947643c0.043031,0.116662 0.110925,0.225675 0.204637,0.319387c0,0 0,0 0,0l8.702823,8.702823l-8.702823,8.702823c0,0 0,0 0,0c-0.093712,0.093712 -0.161606,0.203681 -0.204637,0.319387c-0.118575,0.318431 -0.050681,0.691368 0.205594,0.947643l4.110915,4.110915c0.256275,0.256275 0.629212,0.324168 0.947643,0.205594c0.116662,-0.043031 0.225675,-0.110925 0.319387,-0.204637c0,0 0,0 0,0l8.702823,-8.702823l8.702823,8.702823c0,0 0,0 0,0c0.093712,0.093712 0.203681,0.161606 0.319387,0.204637c0.318431,0.118575 0.691368,0.050681 0.947643,-0.205594l4.110915,-4.110915c0.256275,-0.256275 0.324168,-0.629212 0.205594,-0.947643c-0.043031,-0.116662 -0.110925,-0.225675 -0.204637,-0.319387l0.000956,0z"></path>
-        </symbol>
-        <symbol viewBox="0 0 30 30" id="checkMark">
-            <path d="M25.313 3.75l-14.063 14.063-6.563-6.563-4.688 4.688 11.25 11.25 18.75-18.75z"></path>
         </symbol>
     </svg>
     <!--END SVG SPRITE-->

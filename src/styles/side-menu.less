@@ -1,0 +1,58 @@
+@import "./colors";
+
+.side-menu {
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+
+    .menu {
+        background-color: fade(@cellDisabledColor, 80%);
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 1.25rem;
+
+        &.hidden {
+            display: none;
+        }
+
+        .side-menu-logo {
+			width: 16.25rem;
+			height: 5.625rem;
+
+			text {
+				font: bold 5rem "dekiru", corbel, sans-serif;
+				transform: translate(0, 4.5rem);
+			}
+		}
+
+        .buttons-wrapper {
+            margin: 1.875rem 0;
+
+            input {
+                margin: 0.625rem 0;
+            }
+        }
+
+        a:link {
+			text-decoration: none;
+		}
+    }
+
+    #side-menu-button {
+        width: 1.5625rem;
+        background-color: @blackColor;
+        border: 0;
+        transition: 0.5s;
+
+        &:hover {
+            background-color: @pinkColor;
+        }
+    }
+}
