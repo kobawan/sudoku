@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -79,7 +79,7 @@ var _generalUtils = __webpack_require__(1);
 
 var _visibilityUtils = __webpack_require__(2);
 
-var _Generator = __webpack_require__(14);
+var _Generator = __webpack_require__(13);
 
 var _Generator2 = _interopRequireDefault(_Generator);
 
@@ -87,13 +87,13 @@ var _consts = __webpack_require__(3);
 
 var _arrayUtils = __webpack_require__(4);
 
-var _gameButtons = __webpack_require__(15);
+var _gameButtons = __webpack_require__(14);
 
 var _gameTable = __webpack_require__(6);
 
-var _gameCells = __webpack_require__(16);
+var _gameCells = __webpack_require__(15);
 
-var _gameNotesCells = __webpack_require__(17);
+var _gameNotesCells = __webpack_require__(16);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -118,12 +118,11 @@ var game = undefined;
 
 /**
  * Initializes game and sets game singleton. Changes page when game is initialized.
- * @param {GameConfig.TYPE} gameType size of sudoku
  * @param {GameConfig.DIFFICULTY} difficulty difficulty of sudoku
+ * @param {GameConfig.TYPE} gameType size of sudoku
  */
-var initGame = exports.initGame = function initGame() {
-	var gameType = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _consts.GameConfig.TYPE.DEFAULT;
-	var difficulty = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _consts.GameConfig.DIFFICULTY.EASY;
+var initGame = exports.initGame = function initGame(difficulty) {
+	var gameType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _consts.GameConfig.TYPE.DEFAULT;
 
 	game = new _Generator2.default(gameType, difficulty);
 	(0, _generalUtils.resetCells)();
@@ -155,7 +154,7 @@ var addGameButtonListeners = exports.addGameButtonListeners = function addGameBu
 	document.querySelector(".game input[value=Solve]").addEventListener("click", _gameButtons.solve);
 	document.querySelector("#side-menu-button").addEventListener("click", _visibilityUtils.toggleSideMenu);
 
-	document.querySelector(".game .message-popup #okButton").addEventListener("click", _visibilityUtils.disableMessagePopup);
+	document.querySelector(".game .message-popup input").addEventListener("click", _visibilityUtils.disableMessagePopup);
 
 	document.querySelector("input[value=Pencil]").addEventListener("click", function () {
 		return (0, _gameButtons.toggleCellMode)();
@@ -265,6 +264,34 @@ var removeDuplicates = exports.removeDuplicates = function removeDuplicates(arr)
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+/**
+ * Toggles sections of about tab in menu. Hides according arrow button.
+ * @param {string} sectionToHide Id of the about section that should hide
+ */
+var toggleAboutSection = exports.toggleAboutSection = function toggleAboutSection() {
+	var sectionToHide = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "contactsSection";
+
+	var sectionToShow = sectionToHide === "aboutSection" ? "contactsSection" : "aboutSection";
+
+	document.querySelector(".lobby #" + sectionToHide).classList.add("hidden");
+	document.querySelector(".lobby #" + sectionToShow).classList.remove("hidden");
+};
+
+/**
+ * Iterates through menu tabs to show/hide according to button clicked in menu.
+ * @param {string} contentId
+ */
+var toggleContent = exports.toggleContent = function toggleContent() {
+	var contentId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+
+	var tabs = document.querySelector(".lobby-content-box.menu-content").children;
+
+	Array.from(tabs).forEach(function (tab) {
+		toggleAboutSection();
+		tab.id === contentId ? tab.classList.remove("hidden") : tab.classList.add("hidden");
+	});
+};
+
 var Page = exports.Page = {
 	Game: 0,
 	Menu: 1
@@ -276,6 +303,8 @@ var changePage = exports.changePage = function changePage() {
 	if (page === Page.Game) {
 		document.querySelector(".lobby").classList.add("hidden");
 		document.querySelector(".game").classList.remove("hidden");
+
+		toggleContent(); // Resets menu content and its sections to default visibility
 	} else if (page === Page.Menu) {
 		document.querySelector(".lobby").classList.remove("hidden");
 		document.querySelector(".game").classList.add("hidden");
@@ -790,47 +819,36 @@ module.exports = Html5Entities;
 
 
 /***/ }),
-/* 9 */,
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(11);
-__webpack_require__(26);
-module.exports = __webpack_require__(27);
+__webpack_require__(10);
+__webpack_require__(25);
+module.exports = __webpack_require__(26);
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _menu = __webpack_require__(12);
-
-var _visibilityUtils = __webpack_require__(2);
+var _menu = __webpack_require__(11);
 
 var _game = __webpack_require__(0);
 
-var _styles = __webpack_require__(18);
+__webpack_require__(17);
 
-var _styles2 = _interopRequireDefault(_styles);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Initialize menu event listeners and show menu
+// Initialize menu event listeners
 (0, _menu.addMenuButtonListeners)();
-
-// eslint-disable-next-line no-unused-vars
-
-(0, _visibilityUtils.changePage)(_visibilityUtils.Page.Menu);
 
 // Initialize game event listeners
 (0, _game.addGameButtonListeners)();
 (0, _game.addTableCellListeners)();
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -841,7 +859,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.addMenuButtonListeners = undefined;
 
-var _menuButtons = __webpack_require__(13);
+var _menuButtons = __webpack_require__(12);
+
+var _visibilityUtils = __webpack_require__(2);
 
 var _game = __webpack_require__(0);
 
@@ -853,30 +873,38 @@ var _consts = __webpack_require__(3);
 var addMenuButtonListeners = exports.addMenuButtonListeners = function addMenuButtonListeners() {
 	document.querySelector(".lobby input[value=Resume]").addEventListener("click", _menuButtons.resumeGame);
 	document.querySelector(".lobby input[value=Easy]").addEventListener("click", function () {
-		return (0, _game.initGame)();
+		return (0, _game.initGame)(_consts.GameConfig.DIFFICULTY.EASY);
 	});
 	document.querySelector(".lobby input[value=Medium]").addEventListener("click", function () {
-		return (0, _game.initGame)(_consts.GameConfig.TYPE.DEFAULT, _consts.GameConfig.DIFFICULTY.MEDIUM);
+		return (0, _game.initGame)(_consts.GameConfig.DIFFICULTY.MEDIUM);
 	});
 	document.querySelector(".lobby input[value=Hard]").addEventListener("click", function () {
-		return (0, _game.initGame)(_consts.GameConfig.TYPE.DEFAULT, _consts.GameConfig.DIFFICULTY.HARD);
+		return (0, _game.initGame)(_consts.GameConfig.DIFFICULTY.HARD);
 	});
 
-	document.querySelector(".lobby input[value=Stats]").addEventListener("click", _menuButtons.showContent);
-	document.querySelector(".lobby input[value=Settings]").addEventListener("click", _menuButtons.showContent);
-	document.querySelector(".lobby input[value=Rules]").addEventListener("click", _menuButtons.showContent);
-	document.querySelector(".lobby input[value=About]").addEventListener("click", _menuButtons.showContent);
+	var menuContentButtons = document.querySelectorAll(".lobby .lobby-content-box.menu .column")[1].querySelectorAll("input");
 
-	document.querySelector("#arrowLeft").addEventListener("click", function () {
-		return (0, _menuButtons.moveSection)(_menuButtons.ArrowButton.Left);
+	menuContentButtons.forEach(function (button) {
+		return button.addEventListener("click", function (event) {
+			return (0, _visibilityUtils.toggleContent)(event.target.value.toLowerCase() + "Content");
+		});
 	});
-	document.querySelector("#arrowRight").addEventListener("click", function () {
-		return (0, _menuButtons.moveSection)(_menuButtons.ArrowButton.Right);
+
+	document.querySelectorAll(".lobby .arrow").forEach(function (arrow) {
+		return arrow.addEventListener("click", function () {
+			(0, _visibilityUtils.toggleAboutSection)(event.path.find(function (el) {
+				return el.classList && el.classList.contains("sub-section");
+			}).id);
+		});
+	});
+
+	document.querySelectorAll(".lobby .cross").forEach(function (cross) {
+		return cross.addEventListener("click", _menuButtons.closeContent);
 	});
 };
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -885,7 +913,7 @@ var addMenuButtonListeners = exports.addMenuButtonListeners = function addMenuBu
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.moveSection = exports.ArrowButton = exports.showContent = exports.resumeGame = undefined;
+exports.closeContent = exports.resumeGame = undefined;
 
 var _game = __webpack_require__(0);
 
@@ -903,38 +931,23 @@ var resumeGame = exports.resumeGame = function resumeGame() {
 };
 
 /**
- * Iterates through menu tabs to show/hide according to button clicked in menu.
+ * Closes menu content when cross is clicked
+ * @param {MouseEvent} event
  */
-var showContent = exports.showContent = function showContent(event) {
-	var tabs = document.querySelector(".lobby-content-box.menu-content").children;
-
-	Array.from(tabs).forEach(function (tab) {
-		// Checks if button value is same as menu content title
-		tab.querySelector("h2").innerText === event.target.value ? tab.classList.remove("hidden") : tab.classList.add("hidden");
+var closeContent = exports.closeContent = function closeContent(event) {
+	var sectionEl = event.path.filter(function (el) {
+		return el.classList && el.classList.contains("section");
 	});
-};
-
-var ArrowButton = exports.ArrowButton = {
-	Right: 0,
-	Left: 1
-};
-
-/**
- * Toggles sections of about tab in menu. Hides according arrow button.
- * @param {ArrowButton} dir direction of clicked arrow button
- */
-var moveSection = exports.moveSection = function moveSection(dir) {
-	if (dir == ArrowButton.Right) {
-		document.querySelector(".lobby #aboutSection").classList.add("hidden");
-		document.querySelector(".lobby #contactsSection").classList.remove("hidden");
-	} else if (dir == ArrowButton.Left) {
-		document.querySelector(".lobby #aboutSection").classList.remove("hidden");
-		document.querySelector(".lobby #contactsSection").classList.add("hidden");
+	// If section contains multiple subsections, e.g. about tab,
+	// then reset to initial subsection
+	if (sectionEl.length > 1) {
+		(0, _visibilityUtils.toggleAboutSection)();
 	}
+	sectionEl.pop().classList.add("hidden");
 };
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1178,7 +1191,7 @@ var _class = function () {
 exports.default = _class;
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1287,7 +1300,7 @@ var check = exports.check = function check() {
 };
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1392,7 +1405,7 @@ var filterInvalidInput = exports.filterInvalidInput = function filterInvalidInpu
 };
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1506,41 +1519,31 @@ var updateNotesCells = exports.updateNotesCells = function updateNotesCells() {
 };
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _buttons = __webpack_require__(19);
+__webpack_require__(18);
 
-var _buttons2 = _interopRequireDefault(_buttons);
+__webpack_require__(19);
 
-var _cellStates = __webpack_require__(20);
+__webpack_require__(20);
 
-var _cellStates2 = _interopRequireDefault(_cellStates);
+__webpack_require__(21);
 
-var _game = __webpack_require__(21);
+__webpack_require__(22);
 
-var _game2 = _interopRequireDefault(_game);
+__webpack_require__(23);
 
-var _lobby = __webpack_require__(22);
+__webpack_require__(24);
 
-var _lobby2 = _interopRequireDefault(_lobby);
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
 
-var _common = __webpack_require__(23);
-
-var _common2 = _interopRequireDefault(_common);
-
-var _sideMenu = __webpack_require__(24);
-
-var _sideMenu2 = _interopRequireDefault(_sideMenu);
-
-var _popup = __webpack_require__(25);
-
-var _popup2 = _interopRequireDefault(_popup);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 /* 19 */
@@ -1580,18 +1583,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 /* 25 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "index.html";
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1600,11 +1597,11 @@ module.exports = __webpack_require__.p + "index.html";
 /* global __resourceQuery WorkerGlobalScope self */
 /* eslint prefer-destructuring: off */
 
-const url = __webpack_require__(28);
-const stripAnsi = __webpack_require__(35);
-const log = __webpack_require__(37).getLogger('webpack-dev-server');
-const socket = __webpack_require__(38);
-const overlay = __webpack_require__(40);
+const url = __webpack_require__(27);
+const stripAnsi = __webpack_require__(34);
+const log = __webpack_require__(36).getLogger('webpack-dev-server');
+const socket = __webpack_require__(37);
+const overlay = __webpack_require__(39);
 
 function getCurrentScriptSource() {
   // `document.currentScript` is the most accurate way to find the current script,
@@ -1688,7 +1685,7 @@ const onSocketMsg = {
     sendMsg('StillOk');
   },
   'log-level': function logLevel(level) {
-    const hotCtx = __webpack_require__(45);
+    const hotCtx = __webpack_require__(44);
     if (hotCtx.keys().indexOf('./log') !== -1) {
       hotCtx('./log').setLogLevel(level);
     }
@@ -1808,7 +1805,7 @@ function reloadApp() {
   if (hot) {
     log.info('[WDS] App hot update...');
     // eslint-disable-next-line global-require
-    const hotEmitter = __webpack_require__(47);
+    const hotEmitter = __webpack_require__(46);
     hotEmitter.emit('webpackHotUpdate', currentHash);
     if (typeof self !== 'undefined' && self.window) {
       // broadcast update to window
@@ -1841,7 +1838,7 @@ function reloadApp() {
 /* WEBPACK VAR INJECTION */}.call(exports, "?http://localhost:8080"))
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1868,8 +1865,8 @@ function reloadApp() {
 
 
 
-var punycode = __webpack_require__(29);
-var util = __webpack_require__(31);
+var punycode = __webpack_require__(28);
+var util = __webpack_require__(30);
 
 exports.parse = urlParse;
 exports.resolve = urlResolve;
@@ -1944,7 +1941,7 @@ var protocolPattern = /^([a-z0-9.+-]+:)/i,
       'gopher:': true,
       'file:': true
     },
-    querystring = __webpack_require__(32);
+    querystring = __webpack_require__(31);
 
 function urlParse(url, parseQueryString, slashesDenoteHost) {
   if (url && util.isObject(url) && url instanceof Url) return url;
@@ -2580,7 +2577,7 @@ Url.prototype.parseHost = function() {
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/punycode v1.4.1 by @mathias */
@@ -3116,10 +3113,10 @@ Url.prototype.parseHost = function() {
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(30)(module), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29)(module), __webpack_require__(7)))
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -3147,7 +3144,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3170,18 +3167,18 @@ module.exports = {
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-exports.decode = exports.parse = __webpack_require__(33);
-exports.encode = exports.stringify = __webpack_require__(34);
+exports.decode = exports.parse = __webpack_require__(32);
+exports.encode = exports.stringify = __webpack_require__(33);
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3272,7 +3269,7 @@ var isArray = Array.isArray || function (xs) {
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3364,18 +3361,18 @@ var objectKeys = Object.keys || function (obj) {
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-const ansiRegex = __webpack_require__(36);
+const ansiRegex = __webpack_require__(35);
 
 module.exports = input => typeof input === 'string' ? input.replace(ansiRegex(), '') : input;
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3392,7 +3389,7 @@ module.exports = () => {
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -3652,13 +3649,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-const SockJS = __webpack_require__(39);
+const SockJS = __webpack_require__(38);
 
 let retries = 0;
 let sock = null;
@@ -3701,7 +3698,7 @@ module.exports = socket;
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var require;var require;/* sockjs-client v1.1.4 | http://sockjs.org | MIT license */
@@ -9441,7 +9438,7 @@ module.exports = function lolcation(loc) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9450,8 +9447,8 @@ module.exports = function lolcation(loc) {
 // The error overlay is inspired (and mostly copied) from Create React App (https://github.com/facebookincubator/create-react-app)
 // They, in turn, got inspired by webpack-hot-middleware (https://github.com/glenjamin/webpack-hot-middleware).
 
-const ansiHTML = __webpack_require__(41);
-const Entities = __webpack_require__(42).AllHtmlEntities;
+const ansiHTML = __webpack_require__(40);
+const Entities = __webpack_require__(41).AllHtmlEntities;
 
 const entities = new Entities();
 
@@ -9577,7 +9574,7 @@ exports.showMessage = function handleMessage(messages) {
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9760,19 +9757,19 @@ ansiHTML.reset()
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
-  XmlEntities: __webpack_require__(43),
-  Html4Entities: __webpack_require__(44),
+  XmlEntities: __webpack_require__(42),
+  Html4Entities: __webpack_require__(43),
   Html5Entities: __webpack_require__(8),
   AllHtmlEntities: __webpack_require__(8)
 };
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports) {
 
 var ALPHA_INDEX = {
@@ -9933,7 +9930,7 @@ module.exports = XmlEntities;
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports) {
 
 var HTML_ALPHA = ['apos', 'nbsp', 'iexcl', 'cent', 'pound', 'curren', 'yen', 'brvbar', 'sect', 'uml', 'copy', 'ordf', 'laquo', 'not', 'shy', 'reg', 'macr', 'deg', 'plusmn', 'sup2', 'sup3', 'acute', 'micro', 'para', 'middot', 'cedil', 'sup1', 'ordm', 'raquo', 'frac14', 'frac12', 'frac34', 'iquest', 'Agrave', 'Aacute', 'Acirc', 'Atilde', 'Auml', 'Aring', 'Aelig', 'Ccedil', 'Egrave', 'Eacute', 'Ecirc', 'Euml', 'Igrave', 'Iacute', 'Icirc', 'Iuml', 'ETH', 'Ntilde', 'Ograve', 'Oacute', 'Ocirc', 'Otilde', 'Ouml', 'times', 'Oslash', 'Ugrave', 'Uacute', 'Ucirc', 'Uuml', 'Yacute', 'THORN', 'szlig', 'agrave', 'aacute', 'acirc', 'atilde', 'auml', 'aring', 'aelig', 'ccedil', 'egrave', 'eacute', 'ecirc', 'euml', 'igrave', 'iacute', 'icirc', 'iuml', 'eth', 'ntilde', 'ograve', 'oacute', 'ocirc', 'otilde', 'ouml', 'divide', 'oslash', 'ugrave', 'uacute', 'ucirc', 'uuml', 'yacute', 'thorn', 'yuml', 'quot', 'amp', 'lt', 'gt', 'OElig', 'oelig', 'Scaron', 'scaron', 'Yuml', 'circ', 'tilde', 'ensp', 'emsp', 'thinsp', 'zwnj', 'zwj', 'lrm', 'rlm', 'ndash', 'mdash', 'lsquo', 'rsquo', 'sbquo', 'ldquo', 'rdquo', 'bdquo', 'dagger', 'Dagger', 'permil', 'lsaquo', 'rsaquo', 'euro', 'fnof', 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega', 'alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta', 'iota', 'kappa', 'lambda', 'mu', 'nu', 'xi', 'omicron', 'pi', 'rho', 'sigmaf', 'sigma', 'tau', 'upsilon', 'phi', 'chi', 'psi', 'omega', 'thetasym', 'upsih', 'piv', 'bull', 'hellip', 'prime', 'Prime', 'oline', 'frasl', 'weierp', 'image', 'real', 'trade', 'alefsym', 'larr', 'uarr', 'rarr', 'darr', 'harr', 'crarr', 'lArr', 'uArr', 'rArr', 'dArr', 'hArr', 'forall', 'part', 'exist', 'empty', 'nabla', 'isin', 'notin', 'ni', 'prod', 'sum', 'minus', 'lowast', 'radic', 'prop', 'infin', 'ang', 'and', 'or', 'cap', 'cup', 'int', 'there4', 'sim', 'cong', 'asymp', 'ne', 'equiv', 'le', 'ge', 'sub', 'sup', 'nsub', 'sube', 'supe', 'oplus', 'otimes', 'perp', 'sdot', 'lceil', 'rceil', 'lfloor', 'rfloor', 'lang', 'rang', 'loz', 'spades', 'clubs', 'hearts', 'diams'];
@@ -10086,11 +10083,11 @@ module.exports = Html4Entities;
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./log": 46
+	"./log": 45
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -10106,10 +10103,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 45;
+webpackContext.id = 44;
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports) {
 
 var logLevel = "info";
@@ -10159,15 +10156,15 @@ module.exports.setLogLevel = function(level) {
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var EventEmitter = __webpack_require__(48);
+var EventEmitter = __webpack_require__(47);
 module.exports = new EventEmitter();
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports) {
 
 // Copyright Joyent, Inc. and other Node contributors.
