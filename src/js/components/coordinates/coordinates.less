@@ -1,0 +1,34 @@
+.coorX,
+.coorY {
+    transition: 0.2s;
+    border: 0.125rem solid transparent;
+    border-collapse: collapse;
+    background-color: transparent;
+
+    td {
+        border: 0.0625rem solid transparent;
+        padding: 0;
+        font-size: 1.375rem;
+        width: 2.3125rem;
+        height: 2.3125rem;
+        text-align: center;
+        font-family: corbel, sans-serif;
+    }
+
+    &.hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.coorX {
+    td:nth-of-type(3n) {
+        border-right: 0.125rem solid transparent;
+    }
+
+}
+.coorY {
+    tr:nth-of-type(3n) td {
+        border-bottom: 0.125rem solid transparent;
+    }
+}

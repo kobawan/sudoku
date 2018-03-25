@@ -1,20 +1,3 @@
-#coordinates-table-mixin() {
-    table {
-        border: 0.125rem solid transparent;
-        border-collapse: collapse;
-        background-color: transparent;
-
-        td {
-            border: 0.0625rem solid transparent;
-            padding: 0;
-            font-size: 1.375rem;
-            width: 2.3125rem;
-            height: 2.3125rem;
-            text-align: center;
-        }
-    }
-}
-
 .game {
     width: 100%;
     height: 100%;
@@ -33,39 +16,11 @@
     align-items: center;
     justify-content: flex-start;
 
-    .coorX {
-        font-family: corbel, sans-serif;
-
-        &.hidden {
-            visibility: hidden;
-        }
-
-        #coordinates-table-mixin();
-
-        table td:nth-of-type(3n) {
-            border-right: 0.125rem solid transparent;
-        }
-    }
-
     .center {
         display: flex;
         flex-flow: row nowrap;
         align-items: flex-start;
         justify-content: center;
-
-        .coorY {
-            font-family: corbel, sans-serif;
-
-            &.hidden {
-                visibility: hidden;
-            }
-
-            #coordinates-table-mixin();
-
-            table tr:nth-of-type(3n) td {
-                border-bottom: 0.125rem solid transparent;
-            }
-        }
 
         .sudoku {
             border: 0.125rem solid black;

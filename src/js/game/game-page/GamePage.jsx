@@ -3,6 +3,7 @@ import * as React from "react";
 import { SideMenu } from "../../components/side-menu/SideMenu.jsx";
 import { Popup } from "../../components/popup/Popup.jsx";
 import { GameButton } from "../../components/buttons/Button.jsx";
+import { CoordinateTableX, CoordinateTableY } from "../../components/coordinates/Coordinates.jsx";
 import { sortByGrids } from "../../utils/arrayUtils";
 import { isEmptyCell, isReadOnlyCell } from "../helpers";
 import { CellClassType, CellMode } from "../../consts";
@@ -137,36 +138,10 @@ export class GamePage extends React.Component {
                 <Popup {...this.state.popupProps} />
 
                 <div className="game-wrapper">
-                    <div
-                        className={[
-                            "coorX",
-                            !this.state.toggleCoordinates ? "hidden" : null
-                        ].join(" ")}
-                    >
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <CoordinateTableX hidden={!this.state.toggleCoordinates} />
 
                     <div className="center">
-                        <div
-                            className={[
-                                "coorY",
-                                !this.state.toggleCoordinates ? "hidden" : null
-                            ].join(" ")}
-                        >
-                            <table>
-                                <tbody>
-                                    <tr><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr>
-                                    <tr><td>4</td></tr><tr><td>5</td></tr><tr><td>6</td></tr>
-                                    <tr><td>7</td></tr><tr><td>8</td></tr><tr><td>9</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <CoordinateTableY hidden={!this.state.toggleCoordinates} />
 
                         <table className="sudoku">
                             <tbody>
