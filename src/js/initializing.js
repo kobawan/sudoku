@@ -1,6 +1,5 @@
-import { addMenuButtonListeners } from "./menu/menu";
+import { mountLobbyPage } from "./utils/visibilityUtils";
 
 import "../styles";
 
-// Initialize menu event listeners
-addMenuButtonListeners();
+mountLobbyPage();

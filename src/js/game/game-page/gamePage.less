@@ -1,114 +1,113 @@
 #coordinates-table-mixin() {
-	table {
-		border: 0.125rem solid transparent;
-		border-collapse: collapse;
-		background-color: transparent;
+    table {
+        border: 0.125rem solid transparent;
+        border-collapse: collapse;
+        background-color: transparent;
 
-		td {
-			border: 0.0625rem solid transparent;
-			padding: 0;
-			font-size: 1.375rem;
-			width: 2.3125rem;
-			height: 2.3125rem;
-			text-align: center;
-		}
-	}
+        td {
+            border: 0.0625rem solid transparent;
+            padding: 0;
+            font-size: 1.375rem;
+            width: 2.3125rem;
+            height: 2.3125rem;
+            text-align: center;
+        }
+    }
 }
 
 .game {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-	&.hidden {
-		display: none;
-	}
+    &.hidden {
+        display: none;
+    }
 }
 
 .game-wrapper {
-	display: flex;
-	flex-flow: column nowrap;
-	align-items: center;
-	justify-content: flex-start;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: flex-start;
 
-	.coorX {
-		font-family: corbel, sans-serif;
+    .coorX {
+        font-family: corbel, sans-serif;
 
-		&.hidden {
-			visibility: hidden;
-		}
+        &.hidden {
+            visibility: hidden;
+        }
 
-		#coordinates-table-mixin();
+        #coordinates-table-mixin();
 
-		table td:nth-of-type(3n) {
-			border-right: 0.125rem solid transparent;
-		}
-	}
+        table td:nth-of-type(3n) {
+            border-right: 0.125rem solid transparent;
+        }
+    }
 
-	.center {
-		display: flex;
-		flex-flow: row nowrap;
-		align-items: flex-start;
-		justify-content: center;
+    .center {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: flex-start;
+        justify-content: center;
 
-		.coorY {
-			font-family: corbel, sans-serif;
+        .coorY {
+            font-family: corbel, sans-serif;
 
-			&.hidden {
-				visibility: hidden;
-			}
+            &.hidden {
+                visibility: hidden;
+            }
 
-			#coordinates-table-mixin();
+            #coordinates-table-mixin();
 
-			table tr:nth-of-type(3n) td {
-				border-bottom: 0.125rem solid transparent;
-			}
-		}
+            table tr:nth-of-type(3n) td {
+                border-bottom: 0.125rem solid transparent;
+            }
+        }
 
-		.sudoku {
-			border: 0.125rem solid black;
-			border-collapse: collapse;
+        .sudoku {
+            border: 0.125rem solid black;
+            border-collapse: collapse;
 
-			tr {
-				&:nth-of-type(3n) td {
-					border-bottom: 0.125rem solid black;
-				}
+            tr {
+                &:nth-of-type(3n) td {
+                    border-bottom: 0.125rem solid black;
+                }
 
-				td {
-					border: 0.0625rem solid black;
-					padding: 0;
+                td {
+                    border: 0.0625rem solid black;
+                    padding: 0;
 
-					&:nth-of-type(3n) {
-						border-right: 0.125rem solid black;
-					}
+                    &:nth-of-type(3n) {
+                        border-right: 0.125rem solid black;
+                    }
 
-					textarea {
-						text-align: center;
-						padding: 0;
-						resize: none;
-						vertical-align: middle;
+                    textarea {
+                        text-align: center;
+                        padding: 0;
+                        resize: none;
+                        vertical-align: middle;
 
-						&:focus {
-							outline: 0;
-						}
-					}
-				}
-			}
-		}
+                        &:focus {
+                            outline: 0;
+                        }
+                    }
+                }
+            }
+        }
 
-		.dummy-block {
-			width: 2.5625rem;
-			height: 21.6875rem;
-		}
-	}
+        .dummy-block {
+            width: 2.5625rem;
+            height: 21.6875rem;
+        }
+    }
 
-	.game-buttons {
-		padding: 1.25rem;
-
-		input {
-			margin: 0 0.625rem;
-		}
-	}
+    .game-buttons {
+        display: flex;
+        justify-content: space-between;
+        width: 9.5rem;
+        padding: 1.25rem;
+    }
 }

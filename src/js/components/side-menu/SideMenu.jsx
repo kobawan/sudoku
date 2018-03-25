@@ -1,9 +1,11 @@
 import * as React from "react";
 
+import { mapPropsToMenuButtons } from "../buttons/Button.jsx";
+
 import "./sideMenu.less";
 
 /**
- * @param { hidden: boolean, onClick: Function, children: any }
+ * @param { hidden: boolean, onClick: Function, buttons: object[] }
  */
 export class SideMenu extends React.PureComponent {
     render () {
@@ -19,10 +21,14 @@ export class SideMenu extends React.PureComponent {
                         <text>Sudoku</text>
                     </svg>
                     <div className="buttons-wrapper">
-                        {this.props.children}
+                        {mapPropsToMenuButtons(this.props.buttons)}
                     </div>
                     <span>
-                        <a href="https://github.com/kobawan">
+                        <a
+                            href="https://github.com/kobawan"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             @kobawan
                         </a>
                     </span>

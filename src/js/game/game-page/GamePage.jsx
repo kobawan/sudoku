@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { SideMenu } from "../../components/side-menu/SideMenu.jsx";
 import { Popup } from "../../components/popup/Popup.jsx";
+import { GameButton } from "../../components/buttons/Button.jsx";
 import { sortByGrids } from "../../utils/arrayUtils";
 import { isEmptyCell, isReadOnlyCell } from "../helpers";
 import { CellClassType, CellMode } from "../../consts";
@@ -27,7 +28,6 @@ export class GamePage extends React.Component {
         this.enableMessagePopup = this.enableMessagePopup.bind(this);
         this.disableMessagePopup = this.disableMessagePopup.bind(this);
         this.toggleSideMenu = this.toggleSideMenu.bind(this);
-        this.getMenuButton = this.getMenuButton.bind(this);
         this.resetState = this.resetState.bind(this);
         this.setCellModePencil = this.setCellModePencil.bind(this);
         this.setCellModeNotes = this.setCellModeNotes.bind(this);
@@ -66,62 +66,74 @@ export class GamePage extends React.Component {
     }
 
     render () {
-        const returnButton = this.getMenuButton("Return", () => changePage(Page.Menu));
-        const resetButton = this.getMenuButton("Reset", () => {
-            this.enableMessagePopup(
-                "Are you sure you want to reset?",
-                () => {
-                    // TODO reset only non readonly cells
-                    this.resetCells();
-                    this.resetState();
-                    sortByGrids(this.props.game, this.assignValues);
-                }
-            );
-        });
-        const checkButton = this.getMenuButton("Check", () => {
-            const duplicates = showDuplicates(this.cells, this.props.game);
-            const wrongCells = duplicates
-                .map(cell => {
-                    const row = cell.parentNode.parentNode.rowIndex + 1;
-                    const col = "ABCDEFGHI"[cell.parentNode.cellIndex];
-                    return `${col + row}`;
-                })
-                .sort()
-                .join(", ")
-            ;
-            const text = wrongCells.length > 0
-                ? "Cells " + wrongCells + " are incorrect."
-                : "Correct so far!";
-            this.enableMessagePopup(text, this.disableMessagePopup, true);
-        });
-        const solveButton = this.getMenuButton("Solve", () => {
-            this.enableMessagePopup(
-                "Are you sure you want to solve?",
-                () => {
-                    // TODO reset only non readonly cells
-                    this.resetCells();
-                    this.resetState();
-                    sortByGrids(this.props.game, this.assignValues);
-                    this.cells.forEach((cell, index) => cell.value = this.props.game.matrix[index]);
+        const sideMenuButtons = [
+            {
+                value: "Return",
+                onClick: () => changePage(Page.Menu),
+            },
+            {
+                value: "Reset", 
+                onClick: () => {
                     this.enableMessagePopup(
-                        "Correct!<br />You have won the game!",
-                        this.disableMessagePopup
+                        "Are you sure you want to reset?",
+                        () => {
+                            // TODO reset only non readonly cells
+                            this.resetCells();
+                            this.resetState();
+                            sortByGrids(this.props.game, this.assignValues);
+                        }
                     );
-                }
-            );
-        });
+                },
+            },
+            {
+                value: "Check",
+                onClick: () => {
+                    const duplicates = showDuplicates(this.cells, this.props.game);
+                    const wrongCells = duplicates
+                        .map(cell => {
+                            const row = cell.parentNode.parentNode.rowIndex + 1;
+                            const col = "ABCDEFGHI"[cell.parentNode.cellIndex];
+                            return `${col + row}`;
+                        })
+                        .sort()
+                        .join(", ")
+                    ;
+                    const text = wrongCells.length > 0
+                        ? "Cells " + wrongCells + " are incorrect."
+                        : "Correct so far!";
+                    this.enableMessagePopup(text, this.disableMessagePopup, true);
+                },
+            },
+            {
+                value: "Solve",
+                onClick: () => {
+                    this.enableMessagePopup(
+                        "Are you sure you want to solve?",
+                        () => {
+                            // TODO reset only non readonly cells
+                            this.resetCells();
+                            this.resetState();
+                            sortByGrids(this.props.game, this.assignValues);
+                            this.cells.forEach(
+                                (cell, index) => cell.value = this.props.game.matrix[index]
+                            );
+                            this.enableMessagePopup(
+                                "Correct!<br />You have won the game!",
+                                this.disableMessagePopup
+                            );
+                        }
+                    );
+                },
+            }
+        ];
 
         return (
             <div className={["game", this.props.hidden ? "hidden" : null].join(" ")}>
                 <SideMenu
                     hidden={!this.state.toggleSideMenu}
                     onClick={this.toggleSideMenu}
-                >
-                    {returnButton}
-                    {resetButton}
-                    {checkButton}
-                    {solveButton}
-                </SideMenu>
+                    buttons={sideMenuButtons}
+                />
                 <Popup {...this.state.popupProps} />
 
                 <div className="game-wrapper">
@@ -264,23 +276,15 @@ export class GamePage extends React.Component {
                     </div>
 
                     <div className="game-buttons">
-                        <input
-                            type="button"
+                        <GameButton
                             value="Pencil"
-                            className={[
-                                "game-button",
-                                this.state.cellMode === CellMode.Pencil ? "selected" : null,
-                            ].join(" ")}
                             onClick={this.setCellModePencil}
+                            selected={this.state.cellMode === CellMode.Pencil}
                         />
-                        <input
-                            type="button"
+                        <GameButton
                             value="Notes"
-                            className={[
-                                "game-button",
-                                this.state.cellMode === CellMode.Notes ? "selected" : null,
-                            ].join(" ")}
                             onClick={this.setCellModeNotes}
+                            selected={this.state.cellMode === CellMode.Notes}
                         />
                     </div>
                 </div>
@@ -318,17 +322,6 @@ export class GamePage extends React.Component {
             this.cells[values.pos].maxLength = 1;
             this.cells[values.pos].className = CellClassType.READONLY;
         }
-    }
-
-    getMenuButton (value, callback) {
-        return (
-            <input
-                type="button"
-                value={value}
-                className="menu-button"
-                onClick={callback}
-            />
-        );
     }
 
     handleCellModeChange () {

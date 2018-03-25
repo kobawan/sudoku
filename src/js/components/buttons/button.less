@@ -1,0 +1,49 @@
+@import "../../../styles/colors";
+
+.menu-button {
+    background-color: @blackColor;
+    border: 0;
+    color: @whiteColor;
+    border-radius: 0 0.75rem;
+    min-width: 6.875rem;
+    padding: 0.4375rem;
+    transition: 0.5s;
+    margin: 0.625rem 0;
+
+    &.reversed {
+        border-radius: 0.75rem 0;
+    }
+
+    &.disabled {
+        pointer-events: none;
+        background-color: @cellDisabledColor;
+        color: @blackColor;
+    }
+
+    &:hover {
+        background-color: @pinkColor;
+    }
+}
+
+.game-button {
+    background-color: @blackColor;
+    border: 0;
+    color: @whiteColor;
+    border-radius: 2.625rem;
+    height: 4.1875rem;
+    width: 4.125rem;
+    padding: 0;
+    transition: 0.5s;
+    
+    &.small {
+        height: 2.5rem;
+        width: 2.5rem;
+        font-size: 1rem;
+    }
+
+    &:hover,
+    &.selected {
+        background-color: @pinkColor;
+    }
+}
+

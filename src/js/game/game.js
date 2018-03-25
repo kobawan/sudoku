@@ -1,4 +1,4 @@
-import { toggleContent, mountGamePage, unmountGamePage } from "../utils/visibilityUtils";
+import { mountGamePage, unmountGamePage, unmountLobbyPage } from "../utils/visibilityUtils";
 import Game from "../Generator";
 import { GameConfig } from "../consts";
 
@@ -13,17 +13,15 @@ export const initGame = (difficulty, gameType = GameConfig.TYPE.DEFAULT) => {
     game = new Game(gameType, difficulty);
 
     unmountGamePage();
-    document.querySelector(".lobby").classList.add("hidden");
-    toggleContent();
+    unmountLobbyPage();
     mountGamePage({ game });
 };
 
 /**
  * Gets initialized game. If no game has been initialized it throws error.
  */
-export const getGame = () => {
-    if (!game) {
-        // TODO add behaviour for resume button for when game is not initialized
+export const getGame = (isFromLobby = false) => {
+    if (!game && !isFromLobby) {
         throw new Error("Game is not initialized. Please start a new game.");
     }
     return game;

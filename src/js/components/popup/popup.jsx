@@ -1,9 +1,11 @@
 import * as React from "react";
 
+import { GameButton, GameButtonSize } from "../buttons/Button.jsx";
+
 import "./popup.less";
 
 /**
- * @param { text: string, hidden: boolean }
+ * @param { text: string, hidden: boolean, onClick: Function }
  */
 export class Popup extends React.Component {
     render () {
@@ -26,7 +28,10 @@ export class Popup extends React.Component {
                 <div className="message" dangerouslySetInnerHTML={{ __html: this.props.text }} />
                 <label>
                     {checkSVG}
-                    <input type="button" className="game-button" onClick={this.props.onClick} />
+                    <GameButton
+                        onClick={this.props.onClick}
+                        size={GameButtonSize.Small}
+                    />
                 </label>
             </div>
         );

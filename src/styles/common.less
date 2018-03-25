@@ -1,49 +1,52 @@
 @import "./colors";
 
 @font-face {
-	font-family: "dekiru";
-	src: url("../fonts/Dekiru.ttf") format("truetype");
-	font-weight: normal;
-  	font-style: normal;
+    font-family: "dekiru";
+    src: url("../fonts/Dekiru.ttf") format("truetype");
+    font-weight: normal;
+      font-style: normal;
 }
 
 html {
-	font: 16px "dekiru", corbel, sans-serif;
-	height: 100%;
-	width: 100%;
-	margin: 0;
-	padding: 0;
+    font: 16px "dekiru", corbel, sans-serif;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-	background:	@cellDisabledColor no-repeat center/cover url("../images/background.png");
-	height: 100%;
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	overflow: scroll;
+    background:	@cellDisabledColor no-repeat center/cover url("../images/background.png");
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: scroll;
 }
 
 input[type="button"] {
-	font: 1.25rem "dekiru", corbel, sans-serif;
-	cursor: pointer;
+    font: 1.25rem "dekiru", corbel, sans-serif;
+    cursor: pointer;
 
-	&:focus {
-		outline: 0;
-	}
+    &:focus {
+        outline: 0;
+    }
 }
 
 svg {
-	.icon {
-		overflow: hidden;
-		height: 1rem;
-		width: 1rem;
-	}
+    .icon {
+        overflow: hidden;
+        height: 1rem;
+        width: 1rem;
+    }
 }
 
-a:link,
-a:visited,
-a:hover,
-a:active {
-	color: @blackColor;
+a {
+    color: @blackColor;
+    text-decoration: none;
+
+    &:hover {
+        color: @pinkColor;
+        text-decoration: underline;
+    }
 }
