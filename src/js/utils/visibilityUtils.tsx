@@ -1,16 +1,15 @@
 import * as React from "react";
-import ReactDOM from "react-dom";
+import * as ReactDOM from "react-dom";
 
-import { GamePage } from "../game/game-page/GamePage.jsx";
-import { getGame } from "../game/game";
+import { GamePage, GamePageProps } from "../game/game-page/GamePage";
+import Game from "../generator";
 
-import { LobbyPage } from "../lobby/lobby-page/LobbyPage.jsx";
+import { LobbyPage } from "../lobby/lobby-page/LobbyPage";
 
 /**
  * Mounts game page with given props
- * @param { hidden: boolean, game: Game } props
  */
-export const mountGamePage = (props) => {
+export const mountGamePage = (props: GamePageProps) => {
     ReactDOM.render(
         <GamePage {...props} />,
         document.getElementById("gamePage")
@@ -41,22 +40,21 @@ export const unmountLobbyPage = () => {
     ReactDOM.unmountComponentAtNode(document.getElementById("lobbyPage"));
 };
 
-export const Page = {
-    Game: 0,
-    Menu: 1,
+export enum Page {
+    Game,
+    Menu,
 };
 
 /**
  * Toggles page between game and menu
- * @param {Page} page
  */
-export const changePage = (page = Page.Game) => {
+export const changePage = (game: Game, page = Page.Game) => {
     if(page === Page.Game) {
         unmountLobbyPage();
-        mountGamePage({ game: getGame() });
+        mountGamePage({ game });
     }
     else if (page === Page.Menu) {
         mountLobbyPage();
-        mountGamePage({ hidden: true });
+        mountGamePage({ game, hidden: true });
     }
 };

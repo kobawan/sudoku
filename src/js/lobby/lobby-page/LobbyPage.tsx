@@ -1,6 +1,8 @@
 import * as React from "react";
 
-import { MainMenu } from "../../components/main-menu/MainMenu.jsx";
+import "./lobbyPage.less";
+
+import { MainMenu } from "../../components/main-menu/MainMenu";
 import {
     StatsSection,
     SettingsSection,
@@ -8,11 +10,15 @@ import {
     AboutSection,
     ContactsSection,
     MenuSection,
-} from "../../components/menu-content/Sections.jsx";
+    SharedSectionProps,
+} from "../../components/menu-content/Sections";
+import { MenuButtonProps } from "../../components/buttons/Button";
 
-import "./lobbyPage.less";
+type MapMenuSectionToComponentIndexSignature = {
+    [k in keyof typeof MenuSection]: ({ crossOnClick, arrowOnClick }: SharedSectionProps) => JSX.Element
+};
 
-const mapMenuSectionToComponent = {
+const mapMenuSectionToComponent: MapMenuSectionToComponentIndexSignature = {
     [MenuSection.Stats]: StatsSection,
     [MenuSection.Settings]: SettingsSection,
     [MenuSection.Rules]: RulesSection,
@@ -20,31 +26,31 @@ const mapMenuSectionToComponent = {
     [MenuSection.Contacts]: ContactsSection,
 };
 
-export class LobbyPage extends React.Component {
-    constructor (props) {
-        super(props);
-        this.getSectionComponent = this.getSectionComponent.bind(this);
-        this.state = {
-            currentSection: undefined,
-        };
-    }
+export interface LobbyPageState {
+    currentSection?: MenuSection;
+}
 
-    render () {
-        const rightColumn = [
+export class LobbyPage extends React.PureComponent<{}, LobbyPageState> {
+    public state: LobbyPageState = {
+        currentSection: undefined,
+    };
+
+    public render () {
+        const rightColumn: MenuButtonProps[] = [
             {
-                value: "Stats",
+                value: MenuSection.Stats,
                 onClick: () => this.setState({ currentSection: MenuSection.Stats }),
             },
             {
-                value: "Settings",
+                value: MenuSection.Settings,
                 onClick: () => this.setState({ currentSection: MenuSection.Settings }),
             },
             {
-                value: "Rules",
+                value: MenuSection.Rules,
                 onClick: () => this.setState({ currentSection: MenuSection.Rules }),
             },
             {
-                value: "About",
+                value: MenuSection.About,
                 onClick: () => this.setState({ currentSection: MenuSection.About }),
             },
         ];
@@ -59,22 +65,24 @@ export class LobbyPage extends React.Component {
                     </div>
 
                     <div className="lobby-content-box">
-                        {this.state.currentSection && this.getSectionComponent()}
+                        {this.getSectionComponent()}
                     </div>
                 </div>
             </div>
         );
     }
 
-    getSectionComponent () {
+    private getSectionComponent = () => {
+        if (!this.state.currentSection) {
+            return null;
+        }
         const Component = mapMenuSectionToComponent[this.state.currentSection];
-
         const crossOnClick = () => this.setState({ currentSection: undefined });
-
         const hasSubSection = [
             MenuSection.About,
             MenuSection.Contacts
         ].includes(this.state.currentSection);
+
         const arrowOnClick = !hasSubSection
             ? () => undefined
             : () => {

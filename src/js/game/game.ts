@@ -1,15 +1,13 @@
 import { mountGamePage, unmountGamePage, unmountLobbyPage } from "../utils/visibilityUtils";
-import Game from "../Generator";
+import Game from "../generator";
 import { GameConfig } from "../consts";
 
-let game = undefined;
+let game: Game | undefined = undefined;
 
 /**
  * Initializes game and sets game singleton. Changes page when game is initialized.
- * @param {GameConfig.DIFFICULTY} difficulty difficulty of sudoku
- * @param {GameConfig.TYPE} gameType size of sudoku
  */
-export const initGame = (difficulty, gameType = GameConfig.TYPE.DEFAULT) => {
+export const initGame = (difficulty: number, gameType = GameConfig.TYPE.DEFAULT) => {
     game = new Game(gameType, difficulty);
 
     unmountGamePage();

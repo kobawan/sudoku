@@ -2,7 +2,7 @@ import * as React from "react";
 
 import "./coordinates.less";
 
-export const CoordinateTableX = ({ hidden }) => (
+export const CoordinateTableX = ({ hidden }: { hidden: boolean }) => (
     <table
         className={[
             "coorX",
@@ -25,7 +25,7 @@ export const CoordinateTableX = ({ hidden }) => (
     </table>
 );
 
-export const CoordinateTableY = ({ hidden }) => (
+export const CoordinateTableY = ({ hidden }: { hidden: boolean }) => (
     <table
         className={[
             "coorY",

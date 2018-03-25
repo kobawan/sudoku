@@ -10,16 +10,24 @@ import {
     sortByGrids,
 } from "../utils/arrayUtils";
 import { CellMode } from "../consts";
+import Game from "../generator";
+
+export interface Coordinates {
+    x: number;
+    y: number;
+    grid: number;
+}
 
 /**
  * Returns coordinates of selected cell
- * @param {object} game current game
- * @param {EventTarget} selectedCell
- * @param {NodeListOf<HTMLTextAreaElement>} cells
  */
-const findCoordinates = (game, selectedCell, cells) => {
-    const coorRow = selectedCell.parentNode.parentNode.rowIndex;
-    const coorCol = selectedCell.parentNode.cellIndex;
+const findCoordinates = (
+    game: Game,
+    selectedCell: HTMLTextAreaElement,
+    cells: NodeListOf<HTMLTextAreaElement>
+): Coordinates => {
+    const coorRow = (selectedCell.parentNode.parentNode as HTMLTableRowElement).rowIndex;
+    const coorCol = (selectedCell.parentNode as HTMLTableDataCellElement).cellIndex;
     let coorGrid;
     sortByGrids(game, ({ grid, pos }) => {
         if(selectedCell === cells[pos]) {
@@ -32,12 +40,10 @@ const findCoordinates = (game, selectedCell, cells) => {
 
 /**
  * Removes numbers from notes that are related to selected cell
- * @param {EventTarget} selectedCell
- * @param {HTMLTextAreaElement[]} arr array of row, col, or grid of changed selected cell
  */
-const removeNotesDup = (selectedCell, arr) => {
+const removeNotesDup = (selectedCell: HTMLTextAreaElement, arr: HTMLTextAreaElement[]) => {
     if(arr.length !== 0) {
-        let pos;
+        let pos: number;
         arr.forEach(cell => {
             pos = cell.value.indexOf(selectedCell.value);
             if(pos !== -1) {
@@ -51,12 +57,13 @@ const removeNotesDup = (selectedCell, arr) => {
 /**
  * Removes value from notes if new pencil value has been inputted and
  * Filters notes if game is in notes mode
- * @param {CellMode} cellMode
- * @param {object} game
- * @param {NodeListOf<HTMLTextAreaElement>} cells
  */
-export const updateNotesCells = (cellMode, game, cells) => {
-    const selectedCell = event.target;
+export const updateNotesCells = (event: KeyboardEvent) => (
+    cellMode: CellMode,
+    game: Game,
+    cells: NodeListOf<HTMLTextAreaElement>
+) => {
+    const selectedCell = event.target as HTMLTextAreaElement;
     // Removes note duplicates when new pencil value is added
     if (
         cellMode === CellMode.Pencil
@@ -79,11 +86,11 @@ export const updateNotesCells = (cellMode, game, cells) => {
                 arr[grid].push(cells[pos]);
             }
         });
-        const duplicates = removeDuplicates([].concat(
-            notesCellsRows[coor.x],
-            notesCellsCols[coor.y],
-            notesCellsGrids[coor.grid]
-        ));
+        const duplicates = removeDuplicates([
+            ...notesCellsRows[coor.x],
+            ...notesCellsCols[coor.y],
+            ...notesCellsGrids[coor.grid]
+        ]);
         removeNotesDup(selectedCell, duplicates);
     }
     // filters and sorts notes cell when new note value is added

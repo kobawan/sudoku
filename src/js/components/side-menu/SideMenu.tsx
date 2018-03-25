@@ -1,14 +1,17 @@
 import * as React from "react";
 
-import { mapPropsToMenuButtons } from "../buttons/Button.jsx";
-
 import "./sideMenu.less";
 
-/**
- * @param { hidden: boolean, onClick: Function, buttons: object[] }
- */
-export class SideMenu extends React.PureComponent {
-    render () {
+import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
+
+export interface SideMenuProps {
+    hidden: boolean;
+    onClick: () => void;
+    buttons: MenuButtonProps[]
+}
+
+export class SideMenu extends React.PureComponent<SideMenuProps> {
+    public render () {
         const menuClasses = [
             "menu",
             this.props.hidden ? "hidden" : null,

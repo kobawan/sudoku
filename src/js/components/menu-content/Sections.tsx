@@ -1,16 +1,18 @@
 import * as React from "react";
 
-import { MenuContentSection, ArrowDirection } from "./MenuContentSection.jsx";
+import { MenuContentSection, ArrowDirection, MenuContentSectionProps } from "./MenuContentSection";
 
-export const MenuSection = {
-    Stats: "Stats",
-    Settings: "Settings",
-    Rules: "Rules",
-    About: "About",
-    Contacts: "Contacts",
+export enum MenuSection {
+    Stats = "Stats",
+    Settings = "Settings",
+    Rules = "Rules",
+    About = "About",
+    Contacts = "Contacts",
 };
 
-export const StatsSection = ({ crossOnClick, arrowOnClick }) => {
+export type SharedSectionProps = Pick<MenuContentSectionProps, "crossOnClick" | "arrowOnClick">
+
+export const StatsSection = ({ crossOnClick, arrowOnClick }: SharedSectionProps) => {
     return (
         <MenuContentSection
             title={MenuSection.Stats}
@@ -21,7 +23,7 @@ export const StatsSection = ({ crossOnClick, arrowOnClick }) => {
     );
 };
 
-export const SettingsSection = ({ crossOnClick, arrowOnClick }) => {
+export const SettingsSection = ({ crossOnClick, arrowOnClick }: SharedSectionProps) => {
     return (
         <MenuContentSection
             title={MenuSection.Settings}
@@ -32,7 +34,7 @@ export const SettingsSection = ({ crossOnClick, arrowOnClick }) => {
     );
 };
 
-export const RulesSection = ({ crossOnClick, arrowOnClick }) => {
+export const RulesSection = ({ crossOnClick, arrowOnClick }: SharedSectionProps) => {
     const paragraph1 =
         "The classic Sudoku game involves a table of 81 squares. The table is divided " +
         "into nine 3x3 grids, each containing nine squares."
@@ -56,7 +58,7 @@ export const RulesSection = ({ crossOnClick, arrowOnClick }) => {
     );
 };
 
-export const AboutSection = ({ crossOnClick, arrowOnClick }) => {
+export const AboutSection = ({ crossOnClick, arrowOnClick }: SharedSectionProps) => {
     const paragraph1 =
         "Hi! My name is Sara, or Kobawan in the interwebz. I've always been a fan of puzzles, " +
         "so when I started programming, I came up with the idea to combine my two joys of " +
@@ -88,7 +90,7 @@ export const AboutSection = ({ crossOnClick, arrowOnClick }) => {
     );
 };
 
-export const ContactsSection = ({ crossOnClick, arrowOnClick }) => {
+export const ContactsSection = ({ crossOnClick, arrowOnClick }: SharedSectionProps) => {
     return (
         <MenuContentSection
             title={MenuSection.Contacts}

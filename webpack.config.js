@@ -3,7 +3,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     entry: [
-        path.join(__dirname, "src", "js", "initializing.js"),
+        path.join(__dirname, "src", "js", "initializing.ts"),
         path.join(__dirname, "src", "index.html"),
         "webpack-dev-server/client?http://localhost:8080",
     ],
@@ -12,6 +12,9 @@ module.exports = {
         path: path.resolve(__dirname, "dist"),
     },
     devtool: "source-map",
+    resolve: {
+        extensions: [".ts", ".tsx", ".jsx", ".js", ".json"]
+    },
     module: {
         rules: [
             {
@@ -41,14 +44,13 @@ module.exports = {
                 }),
             },
             {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: ["es2015", "react"],
-                    },
-                },
+                test: /\.tsx?$/,
+                loader: "awesome-typescript-loader",
+            },
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                loader: "source-map-loader",
             },
             {
                 test: /index\.html/,

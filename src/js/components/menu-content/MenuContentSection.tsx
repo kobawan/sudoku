@@ -2,23 +2,22 @@ import * as React from "react";
 
 import "./menuContentSection.less";
 
-export const ArrowDirection = {
-    Right: 0,
-    Left: 1,
+export enum ArrowDirection {
+    Right,
+    Left,
 };
 
-/**
- * {
- *     title: string,
- *     content: any,
- *     withFooter: boolean,
- *     arrow: ArrowDirection,
- *     arrowOnClick: Function,
- *     crossOnClick: Function
- * }
- */
-export class MenuContentSection extends React.Component {
-    render () {
+export interface MenuContentSectionProps {
+    title: string;
+    content: JSX.Element;
+    withFooter?: boolean;
+    arrow?: ArrowDirection;
+    arrowOnClick?: () => void;
+    crossOnClick: () => void;
+};
+
+export class MenuContentSection extends React.PureComponent<MenuContentSectionProps> {
+    public render () {
         /* eslint-disable max-len */
         const crossSvg = (
             <svg viewBox="0 0 30 30" className="icon">

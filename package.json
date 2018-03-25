@@ -22,13 +22,16 @@
   },
   "homepage": "https://github.com/kobawan/sudoku",
   "dependencies": {
+    "@types/react": "^16.0.41",
+    "@types/react-dom": "^16.0.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
+    "awesome-typescript-loader": "^4.0.1",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.4",
     "eslint": "^4.10.0",
@@ -43,7 +46,9 @@
     "postcss-cssnext": "^3.0.2",
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.0.10",
+    "source-map-loader": "^0.2.3",
     "style-loader": "^0.19.1",
+    "typescript": "^2.7.2",
     "webpack": "^3.5.4",
     "webpack-dev-server": "^2.10.0"
   }

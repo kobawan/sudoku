@@ -1,22 +1,24 @@
 import * as React from "react";
 
 import "./mainMenu.less";
-import { mapPropsToMenuButtons } from "../buttons/Button.jsx";
+
+import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
 import { getGame, initGame } from "../../game/game";
 import { changePage } from "../../utils/visibilityUtils";
 import { GameConfig } from "../../consts";
 
-/**
- * @param { rightColumn: object[] }
- */
-export class MainMenu extends React.PureComponent {
-    render () {
+export interface MainMenuProps {
+    rightColumn: MenuButtonProps[];
+}
+
+export class MainMenu extends React.PureComponent<MainMenuProps> {
+    public render () {
         const game = getGame(true);
-        const leftColumn = [
+        const leftColumn: MenuButtonProps[] = [
             {
                 value: "Resume",
                 disabled: game === undefined,
-                onClick: () => game ? changePage() : undefined,
+                onClick: () => game ? changePage(game) : undefined,
             },
             {
                 value: "Easy",

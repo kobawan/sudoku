@@ -2,15 +2,15 @@ import { removeDuplicates } from "../utils/generalUtils";
 import { isEmptyCell, isPencilCell, isNotesCell } from "./helpers";
 import { sortByRows, sortByCols, sortByGrids } from "../utils/arrayUtils";
 import { CellClassType } from "../consts";
+import Game from "../generator";
 
 /**
  * Highlights pencil cells that have same value
- * @param {NodeListOf<HTMLTextAreaElement>} cells
  */
-export const highlight = (cells) => {
+export const highlight = (event: FocusEvent) => (cells: NodeListOf<HTMLTextAreaElement>) => {
     cells.forEach(cell => cell.classList.remove(CellClassType.HIGHLIGHT));
 
-    const selectedCell = event.target;
+    const selectedCell = event.target as HTMLTextAreaElement;
     //skip selected empty cells and notes cells
     if (!isEmptyCell(selectedCell) && isPencilCell(selectedCell)) {
         cells.forEach(cell => {
@@ -24,10 +24,8 @@ export const highlight = (cells) => {
 
 /**
  * Finds pencil mode cell duplicates from rows, cols and grids
- * @param {NodeListOf<HTMLTextAreaElement>} cells
- * @param {object} game
  */
-export const showDuplicates = (cells, game) => {
+export const showDuplicates = (cells: NodeListOf<HTMLTextAreaElement>, game: Game) => {
     cells.forEach(cell => cell.classList.remove(CellClassType.HIGHLIGHT, CellClassType.ERROR));
 
     const pencilCellsRows = sortByRows(game, ({ arr, row, pos }) => {
@@ -57,13 +55,14 @@ export const showDuplicates = (cells, game) => {
 
 /**
  * Finds all occuring duplicates and returns array of their cells
- * @param {HTMLTextAreaElement[][]} rows array of not empty pencil cells in rows
- * @param {HTMLTextAreaElement[][]} cols array of not empty pencil cells in cols
- * @param {HTMLTextAreaElement[][]} grids array of not empty pencil cells in grids
  */
-const getDuplicates = (rows, cols, grids) => {
-    const arr = [].concat(rows, cols, grids);
-    let duplicates = [];
+const getDuplicates = (
+    rows: HTMLTextAreaElement[][],
+    cols: HTMLTextAreaElement[][],
+    grids: HTMLTextAreaElement[][]
+) => {
+    const arr: HTMLTextAreaElement[][] = [...rows, ...cols, ...grids];
+    let duplicates: HTMLTextAreaElement[] = [];
     for (let outer = 0; outer < arr.length; outer++) {
         for (let inner = 0; inner < arr[outer].length; inner++) {
             for (let pos = 1; pos < arr[outer].length - inner; pos++) {
@@ -80,10 +79,8 @@ const getDuplicates = (rows, cols, grids) => {
 
 /**
  * Checks for in-game errors and if game is complete and correct
- * @param {NodeListOf<HTMLTextAreaElement>} cells
- * @param {object} game
  */
-export const checkForWin = (cells, game) => {
+export const checkForWin = (cells: NodeListOf<HTMLTextAreaElement>, game: Game) => {
     const duplicates = showDuplicates(cells, game);
     const invalidCells = Array.from(cells).filter(
         cell => isNotesCell(cell) || isEmptyCell(cell)

@@ -1,17 +1,21 @@
 import * as React from "react";
 
-import { GameButton, GameButtonSize } from "../buttons/Button.jsx";
-
 import "./popup.less";
 
-/**
- * @param { text: string, hidden: boolean, onClick: Function }
- */
-export class Popup extends React.Component {
-    render () {
+import { GameButton, GameButtonSize } from "../buttons/Button";
+
+
+export interface PopupProps {
+    text?: JSX.Element;
+    hidden: boolean;
+    onClick: () => void;
+}
+
+export class Popup extends React.PureComponent<PopupProps> {
+    public render () {
         const containerClasses = [
             "message-popup",
-            this.props.hidden ? "hidden" : null
+            this.props.hidden || !this.props.text ? "hidden" : null
         ].join(" ");
 
         /* eslint-disable max-len */
@@ -25,7 +29,9 @@ export class Popup extends React.Component {
 
         return (
             <div className={containerClasses}>
-                <div className="message" dangerouslySetInnerHTML={{ __html: this.props.text }} />
+                <div className="message">
+                    {this.props.text}
+                </div>
                 <label>
                     {checkSVG}
                     <GameButton
