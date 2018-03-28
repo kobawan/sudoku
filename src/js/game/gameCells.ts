@@ -10,21 +10,21 @@ export const arrowKeys = (event: KeyboardEvent) => (sudokuTable: HTMLTableElemen
     const tableColumn = tableCell.parentElement as HTMLTableRowElement;
     let coorRow = tableColumn.rowIndex;
     let coorCol = tableCell.cellIndex;
-    switch(event.keyCode) {
-        case 37: // left arrow
-            coorCol == 0 ? coorCol = 8 : coorCol--;
-            break;
-        case 38: // up arrow
-            coorRow == 0 ? coorRow = 8 : coorRow--;
-            break;
-        case 39: // right arrow
-            coorCol == 8 ? coorCol = 0 : coorCol++;
-            break;
-        case 40: // down arrow
-            coorRow == 8 ? coorRow = 0 : coorRow++;
-            break;
-        default:
-            break;
+    switch (event.keyCode) {
+    case 37: // left arrow
+        coorCol === 0 ? coorCol = 8 : coorCol--;
+        break;
+    case 38: // up arrow
+        coorRow === 0 ? coorRow = 8 : coorRow--;
+        break;
+    case 39: // right arrow
+        coorCol === 8 ? coorCol = 0 : coorCol++;
+        break;
+    case 40: // down arrow
+        coorRow === 8 ? coorRow = 0 : coorRow++;
+        break;
+    default:
+        break;
     }
     const nextCell = sudokuTable.rows[coorRow].cells[coorCol].children[0] as HTMLTextAreaElement;
     nextCell.focus();
@@ -34,7 +34,7 @@ export const arrowKeys = (event: KeyboardEvent) => (sudokuTable: HTMLTableElemen
  * Selects clicked value. Gets triggered on cell focus
  */
 export const selectValue = (event: FocusEvent) => (cellMode: CellMode) => {
-    const cell = event.target as HTMLTextAreaElement;;
+    const cell = event.target as HTMLTextAreaElement;
     if (
         (cellMode === CellMode.Notes && isPencilCell(cell)) // should not select notes in notes mode
         || cellMode === CellMode.Pencil

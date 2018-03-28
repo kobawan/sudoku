@@ -1,14 +1,18 @@
-export const GameConfig = {
-    DIFFICULTY: {
-        EASY: 4,
-        MEDIUM: 5,
-        HARD: 6
-    },
-    TYPE: {
-        DEFAULT: 9
-    },
-    SHUFFLE: 60,
-};
+export enum GameDifficulty {
+    Easy = 4,
+    Medium = 5,
+    Hard = 6,
+}
+
+export enum GameType {
+    Default = 9,
+}
+
+export interface GameConfig {
+    difficulty: GameDifficulty;
+    type?: GameType;
+    shuffle?: number;
+}
 
 export enum CellClassType {
     READONLY = "readOnly",
@@ -16,9 +20,9 @@ export enum CellClassType {
     NOTES = "notes",
     HIGHLIGHT = "highlight",
     ERROR = "error",
-};
+}
 
 export enum CellMode {
     Pencil,
     Notes,
-};
+}

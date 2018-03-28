@@ -8,7 +8,7 @@ export interface MenuButtonProps {
     reversed?: boolean;
     disabled?: boolean;
     index?: number;
-};
+}
 
 export const MenuButton = (props: MenuButtonProps) => (
     <input
@@ -36,14 +36,14 @@ export const mapPropsToMenuButtons = (buttons: MenuButtonProps[]) => {
 export enum GameButtonSize {
     Default,
     Small,
-};
+}
 
 export interface GameButtonProps {
     value?: string;
     onClick: () => void;
     size?: GameButtonSize;
     selected?: boolean;
-};
+}
 
 export const GameButton = ({
     value,
@@ -57,7 +57,7 @@ export const GameButton = ({
         className={[
             "game-button",
             selected ? "selected" : null,
-            size === GameButtonSize.Small ? "small" : null
+            size === GameButtonSize.Small ? "small" : null,
         ].join(" ")}
         onClick={onClick}
     />

@@ -6,7 +6,7 @@ export const CoordinateTableX = ({ hidden }: { hidden: boolean }) => (
     <table
         className={[
             "coorX",
-            hidden ? "hidden" : null
+            hidden ? "hidden" : null,
         ].join(" ")}
     >
         <tbody>
@@ -29,7 +29,7 @@ export const CoordinateTableY = ({ hidden }: { hidden: boolean }) => (
     <table
         className={[
             "coorY",
-            hidden ? "hidden" : null
+            hidden ? "hidden" : null,
         ].join(" ")}
     >
         <tbody>

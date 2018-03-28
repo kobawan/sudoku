@@ -8,9 +8,9 @@ export enum MenuSection {
     Rules = "Rules",
     About = "About",
     Contacts = "Contacts",
-};
+}
 
-export type SharedSectionProps = Pick<MenuContentSectionProps, "crossOnClick" | "arrowOnClick">
+export type SharedSectionProps = Pick<MenuContentSectionProps, "crossOnClick" | "arrowOnClick">;
 
 export const StatsSection = ({ crossOnClick, arrowOnClick }: SharedSectionProps) => {
     return (

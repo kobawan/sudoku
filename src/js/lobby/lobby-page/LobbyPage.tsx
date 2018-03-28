@@ -15,7 +15,8 @@ import {
 import { MenuButtonProps } from "../../components/buttons/Button";
 
 type MapMenuSectionToComponentIndexSignature = {
-    [k in keyof typeof MenuSection]: ({ crossOnClick, arrowOnClick }: SharedSectionProps) => JSX.Element
+    [k in keyof typeof MenuSection]:
+        ({ crossOnClick, arrowOnClick }: SharedSectionProps) => JSX.Element
 };
 
 const mapMenuSectionToComponent: MapMenuSectionToComponentIndexSignature = {
@@ -36,24 +37,16 @@ export class LobbyPage extends React.PureComponent<{}, LobbyPageState> {
     };
 
     public render () {
-        const rightColumn: MenuButtonProps[] = [
-            {
-                value: MenuSection.Stats,
-                onClick: () => this.setState({ currentSection: MenuSection.Stats }),
-            },
-            {
-                value: MenuSection.Settings,
-                onClick: () => this.setState({ currentSection: MenuSection.Settings }),
-            },
-            {
-                value: MenuSection.Rules,
-                onClick: () => this.setState({ currentSection: MenuSection.Rules }),
-            },
-            {
-                value: MenuSection.About,
-                onClick: () => this.setState({ currentSection: MenuSection.About }),
-            },
+        const menuSectionButtons = [
+            MenuSection.Stats,
+            MenuSection.Settings,
+            MenuSection.Rules,
+            MenuSection.About,
         ];
+        const rightColumn: MenuButtonProps[] = menuSectionButtons.map((section: MenuSection) => ({
+            value: section,
+            onClick: () => this.setState({ currentSection: section }),
+        }));
 
         return (
             <div className="lobby">
@@ -80,21 +73,21 @@ export class LobbyPage extends React.PureComponent<{}, LobbyPageState> {
         const crossOnClick = () => this.setState({ currentSection: undefined });
         const hasSubSection = [
             MenuSection.About,
-            MenuSection.Contacts
+            MenuSection.Contacts,
         ].includes(this.state.currentSection);
 
         const arrowOnClick = !hasSubSection
             ? () => undefined
             : () => {
-                switch(this.state.currentSection) {
-                    case MenuSection.About:
-                        this.setState({ currentSection: MenuSection.Contacts });
-                        break;
-                    case MenuSection.Contacts:
-                        this.setState({ currentSection: MenuSection.About });
-                        break;
-                    default:
-                        break;
+                switch (this.state.currentSection) {
+                case MenuSection.About:
+                    this.setState({ currentSection: MenuSection.Contacts });
+                    break;
+                case MenuSection.Contacts:
+                    this.setState({ currentSection: MenuSection.About });
+                    break;
+                default:
+                    break;
                 }
             }
         ;

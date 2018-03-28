@@ -1,18 +1,22 @@
 import { compose } from "./utils/generalUtils";
-import { GameConfig } from "./consts";
+import { GameConfig, GameType } from "./consts";
 
-export default class {
-    public gameType: number;
-    public difficulty: number;
-    public ratio: number;
-    public matrix: number[] = []; // Array of result ordered by rows
-    public mask: number[][] = []; // 2d array of masked result ordered by grids
+export class Game {
+    public readonly gameType: number;
+    public readonly difficulty: number;
+    public readonly ratio: number;
+    public readonly matrix: number[] = []; // Array of result ordered by rows
+    public readonly mask: number[][] = []; // 2d array of masked result ordered by grids
+    private readonly shuffle: number;
 
-    constructor (gameType: number, difficulty: number) {
-        this.gameType = gameType;
-        this.difficulty = difficulty;
-        this.ratio = Math.sqrt(gameType);
-        this.generate();
+    constructor (props: GameConfig) {
+        this.gameType = props.type || GameType.Default;
+        this.difficulty = props.difficulty;
+        this.ratio = Math.sqrt(this.gameType);
+        this.shuffle = props.shuffle || 60;
+        const result = this.generate();
+        this.matrix = result.matrix;
+        this.mask = result.mask;
     }
     /*
      * Creates array ordered by row with values:
@@ -30,7 +34,8 @@ export default class {
      */
     private createTemplate = () => {
         const gameTemplate: number[] = [];
-        let pos: number, val: number;
+        let pos: number;
+        let val: number;
         for (let row = 0; row < this.gameType; row++) {
             for (let col = 0; col < this.gameType; col++) {
                 /**
@@ -52,20 +57,21 @@ export default class {
      * and creates random combos of rand1 and rand2 to switch places
      */
     private shufflePairs = (arr: number[]) => {
-        let rand1: number, rand2: number;
+        let rand1: number;
+        let rand2: number;
         const newArr = arr.slice();
-        for(let randomize = 0; randomize < GameConfig.SHUFFLE; randomize++) {
+        for (let randomize = 0; randomize < this.shuffle; randomize++) {
             rand1 = Math.ceil(Math.random() * this.gameType);
             do {
                 rand2 = Math.ceil(Math.random() * this.gameType);
             }
-            while (rand1 == rand2); // as long as rand1 equals rand2 recalculate rand2
+            while (rand1 === rand2); // as long as rand1 equals rand2 recalculate rand2
 
             for (let pos = 0; pos < newArr.length; pos++) {
-                if (newArr[pos] == rand1) {
+                if (newArr[pos] === rand1) {
                     newArr[pos] = rand2;
                 }
-                else if (newArr[pos] == rand2) {
+                else if (newArr[pos] === rand2) {
                     newArr[pos] = rand1;
                 }
             }
@@ -78,16 +84,20 @@ export default class {
      * and creates random combos of rand1 and rand2 to switch places
      */
     private shuffleColumns = (arr: number[]) => {
-        let rand1: number, rand2: number, pos1: number, pos2: number, originalVal: number;
+        let rand1: number;
+        let rand2: number;
+        let pos1: number;
+        let pos2: number;
+        let originalVal: number;
         const newArr = arr.slice();
-        for(let randomize = 0; randomize < GameConfig.SHUFFLE; randomize++) {
+        for (let randomize = 0; randomize < this.shuffle; randomize++) {
             rand1 = Math.floor(Math.random() * this.ratio);
             do {
                 rand2 = Math.floor(Math.random() * this.ratio);
             }
-            while (rand1 == rand2); // as long as rand1 equals rand2 recalculate rand2
+            while (rand1 === rand2); // as long as rand1 equals rand2 recalculate rand2
 
-            for(let pos = 0; pos < this.gameType; pos++) {
+            for (let pos = 0; pos < this.gameType; pos++) {
                 /**
                  * pos * this.gameType = pos of value in col, iterates through column
                  * rand1 * this.ratio = picks first column from random grid
@@ -108,16 +118,20 @@ export default class {
      * and creates random combos of rand1 and rand2 to switch places
      */
     private shuffleColumnsInGrid = (arr: number[]) => {
-        let rand1: number, rand2: number, pos1: number, pos2: number, originalVal: number;
+        let rand1: number;
+        let rand2: number;
+        let pos1: number;
+        let pos2: number;
+        let originalVal: number;
         const newArr = arr.slice();
-        for (let randomize = 0; randomize < GameConfig.SHUFFLE; randomize++) {
+        for (let randomize = 0; randomize < this.shuffle; randomize++) {
             rand1 = Math.floor(Math.random() * this.ratio);
             do {
                 rand2 = Math.floor(Math.random() * this.ratio);
             }
-            while (rand1 == rand2); // as long as rand1 equals rand2 recalculate rand2
+            while (rand1 === rand2); // as long as rand1 equals rand2 recalculate rand2
 
-            for(let pos = 0; pos < this.gameType; pos++) {
+            for (let pos = 0; pos < this.gameType; pos++) {
                 /**
                  * pos * this.gameType = pos of value in col, iterates through column
                  * randomize % this.ratio * this.ratio = iterates first column of each grid
@@ -134,16 +148,20 @@ export default class {
     }
 
     private shuffleRowsInGrid = (arr: number[]) => {
-        let rand1: number, rand2: number, pos1: number, pos2: number, originalVal: number;
+        let rand1: number;
+        let rand2: number;
+        let pos1: number;
+        let pos2: number;
+        let originalVal: number;
         const newArr = arr.slice();
-        for (let randomize = 0; randomize < GameConfig.SHUFFLE; randomize++) {
+        for (let randomize = 0; randomize < this.shuffle; randomize++) {
             rand1 = Math.floor(Math.random() * this.ratio);
             do {
                 rand2 = Math.floor(Math.random() * this.ratio);
             }
-            while (rand1 == rand2); // as long as rand1 equals rand2 recalculate rand2
+            while (rand1 === rand2); // as long as rand1 equals rand2 recalculate rand2
 
-            for(let pos = 0; pos < this.gameType; pos++) {
+            for (let pos = 0; pos < this.gameType; pos++) {
                 /**
                  * pos = pos of value in first row, iterates through row
                  * this.gameType = moves pos to first value in picked row
@@ -162,14 +180,18 @@ export default class {
 
     private maskGame = (matrix: number[]) => {
         const arr: number[][] = [];
-        let grid: number, rowPos: number, colPos: number, pos: number, rand: number;
-        for(let rowGrid=0; rowGrid<this.ratio; rowGrid++) {
-            for(let colGrid=0; colGrid<this.ratio; colGrid++) {
+        let grid: number;
+        let rowPos: number;
+        let colPos: number;
+        let pos: number;
+        let rand: number;
+        for (let rowGrid = 0; rowGrid < this.ratio; rowGrid++) {
+            for (let colGrid = 0; colGrid < this.ratio; colGrid++) {
                 arr.push([]);
                 grid = rowGrid * this.ratio + colGrid;
-                for(let row=0; row<this.ratio; row++) {
+                for (let row = 0; row < this.ratio; row++) {
                     rowPos = (row + rowGrid * this.ratio) * this.gameType;
-                    for(let col=0; col<this.ratio; col++) {
+                    for (let col = 0; col < this.ratio; col++) {
                         colPos = col + colGrid * this.ratio;
                         pos = rowPos + colPos;
                         arr[grid].push(matrix[pos]);
@@ -179,7 +201,7 @@ export default class {
                     do {
                         rand = Math.floor(Math.random() * this.gameType);
                     }
-                    while (arr[grid][rand] == 0);
+                    while (arr[grid][rand] === 0);
                     arr[grid][rand] = 0;
                 }
             }
@@ -188,15 +210,14 @@ export default class {
     }
 
     private generate = () => {
-        const template = this.createTemplate();
-        this.matrix = compose(
-            this.shuffleRowsInGrid.bind(this),
-            this.shuffleColumnsInGrid.bind(this),
-            this.shuffleColumns.bind(this),
-            this.shufflePairs.bind(this)
-        )(template);
+        const matrix: number[] = compose(
+            this.shuffleRowsInGrid,
+            this.shuffleColumnsInGrid,
+            this.shuffleColumns,
+            this.shufflePairs,
+        )(this.createTemplate());
+        const mask = this.maskGame(matrix);
 
-        this.mask = this.maskGame(this.matrix);
+        return { matrix, mask };
     }
 }
-

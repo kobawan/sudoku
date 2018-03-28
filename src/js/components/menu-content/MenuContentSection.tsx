@@ -5,7 +5,7 @@ import "./menuContentSection.less";
 export enum ArrowDirection {
     Right,
     Left,
-};
+}
 
 export interface MenuContentSectionProps {
     title: string;
@@ -14,11 +14,11 @@ export interface MenuContentSectionProps {
     arrow?: ArrowDirection;
     arrowOnClick?: () => void;
     crossOnClick: () => void;
-};
+}
 
 export class MenuContentSection extends React.PureComponent<MenuContentSectionProps> {
     public render () {
-        /* eslint-disable max-len */
+        /* tslint:disable max-line-length */
         const crossSvg = (
             <svg viewBox="0 0 30 30" className="icon">
                 <path d={
@@ -46,7 +46,7 @@ export class MenuContentSection extends React.PureComponent<MenuContentSectionPr
                 <path d="m29.5315,15l-14.063,-14.063l0,8.438l-15,0l0,11.25l15,0l0,8.438l14.063,-14.063z"></path>
             </svg>
         );
-        /* eslint-disable max-len */
+        /* tslint:enable max-line-length */
 
         const arrowClassNames = [
             "arrow",

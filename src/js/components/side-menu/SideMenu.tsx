@@ -7,7 +7,7 @@ import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
 export interface SideMenuProps {
     hidden: boolean;
     onClick: () => void;
-    buttons: MenuButtonProps[]
+    buttons: MenuButtonProps[];
 }
 
 export class SideMenu extends React.PureComponent<SideMenuProps> {

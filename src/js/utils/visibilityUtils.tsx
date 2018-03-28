@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { GamePage, GamePageProps } from "../game/game-page/GamePage";
-import Game from "../generator";
+import { Game } from "../generator";
 
 import { LobbyPage } from "../lobby/lobby-page/LobbyPage";
 
@@ -12,7 +12,7 @@ import { LobbyPage } from "../lobby/lobby-page/LobbyPage";
 export const mountGamePage = (props: GamePageProps) => {
     ReactDOM.render(
         <GamePage {...props} />,
-        document.getElementById("gamePage")
+        document.getElementById("gamePage"),
     );
 };
 
@@ -20,7 +20,7 @@ export const mountGamePage = (props: GamePageProps) => {
  * Unmounts game page. Needed for when a new game starts.
  */
 export const unmountGamePage = () => {
-    ReactDOM.unmountComponentAtNode(document.getElementById("gamePage"));
+    ReactDOM.unmountComponentAtNode(document.getElementById("gamePage") as HTMLElement);
 };
 
 /**
@@ -29,7 +29,7 @@ export const unmountGamePage = () => {
 export const mountLobbyPage = () => {
     ReactDOM.render(
         <LobbyPage />,
-        document.getElementById("lobbyPage")
+        document.getElementById("lobbyPage"),
     );
 };
 
@@ -37,19 +37,19 @@ export const mountLobbyPage = () => {
  * Unmounts lobby page
  */
 export const unmountLobbyPage = () => {
-    ReactDOM.unmountComponentAtNode(document.getElementById("lobbyPage"));
+    ReactDOM.unmountComponentAtNode(document.getElementById("lobbyPage") as HTMLElement);
 };
 
 export enum Page {
     Game,
     Menu,
-};
+}
 
 /**
  * Toggles page between game and menu
  */
 export const changePage = (game: Game, page = Page.Game) => {
-    if(page === Page.Game) {
+    if (page === Page.Game) {
         unmountLobbyPage();
         mountGamePage({ game });
     }

@@ -15,7 +15,7 @@ import { highlight, checkForWin, showDuplicates } from "../gameTable";
 import { updateNotesCells } from "../gameNotesCells";
 import { changePage, Page } from "../../utils/visibilityUtils";
 import { addListener, removeListener, Listener } from "../../utils/generalUtils";
-import Game from "../../generator";
+import { Game } from "../../generator";
 
 
 export interface GamePageProps {
@@ -39,7 +39,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
             onClick: () => undefined,
         },
         toggleCoordinates: false,
-    }
+    };
 
     private table: HTMLTableElement | undefined;
     private cells: NodeListOf<HTMLTextAreaElement> | undefined;
@@ -84,7 +84,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                             this.resetCells();
                             this.resetState();
                             sortByGrids(this.props.game, this.assignValues);
-                        }
+                        },
                     );
                 },
             },
@@ -98,8 +98,8 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                     const wrongCells = duplicates
                         .map((cell: HTMLTextAreaElement) => {
                             const tableCell = cell.parentElement as HTMLTableDataCellElement;
-                            const tableColumn = tableCell.parentElement as HTMLTableRowElement;
-                            const row = tableColumn.rowIndex + 1;
+                            const tableRow = tableCell.parentElement as HTMLTableRowElement;
+                            const row = tableRow.rowIndex + 1;
                             const col = "ABCDEFGHI"[tableCell.cellIndex];
                             return `${col + row}`;
                         })
@@ -125,19 +125,19 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                             this.resetCells();
                             this.resetState();
                             sortByGrids(this.props.game, this.assignValues);
-                            this.cells.forEach(
-                                (cell, index: number) => cell.value = `${this.props.game.matrix[index]}`
-                            );
+                            this.cells.forEach((cell, index: number) => {
+                                cell.value = `${this.props.game.matrix[index]}`;
+                            });
                             const message = (
                                 <React.Fragment>
                                     <span>Correct!</span><br /><span>You have won the game!</span>
                                 </React.Fragment>
                             );
                             this.enableMessagePopup(message, this.disableMessagePopup);
-                        }
+                        },
                     );
                 },
-            }
+            },
         ];
 
         return (
@@ -320,24 +320,24 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
         if (!this.cells) {
             return;
         }
-        switch(this.state.cellMode) {
-            case CellMode.Pencil:
-                this.cells.forEach(cell => {
-                    if(isEmptyCell(cell)) {
-                        cell.maxLength = 9;
-                        cell.className = CellClassType.NOTES;
-                    }
-                });
-                break;
-            case CellMode.Notes:
-                this.cells.forEach(cell => {
-                    if(isEmptyCell(cell)) {
-                        cell.maxLength = 1;
-                        cell.className = CellClassType.PENCIL;
-                    }
-                });
-                break;
-            default:
+        switch (this.state.cellMode) {
+        case CellMode.Pencil:
+            this.cells.forEach(cell => {
+                if (isEmptyCell(cell)) {
+                    cell.maxLength = 9;
+                    cell.className = CellClassType.NOTES;
+                }
+            });
+            break;
+        case CellMode.Notes:
+            this.cells.forEach(cell => {
+                if (isEmptyCell(cell)) {
+                    cell.maxLength = 1;
+                    cell.className = CellClassType.PENCIL;
+                }
+            });
+            break;
+        default:
         }
     }
 
@@ -357,14 +357,17 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
         this.setState({ toggleSideMenu: !this.state.toggleSideMenu });
     }
 
-    private enableMessagePopup = (text: JSX.Element, onClick: () => void, toggleCoordinates = false) => {
+    private enableMessagePopup = (
+        text: JSX.Element,
+        onClick: () => void, toggleCoordinates = false,
+    ) => {
         this.setState({
+            toggleCoordinates,
             popupProps: {
-                hidden: false,
                 text,
                 onClick,
+                hidden: false,
             },
-            toggleCoordinates,
         });
     }
 
@@ -394,15 +397,15 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
             addListener(playableCells, "input", e => {
                 // changed clicked cell into according style
                 changeSelectedCellMode(e)(this.state.cellMode);
-                //removes invalid values
+                // removes invalid values
                 filterInvalidInput(e)(this.state.cellMode);
             }),
             addListener(playableCells, "keyup", e => {
                 if (!this.cells) {
                     return;
                 }
-                //removes notes from column, row and grid where the pencil value was inserted
-                //and filters invalid values
+                // removes notes from column, row and grid where the pencil value was inserted
+                // and filters invalid values
                 updateNotesCells(e)(this.state.cellMode, this.props.game, this.cells);
             }),
             addListener(allCells, "keyup", e => {
@@ -428,7 +431,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                 }
                 // finds cells with same values as clicked cell and highlights them
                 highlight(e)(this.cells);
-            })
+            }),
         );
         return listeners;
     }

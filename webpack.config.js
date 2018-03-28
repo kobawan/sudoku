@@ -1,5 +1,6 @@
 const path = require("path");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     entry: [
@@ -54,20 +55,15 @@ module.exports = {
             },
             {
                 test: /index\.html/,
-                use: [
-                    {
-                        loader: "file-loader",
-                        options: {
-                            name: "index.html",
-                        },
-                    },
-                    "extract-loader",
-                    "html-loader",
-                ],
+                use: "html-loader",
             },
         ],
     },
     plugins: [
+        new HtmlWebpackPlugin({
+            favicon: path.join(__dirname, "src", "images", "heart.png"),
+            template: path.join(__dirname, "src", "index.html"),
+        }),
         new ExtractTextPlugin("styles.css"),
     ],
     devServer: {

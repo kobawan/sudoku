@@ -5,7 +5,7 @@ import "./mainMenu.less";
 import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
 import { getGame, initGame } from "../../game/game";
 import { changePage } from "../../utils/visibilityUtils";
-import { GameConfig } from "../../consts";
+import { GameDifficulty } from "../../consts";
 
 export interface MainMenuProps {
     rightColumn: MenuButtonProps[];
@@ -22,15 +22,15 @@ export class MainMenu extends React.PureComponent<MainMenuProps> {
             },
             {
                 value: "Easy",
-                onClick: () => initGame(GameConfig.DIFFICULTY.EASY),
+                onClick: () => initGame({ difficulty: GameDifficulty.Easy }),
             },
             {
                 value: "Medium",
-                onClick: () => initGame(GameConfig.DIFFICULTY.MEDIUM),
+                onClick: () => initGame({ difficulty: GameDifficulty.Medium }),
             },
             {
                 value: "Hard",
-                onClick: () => initGame(GameConfig.DIFFICULTY.HARD),
+                onClick: () => initGame({ difficulty: GameDifficulty.Hard }),
             },
         ];
 

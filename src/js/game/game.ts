@@ -1,5 +1,5 @@
 import { mountGamePage, unmountGamePage, unmountLobbyPage } from "../utils/visibilityUtils";
-import Game from "../generator";
+import { Game } from "../generator";
 import { GameConfig } from "../consts";
 
 let game: Game | undefined = undefined;
@@ -7,8 +7,8 @@ let game: Game | undefined = undefined;
 /**
  * Initializes game and sets game singleton. Changes page when game is initialized.
  */
-export const initGame = (difficulty: number, gameType = GameConfig.TYPE.DEFAULT) => {
-    game = new Game(gameType, difficulty);
+export const initGame = (props: GameConfig) => {
+    game = new Game(props);
 
     unmountGamePage();
     unmountLobbyPage();
