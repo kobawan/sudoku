@@ -24,13 +24,12 @@
         padding-bottom: 0.625rem;
     }
 
-    label {
-        position: relative;
-        display: inline-block;
+    .buttons {
+        display: flex;
+        justify-content: space-around;
+        margin: 0 5rem;
 
-        svg {
-            position: absolute;
-            transform: translate(75%, 75%);
+        .icon {
             fill: @whiteColor;
             cursor: pointer;
             pointer-events: none;

@@ -5,7 +5,7 @@ import "./gamePage.less";
 
 import { SideMenu } from "../../components/side-menu/SideMenu";
 import { Popup, PopupProps } from "../../components/popup/Popup";
-import { GameButton, MenuButtonProps } from "../../components/buttons/Button";
+import { GameButton, MenuButtonProps, GameButtonProps, GameButtonSize } from "../../components/buttons/Button";
 import { CoordinateTableX, CoordinateTableY } from "../../components/coordinates/Coordinates";
 import { sortByGrids, GridValues } from "../../utils/arrayUtils";
 import { isEmptyCell, isReadOnlyCell } from "../helpers";
@@ -16,6 +16,7 @@ import { updateNotesCells } from "../gameNotesCells";
 import { changePage, Page } from "../../utils/visibilityUtils";
 import { addListener, removeListener, Listener } from "../../utils/generalUtils";
 import { Game } from "../../generator";
+import { checkSvg } from "../../components/svg/Icons";
 
 
 export interface GamePageProps {
@@ -36,7 +37,6 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
         toggleSideMenu: false,
         popupProps: {
             hidden: true,
-            onClick: () => undefined,
         },
         toggleCoordinates: false,
     };
@@ -77,15 +77,26 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
             {
                 value: "Reset",
                 onClick: () => {
-                    this.enableMessagePopup(
-                        <span>Are you sure you want to reset?</span>,
-                        () => {
-                            // TODO reset only non readonly cells
-                            this.resetCells();
-                            this.resetState();
-                            sortByGrids(this.props.game, this.assignValues);
-                        },
-                    );
+                    this.enableMessagePopup({
+                        text: <span>Are you sure you want to reset?</span>,
+                        buttons: [
+                            {
+                                size: GameButtonSize.Small,
+                                value: "Yes",
+                                onClick: () => {
+                                    // TODO reset only non readonly cells
+                                    this.resetCells();
+                                    this.resetState();
+                                    sortByGrids(this.props.game, this.assignValues);
+                                },
+                            },
+                            {
+                                size: GameButtonSize.Small,
+                                value: "No",
+                                onClick: this.disableMessagePopup,
+                            },
+                        ],
+                    });
                 },
             },
             {
@@ -109,33 +120,48 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                     const text = wrongCells.length > 0
                         ? <span>Cells {wrongCells} are incorrect.</span>
                         : <span>Correct so far!</span>;
-                    this.enableMessagePopup(text, this.disableMessagePopup, true);
+                    this.enableMessagePopup(
+                        {
+                            text,
+                            buttons: [{
+                                size: GameButtonSize.Small,
+                                icon: checkSvg,
+                                onClick: this.disableMessagePopup,
+                            }],
+                        },
+                        true,
+                    );
                 },
             },
             {
                 value: "Solve",
                 onClick: () => {
-                    this.enableMessagePopup(
-                        <span>Are you sure you want to solve?</span>,
-                        () => {
-                            if (!this.cells) {
-                                return;
-                            }
-                            // TODO reset only non readonly cells
-                            this.resetCells();
-                            this.resetState();
-                            sortByGrids(this.props.game, this.assignValues);
-                            this.cells.forEach((cell, index: number) => {
-                                cell.value = `${this.props.game.matrix[index]}`;
-                            });
-                            const message = (
-                                <React.Fragment>
-                                    <span>Correct!</span><br /><span>You have won the game!</span>
-                                </React.Fragment>
-                            );
-                            this.enableMessagePopup(message, this.disableMessagePopup);
-                        },
-                    );
+                    this.enableMessagePopup({
+                        text: <span>Are you sure you want to solve?</span>,
+                        buttons: [
+                            {
+                                size: GameButtonSize.Small,
+                                value: "Yes",
+                                onClick: () => {
+                                    if (!this.cells) {
+                                        return;
+                                    }
+                                    // TODO reset only non readonly cells
+                                    this.resetCells();
+                                    this.resetState();
+                                    sortByGrids(this.props.game, this.assignValues);
+                                    this.cells.forEach((cell, index: number) => {
+                                        cell.value = `${this.props.game.matrix[index]}`;
+                                    });
+                                },
+                            },
+                            {
+                                size: GameButtonSize.Small,
+                                value: "No",
+                                onClick: this.disableMessagePopup,
+                            },
+                        ],
+                    });
                 },
             },
         ];
@@ -346,8 +372,8 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
             cellMode: CellMode.Pencil,
             toggleSideMenu: false,
             popupProps: {
+                ...this.state.popupProps,
                 hidden: true,
-                onClick: () => undefined,
             },
             toggleCoordinates: false,
         });
@@ -358,14 +384,14 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     }
 
     private enableMessagePopup = (
-        text: JSX.Element,
-        onClick: () => void, toggleCoordinates = false,
+        { text, buttons }: { text: JSX.Element, buttons: GameButtonProps[] },
+        toggleCoordinates = false,
     ) => {
         this.setState({
             toggleCoordinates,
             popupProps: {
                 text,
-                onClick,
+                buttons,
                 hidden: false,
             },
         });
@@ -374,8 +400,8 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     private disableMessagePopup = () => {
         this.setState({
             popupProps: {
+                ...this.state.popupProps,
                 hidden: true,
-                onClick: () => undefined,
             },
             toggleCoordinates: false,
         });
@@ -415,12 +441,18 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                 // shows in-game error for same number and displays automatic win message
                 const hasWon = checkForWin(this.cells, this.props.game);
                 if (hasWon) {
-                    const message = (
-                        <React.Fragment>
-                            <span>Correct!</span><br /><span>You have won the game!</span>
-                        </React.Fragment>
-                    );
-                    this.enableMessagePopup(message, this.disableMessagePopup);
+                    this.enableMessagePopup({
+                        text: (
+                            <React.Fragment>
+                                <span>Correct!</span><br /><span>You have won the game!</span>
+                            </React.Fragment>
+                        ),
+                        buttons: [{
+                            size: GameButtonSize.Small,
+                            icon: checkSvg,
+                            onClick: this.disableMessagePopup,
+                        }],
+                    });
                 }
                 // use arrow keys to move from cell to cell.
                 arrowKeys(e)(this.table);

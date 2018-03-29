@@ -36,7 +36,7 @@ export class SideMenu extends React.PureComponent<SideMenuProps> {
                         </a>
                     </span>
                 </div>
-                <input type="button" className="close-button" onClick={this.props.onClick} />
+                <button className="close-button" onClick={this.props.onClick} />
             </div>
         );
     }

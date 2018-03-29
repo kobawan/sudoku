@@ -11,9 +11,7 @@ export interface MenuButtonProps {
 }
 
 export const MenuButton = (props: MenuButtonProps) => (
-    <input
-        type="button"
-        value={props.value}
+    <button
         className={[
             "menu-button",
             props.reversed ? "reversed" : null,
@@ -21,7 +19,9 @@ export const MenuButton = (props: MenuButtonProps) => (
         ].join(" ")}
         onClick={props.onClick}
         key={props.index}
-    />
+    >
+        {props.value}
+    </button>
 );
 
 export const mapPropsToMenuButtons = (buttons: MenuButtonProps[]) => {
@@ -43,22 +43,34 @@ export interface GameButtonProps {
     onClick: () => void;
     size?: GameButtonSize;
     selected?: boolean;
+    icon?: JSX.Element;
 }
 
 export const GameButton = ({
     value,
+    icon,
     onClick,
     size = GameButtonSize.Default,
     selected = false,
 }: GameButtonProps) => (
-    <input
-        type="button"
-        value={value}
+    <button
         className={[
             "game-button",
             selected ? "selected" : null,
             size === GameButtonSize.Small ? "small" : null,
         ].join(" ")}
         onClick={onClick}
-    />
+    >
+        {value}
+        {icon}
+    </button>
 );
+
+export const mapPropsToGameButtons = (buttons: GameButtonProps[]) => {
+    return buttons.map((props, index) => (
+        <GameButton
+            {...props}
+            key={index}
+        />
+    ));
+};
