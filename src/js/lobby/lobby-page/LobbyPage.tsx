@@ -13,6 +13,7 @@ import {
     SharedSectionProps,
 } from "../../components/menu-content/Sections";
 import { MenuButtonProps } from "../../components/buttons/Button";
+import { GameConfig, GameDifficulty } from "../../consts";
 
 type MapMenuSectionToComponentIndexSignature = {
     [k in keyof typeof MenuSection]:
@@ -31,7 +32,13 @@ export interface LobbyPageState {
     currentSection?: MenuSection;
 }
 
-export class LobbyPage extends React.PureComponent<{}, LobbyPageState> {
+export interface LobbyPageProps {
+    hasCurrentGame: boolean;
+    generateGame: (props: GameConfig) => void;
+    returnToGame: () => void;
+}
+
+export class LobbyPage extends React.PureComponent<LobbyPageProps, LobbyPageState> {
     public state: LobbyPageState = {
         currentSection: undefined,
     };
@@ -43,6 +50,27 @@ export class LobbyPage extends React.PureComponent<{}, LobbyPageState> {
             MenuSection.Rules,
             MenuSection.About,
         ];
+
+        const leftColumn: MenuButtonProps[] = [
+            {
+                value: "Resume",
+                disabled: !this.props.hasCurrentGame,
+                onClick: this.props.hasCurrentGame ? this.props.returnToGame : () => {},
+            },
+            {
+                value: "Easy",
+                onClick: () => this.props.generateGame({ difficulty: GameDifficulty.Easy }),
+            },
+            {
+                value: "Medium",
+                onClick: () => this.props.generateGame({ difficulty: GameDifficulty.Medium }),
+            },
+            {
+                value: "Hard",
+                onClick: () => this.props.generateGame({ difficulty: GameDifficulty.Hard }),
+            },
+        ];
+
         const rightColumn: MenuButtonProps[] = menuSectionButtons.map((section: MenuSection) => ({
             value: section,
             onClick: () => this.setState({ currentSection: section }),
@@ -54,7 +82,7 @@ export class LobbyPage extends React.PureComponent<{}, LobbyPageState> {
                     <div className="lobby-content-box"></div>
 
                     <div className="lobby-content-box">
-                        <MainMenu rightColumn={rightColumn} />
+                        <MainMenu rightColumn={rightColumn} leftColumn={leftColumn} />
                     </div>
 
                     <div className="lobby-content-box">

@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     entry: [
-        path.join(__dirname, "src", "js", "initializing.ts"),
+        path.join(__dirname, "src", "js", "initializing.tsx"),
         path.join(__dirname, "src", "index.html"),
         "webpack-dev-server/client?http://localhost:8080",
     ],

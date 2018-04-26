@@ -15,15 +15,15 @@ import { CellMode, TableCellsMap } from "../../consts";
 import { arrowKeys, findCoordinates } from "../gameCells";
 import { highlight, showDuplicates } from "../gameTable";
 import { updateNotesCells } from "../gameNotesCells";
-import { changePage, Page } from "../../utils/visibilityUtils";
 import { removeDuplicates } from "../../utils/generalUtils";
 import { Game } from "../../generator";
 import { checkSvg } from "../../components/svg/Icons";
 import { SudokuTable } from "../../components/sudoku-table/SudokuTable";
 
 export interface GamePageProps {
-    hidden?: boolean;
+    hidden: boolean;
     game: Game;
+    returnToLobby: () => void;
 }
 
 interface GamePageState {
@@ -51,7 +51,11 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
 
     public componentWillUpdate (nextProps: GamePageProps, nextState: GamePageState) {
         if (this.props.hidden && !nextProps.hidden) {
-            this.resetState();
+            if (this.props.game.mask !== nextProps.game.mask) {
+                this.assignValues(nextProps.game.mask);
+            } else {
+                this.resetState();
+            }
         }
         if (this.state.cellMode !== nextState.cellMode) {
             this.handleCellModeChange();
@@ -62,7 +66,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
         const sideMenuButtons: MenuButtonProps[] = [
             {
                 value: "Return",
-                onClick: () => changePage(this.props.game, Page.Menu),
+                onClick: this.props.returnToLobby,
             },
             {
                 value: "Reset",

@@ -3,37 +3,14 @@ import * as React from "react";
 import "./mainMenu.less";
 
 import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
-import { getGame, initGame } from "../../game";
-import { changePage } from "../../utils/visibilityUtils";
-import { GameDifficulty } from "../../consts";
 
 export interface MainMenuProps {
+    leftColumn: MenuButtonProps[];
     rightColumn: MenuButtonProps[];
 }
 
 export class MainMenu extends React.PureComponent<MainMenuProps> {
     public render () {
-        const game = getGame(true);
-        const leftColumn: MenuButtonProps[] = [
-            {
-                value: "Resume",
-                disabled: game === undefined,
-                onClick: () => game ? changePage(game) : undefined,
-            },
-            {
-                value: "Easy",
-                onClick: () => initGame({ difficulty: GameDifficulty.Easy }),
-            },
-            {
-                value: "Medium",
-                onClick: () => initGame({ difficulty: GameDifficulty.Medium }),
-            },
-            {
-                value: "Hard",
-                onClick: () => initGame({ difficulty: GameDifficulty.Hard }),
-            },
-        ];
-
         return (
             <React.Fragment>
                 <svg xmlns="http://www.w3.org/2000/svg" className="menu-logo">
@@ -41,7 +18,7 @@ export class MainMenu extends React.PureComponent<MainMenuProps> {
                 </svg>
                 <div className="column-container">
                     <div className="column">
-                        {mapPropsToMenuButtons(leftColumn)}
+                        {mapPropsToMenuButtons(this.props.leftColumn)}
                     </div>
                     <div className="column">
                         {mapPropsToMenuButtons(this.props.rightColumn)}
