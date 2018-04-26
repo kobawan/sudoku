@@ -1,6 +1,6 @@
-import { mountGamePage, unmountGamePage, unmountLobbyPage } from "../utils/visibilityUtils";
-import { Game } from "../generator";
-import { GameConfig } from "../consts";
+import { mountGamePage, unmountGamePage, unmountLobbyPage } from "./utils/visibilityUtils";
+import { Game } from "./generator";
+import { GameConfig } from "./consts";
 
 let game: Game | undefined = undefined;
 

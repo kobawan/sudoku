@@ -1,6 +1,5 @@
 import * as React from "react";
 
-/* tslint:disable max-line-length */
 export const crossSvg = (
     <svg viewBox="0 0 30 30" className="icon">
         <path d={
@@ -35,4 +34,3 @@ export const checkSvg = (
         </path>
     </svg>
 );
-/* tslint:enable max-line-length */

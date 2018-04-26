@@ -1,89 +1,93 @@
 import { removeDuplicates } from "../utils/generalUtils";
-import { isEmptyCell, isPencilCell, isNotesCell } from "./helpers";
 import { sortByRows, sortByCols, sortByGrids } from "../utils/arrayUtils";
-import { CellClassType } from "../consts";
-import { Game } from "../generator";
+import { CellMode, TableCellsMap, CellProps, GameType } from "../consts";
 
 /**
  * Highlights pencil cells that have same value
  */
-export const highlight = (event: FocusEvent) => (cells: NodeListOf<HTMLTextAreaElement>) => {
-    cells.forEach(cell => cell.classList.remove(CellClassType.HIGHLIGHT));
+export const highlight = (cellProps: TableCellsMap, selectedCell: CellProps) => {
+    const newCellProps: TableCellsMap = {};
+    const shouldHighlight = !!selectedCell.value && selectedCell.mode !== CellMode.Notes;
 
-    const selectedCell = event.target as HTMLTextAreaElement;
-    // skip selected empty cells and notes cells
-    if (!isEmptyCell(selectedCell) && isPencilCell(selectedCell)) {
-        cells.forEach(cell => {
-            // only pencil cells that match selected cell's value should be highlighted
-            if (isPencilCell(cell) && selectedCell.value === cell.value) {
-                cell.classList.add(CellClassType.HIGHLIGHT);
-            }
-        });
+    for (const key in cellProps) {
+        const matchesValue = cellProps[key].mode !== CellMode.Notes && selectedCell.value === cellProps[key].value;
+        newCellProps[key] = {
+            ...cellProps[key],
+            withHighlight: shouldHighlight && matchesValue,
+        };
     }
+
+    return newCellProps;
 };
 
 /**
  * Finds pencil mode cell duplicates from rows, cols and grids
  */
-export const showDuplicates = (cells: NodeListOf<HTMLTextAreaElement>, game: Game) => {
-    cells.forEach(cell => cell.classList.remove(CellClassType.HIGHLIGHT, CellClassType.ERROR));
+export const showDuplicates = (
+    cellProps: TableCellsMap,
+    gameType: GameType,
+    gameRatio: number,
+) => {
+    const newCellProps: TableCellsMap = {};
+    for (const key in cellProps) {
+        newCellProps[key] = {
+            ...cellProps[key],
+            withHighlight: false,
+            withError: false,
+        };
+    }
 
-    const pencilCellsRows = sortByRows(game, ({ arr, row, pos }) => {
-        if (isPencilCell(cells[pos]) && !isEmptyCell(cells[pos])) {
-            arr[row].push(cells[pos]);
+    const pencilCellsRows = sortByRows(gameType, ({ arr, row, pos }) => {
+        if (newCellProps[pos].mode !== CellMode.Notes && newCellProps[pos].value) {
+            arr[row].push(pos);
         }
     });
-    const pencilCellsCols = sortByCols(game, ({ arr, col, pos }) => {
-        if (isPencilCell(cells[pos]) && !isEmptyCell(cells[pos])) {
-            arr[col].push(cells[pos]);
+    const pencilCellsCols = sortByCols(gameType, ({ arr, col, pos }) => {
+        if (newCellProps[pos].mode !== CellMode.Notes && newCellProps[pos].value) {
+            arr[col].push(pos);
         }
     });
-    const pencilCellsGrids = sortByGrids(game, ({ arr, grid, pos }) => {
-        if (isPencilCell(cells[pos]) && !isEmptyCell(cells[pos])) {
-            arr[grid].push(cells[pos]);
+    const pencilCellsGrids = sortByGrids(gameType, gameRatio, ({ arr, grid, pos }) => {
+        if (newCellProps[pos].mode !== CellMode.Notes && newCellProps[pos].value) {
+            arr[grid].push(pos);
         }
     });
     const duplicates = removeDuplicates(getDuplicates(
         pencilCellsRows,
         pencilCellsCols,
         pencilCellsGrids,
+        newCellProps,
     ));
 
-    duplicates.forEach(cell => cell.classList.add(CellClassType.ERROR));
-    return duplicates;
+    if (duplicates.length > 0) {
+        duplicates.forEach(pos => newCellProps[pos].withError = true);
+    }
+
+    return { duplicates, cellProps: newCellProps };
 };
 
 /**
  * Finds all occuring duplicates and returns array of their cells
  */
 const getDuplicates = (
-    rows: HTMLTextAreaElement[][],
-    cols: HTMLTextAreaElement[][],
-    grids: HTMLTextAreaElement[][],
+    rows: number[][],
+    cols: number[][],
+    grids: number[][],
+    cellProps: TableCellsMap,
 ) => {
-    const arr: HTMLTextAreaElement[][] = [...rows, ...cols, ...grids];
-    const duplicates: HTMLTextAreaElement[] = [];
+    const arr: number[][] = [...rows, ...cols, ...grids];
+    const duplicates: number[] = [];
     for (let outer = 0; outer < arr.length; outer++) {
         for (let inner = 0; inner < arr[outer].length; inner++) {
             for (let pos = 1; pos < arr[outer].length - inner; pos++) {
-                const nextPos = inner + pos;
-                if (arr[outer][inner].value === arr[outer][nextPos].value) {
-                    duplicates.push(arr[outer][inner]);
-                    duplicates.push(arr[outer][nextPos]);
+                const currentPos = arr[outer][inner];
+                const nextPos = arr[outer][inner + pos];
+                if (cellProps[currentPos].value === cellProps[nextPos].value) {
+                    duplicates.push(currentPos);
+                    duplicates.push(nextPos);
                 }
             }
         }
     }
     return duplicates;
-};
-
-/**
- * Checks for in-game errors and if game is complete and correct
- */
-export const checkForWin = (cells: NodeListOf<HTMLTextAreaElement>, game: Game) => {
-    const duplicates = showDuplicates(cells, game);
-    const invalidCells = Array.from(cells).filter(
-        cell => isNotesCell(cell) || isEmptyCell(cell),
-    );
-    return duplicates.length === 0 && invalidCells.length === 0;
 };

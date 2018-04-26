@@ -1,6 +1,6 @@
-import { Game } from "../generator";
+import { GameType } from "../consts";
 
-export interface RowValues<ArrayType = HTMLTextAreaElement> {
+export interface RowValues<ArrayType> {
     row: number;
     pos: number;
     arr: ArrayType[][];
@@ -10,17 +10,17 @@ export interface RowValues<ArrayType = HTMLTextAreaElement> {
  * Iterates through each cell row-wise and calls callback function for each cell.
  * Returns array from callback.
  */
-export const sortByRows = <ArrayType = HTMLTextAreaElement>(
-    game: Game,
+export const sortByRows = <ArrayType = number>(
+    gameType: GameType,
     callback: (values: RowValues<ArrayType>) => void,
 ) => {
     let pos: number;
     let values: RowValues<ArrayType>;
     const arr: ArrayType[][] = [];
-    for (let row = 0; row < game.gameType; row++) {
+    for (let row = 0; row < gameType; row++) {
         arr.push([]);
-        for (let col = 0; col < game.gameType; col++) {
-            pos = row * game.gameType + col;
+        for (let col = 0; col < gameType; col++) {
+            pos = row * gameType + col;
             values = { row, pos, arr };
             callback(values);
         }
@@ -28,7 +28,7 @@ export const sortByRows = <ArrayType = HTMLTextAreaElement>(
     return arr;
 };
 
-export interface ColumnValues<ArrayType = HTMLTextAreaElement> {
+export interface ColumnValues<ArrayType> {
     col: number;
     pos: number;
     arr: ArrayType[][];
@@ -38,17 +38,17 @@ export interface ColumnValues<ArrayType = HTMLTextAreaElement> {
  * Iterates through each cell column-wise and calls callback function for each cell.
  * Returns array from callback.
  */
-export const sortByCols = <ArrayType = HTMLTextAreaElement>(
-    game: Game,
+export const sortByCols = <ArrayType = number>(
+    gameType: GameType,
     callback: (values: ColumnValues<ArrayType>) => void,
 ) => {
     let pos: number;
     let values: ColumnValues<ArrayType>;
     const arr: ArrayType[][] = [];
-    for (let col = 0; col < game.gameType; col++) {
+    for (let col = 0; col < gameType; col++) {
         arr.push([]);
-        for (let row = 0; row < game.gameType; row++) {
-            pos = col + game.gameType * row;
+        for (let row = 0; row < gameType; row++) {
+            pos = col + gameType * row;
             values = { col, pos, arr };
             callback(values);
         }
@@ -56,7 +56,7 @@ export const sortByCols = <ArrayType = HTMLTextAreaElement>(
     return arr;
 };
 
-export interface GridValues<ArrayType = HTMLTextAreaElement> {
+export interface GridValues<ArrayType> {
     row: number;
     col: number;
     grid: number;
@@ -67,9 +67,11 @@ export interface GridValues<ArrayType = HTMLTextAreaElement> {
 /**
  * Iterates through each cell grid-wise and calls callback function for each cell.
  * Returns array from callback.
+ * TODO improve function with one from generator
  */
-export const sortByGrids = <ArrayType = HTMLTextAreaElement>(
-    game: Game,
+export const sortByGrids = <ArrayType = number>(
+    gameType: GameType,
+    gameRatio: number,
     callback: (values: GridValues<ArrayType>) => void,
 ) => {
     let grid: number;
@@ -79,20 +81,20 @@ export const sortByGrids = <ArrayType = HTMLTextAreaElement>(
     let values: GridValues<ArrayType>;
     const arr: ArrayType[][] = [];
     // rows of grids in table
-    for (let rowGrid = 0; rowGrid < game.ratio; rowGrid++) {
+    for (let rowGrid = 0; rowGrid < gameRatio; rowGrid++) {
         // columns of grids in table
-        for (let colGrid = 0; colGrid < game.ratio; colGrid++) {
+        for (let colGrid = 0; colGrid < gameRatio; colGrid++) {
             // grid number horizontally
-            grid = rowGrid * game.ratio + colGrid;
+            grid = rowGrid * gameRatio + colGrid;
             arr.push([]);
             // row per grid
-            for (let row = 0; row < game.ratio; row++) {
+            for (let row = 0; row < gameRatio; row++) {
                 // position of first column in each grid
-                rowPos = (row + rowGrid * game.ratio) * game.gameType;
+                rowPos = (row + rowGrid * gameRatio) * gameType;
                 // column per grid
-                for (let col = 0; col < game.ratio; col++) {
+                for (let col = 0; col < gameRatio; col++) {
                     // increment of column per grid and rows of grids
-                    colPos = col + colGrid * game.ratio;
+                    colPos = col + colGrid * gameRatio;
                     // final position
                     pos = rowPos + colPos;
                     values = { row, col, grid, pos, arr };

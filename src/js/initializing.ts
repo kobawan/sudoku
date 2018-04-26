@@ -1,5 +1,5 @@
 import { mountLobbyPage } from "./utils/visibilityUtils";
 
-import "../styles";
+import "../styles/common.less";
 
 mountLobbyPage();

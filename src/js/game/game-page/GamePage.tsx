@@ -1,23 +1,25 @@
 import * as React from "react";
 
-import "./cells.less";
 import "./gamePage.less";
 
 import { SideMenu } from "../../components/side-menu/SideMenu";
 import { Popup, PopupProps } from "../../components/popup/Popup";
-import { GameButton, MenuButtonProps, GameButtonProps, GameButtonSize } from "../../components/buttons/Button";
+import {
+    GameButton, 
+    MenuButtonProps,
+    GameButtonProps,
+    GameButtonSize,
+ } from "../../components/buttons/Button";
 import { CoordinateTableX, CoordinateTableY } from "../../components/coordinates/Coordinates";
-import { sortByGrids, GridValues } from "../../utils/arrayUtils";
-import { isEmptyCell, isReadOnlyCell } from "../helpers";
-import { CellClassType, CellMode } from "../../consts";
-import { arrowKeys, selectValue, changeSelectedCellMode, filterInvalidInput } from "../gameCells";
-import { highlight, checkForWin, showDuplicates } from "../gameTable";
+import { CellMode, TableCellsMap } from "../../consts";
+import { arrowKeys, findCoordinates } from "../gameCells";
+import { highlight, showDuplicates } from "../gameTable";
 import { updateNotesCells } from "../gameNotesCells";
 import { changePage, Page } from "../../utils/visibilityUtils";
-import { addListener, removeListener, Listener } from "../../utils/generalUtils";
+import { removeDuplicates } from "../../utils/generalUtils";
 import { Game } from "../../generator";
 import { checkSvg } from "../../components/svg/Icons";
-
+import { SudokuTable } from "../../components/sudoku-table/SudokuTable";
 
 export interface GamePageProps {
     hidden?: boolean;
@@ -29,6 +31,7 @@ interface GamePageState {
     toggleSideMenu: boolean;
     popupProps: PopupProps;
     toggleCoordinates: boolean;
+    cellProps: TableCellsMap;
 }
 
 export class GamePage extends React.Component<GamePageProps, GamePageState> {
@@ -39,24 +42,11 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
             hidden: true,
         },
         toggleCoordinates: false,
+        cellProps: {},
     };
 
-    private table: HTMLTableElement | undefined;
-    private cells: NodeListOf<HTMLTextAreaElement> | undefined;
-    private listeners: Listener[] | undefined;
-
-    public componentDidMount () {
-        this.table = document.querySelector(".game .sudoku") as HTMLTableElement;
-        this.cells = document.querySelectorAll(".game .sudoku textarea");
-        this.resetCells();
-        sortByGrids(this.props.game, this.assignValues);
-        this.listeners = this.addCellListeners();
-    }
-
-    public componentWillUnmount () {
-        if (this.cells && this.listeners && this.listeners.length > 0) {
-            this.listeners = removeListener(this.listeners, Array.from(this.cells));
-        }
+    public componentWillMount () {
+        this.assignValues(this.props.game.mask);
     }
 
     public componentWillUpdate (nextProps: GamePageProps, nextState: GamePageState) {
@@ -76,93 +66,15 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
             },
             {
                 value: "Reset",
-                onClick: () => {
-                    this.enableMessagePopup({
-                        text: <span>Are you sure you want to reset?</span>,
-                        buttons: [
-                            {
-                                size: GameButtonSize.Small,
-                                value: "Yes",
-                                onClick: () => {
-                                    // TODO reset only non readonly cells
-                                    this.resetCells();
-                                    this.resetState();
-                                    sortByGrids(this.props.game, this.assignValues);
-                                },
-                            },
-                            {
-                                size: GameButtonSize.Small,
-                                value: "No",
-                                onClick: this.disableMessagePopup,
-                            },
-                        ],
-                    });
-                },
+                onClick: this.enableResetPopup,
             },
             {
                 value: "Check",
-                onClick: () => {
-                    if (!this.cells) {
-                        return;
-                    }
-                    const duplicates = showDuplicates(this.cells, this.props.game);
-                    const wrongCells = duplicates
-                        .map((cell: HTMLTextAreaElement) => {
-                            const tableCell = cell.parentElement as HTMLTableDataCellElement;
-                            const tableRow = tableCell.parentElement as HTMLTableRowElement;
-                            const row = tableRow.rowIndex + 1;
-                            const col = "ABCDEFGHI"[tableCell.cellIndex];
-                            return `${col + row}`;
-                        })
-                        .sort()
-                        .join(", ")
-                    ;
-                    const text = wrongCells.length > 0
-                        ? <span>Cells {wrongCells} are incorrect.</span>
-                        : <span>Correct so far!</span>;
-                    this.enableMessagePopup(
-                        {
-                            text,
-                            buttons: [{
-                                size: GameButtonSize.Small,
-                                icon: checkSvg,
-                                onClick: this.disableMessagePopup,
-                            }],
-                        },
-                        true,
-                    );
-                },
+                onClick: () => this.checkForWin(this.state.cellProps, true),
             },
             {
                 value: "Solve",
-                onClick: () => {
-                    this.enableMessagePopup({
-                        text: <span>Are you sure you want to solve?</span>,
-                        buttons: [
-                            {
-                                size: GameButtonSize.Small,
-                                value: "Yes",
-                                onClick: () => {
-                                    if (!this.cells) {
-                                        return;
-                                    }
-                                    // TODO reset only non readonly cells
-                                    this.resetCells();
-                                    this.resetState();
-                                    sortByGrids(this.props.game, this.assignValues);
-                                    this.cells.forEach((cell, index: number) => {
-                                        cell.value = `${this.props.game.matrix[index]}`;
-                                    });
-                                },
-                            },
-                            {
-                                size: GameButtonSize.Small,
-                                value: "No",
-                                onClick: this.disableMessagePopup,
-                            },
-                        ],
-                    });
-                },
+                onClick: this.enableSolvePopup,
             },
         ];
 
@@ -181,109 +93,10 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                     <div className="center">
                         <CoordinateTableY hidden={!this.state.toggleCoordinates} />
 
-                        <table className="sudoku">
-                            <tbody>
-                                <tr>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                    <td><textarea></textarea></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <SudokuTable
+                            cellState={this.state.cellProps}
+                            gameType={this.props.game.gameType}
+                        />
 
                         <div className="dummy-block"></div>
                     </div>
@@ -305,68 +118,6 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
         );
     }
 
-    private setCellModePencil = () => {
-        this.setState({ cellMode: CellMode.Pencil });
-    }
-
-    private setCellModeNotes = () => {
-        this.setState({ cellMode: CellMode.Notes });
-    }
-
-    private resetCells = () => {
-        if (!this.cells) {
-            return;
-        }
-        this.cells.forEach(cell => {
-            cell.value = cell.defaultValue;
-            cell.readOnly = false;
-            cell.maxLength = 1;
-            cell.className = CellClassType.PENCIL;
-        });
-    }
-
-    /**
-     * Assigns game values to corresponding cells
-     */
-    private assignValues = ({ row, col, grid, pos }: GridValues) => {
-        if (!this.cells) {
-            return;
-        }
-        const counter = col + (row * this.props.game.ratio);
-        const val = this.props.game.mask[grid][counter];
-        if (val !== 0) {
-            this.cells[pos].value = `${val}`;
-            this.cells[pos].readOnly = true;
-            this.cells[pos].maxLength = 1;
-            this.cells[pos].className = CellClassType.READONLY;
-        }
-    }
-
-    private handleCellModeChange = () => {
-        if (!this.cells) {
-            return;
-        }
-        switch (this.state.cellMode) {
-        case CellMode.Pencil:
-            this.cells.forEach(cell => {
-                if (isEmptyCell(cell)) {
-                    cell.maxLength = 9;
-                    cell.className = CellClassType.NOTES;
-                }
-            });
-            break;
-        case CellMode.Notes:
-            this.cells.forEach(cell => {
-                if (isEmptyCell(cell)) {
-                    cell.maxLength = 1;
-                    cell.className = CellClassType.PENCIL;
-                }
-            });
-            break;
-        default:
-        }
-    }
-
     private resetState = () => {
         this.setState({
             cellMode: CellMode.Pencil,
@@ -381,6 +132,14 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
 
     private toggleSideMenu = () => {
         this.setState({ toggleSideMenu: !this.state.toggleSideMenu });
+    }
+
+    private setCellModePencil = () => {
+        this.setState({ cellMode: CellMode.Pencil });
+    }
+
+    private setCellModeNotes = () => {
+        this.setState({ cellMode: CellMode.Notes });
     }
 
     private enableMessagePopup = (
@@ -407,64 +166,246 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
         });
     }
 
-    private addCellListeners = () => {
-        if (!this.cells) {
-            return undefined;
-        }
-        const listeners: Listener[] = [];
-        const playableCells = Array.from(this.cells).filter(cell => !isReadOnlyCell(cell));
-        const allCells = Array.from(this.cells);
+    /**
+     * Assigns game values to corresponding cells.
+     */
+    private assignValues = (values: number[], isInitialValues = true) => {
+        const cellProps: TableCellsMap = {};
+        values.forEach((value, key) => {
+            const isReadOnlyCell =
+                (isInitialValues && value !== 0)
+                || (
+                    !isInitialValues
+                    && this.state.cellProps[key]
+                    && this.state.cellProps[key].mode === CellMode.ReadOnly
+                )
+            ;
 
-        listeners.push(
-            addListener(playableCells, "focus", e => {
-                // selects cell values
-                selectValue(e)(this.state.cellMode);
-            }),
-            addListener(playableCells, "input", e => {
-                // changed clicked cell into according style
-                changeSelectedCellMode(e)(this.state.cellMode);
-                // removes invalid values
-                filterInvalidInput(e)(this.state.cellMode);
-            }),
-            addListener(playableCells, "keyup", e => {
-                if (!this.cells) {
-                    return;
-                }
-                // removes notes from column, row and grid where the pencil value was inserted
-                // and filters invalid values
-                updateNotesCells(e)(this.state.cellMode, this.props.game, this.cells);
-            }),
-            addListener(allCells, "keyup", e => {
-                if (!this.cells || !this.table) {
-                    return;
-                }
-                // shows in-game error for same number and displays automatic win message
-                const hasWon = checkForWin(this.cells, this.props.game);
-                if (hasWon) {
-                    this.enableMessagePopup({
-                        text: (
-                            <React.Fragment>
-                                <span>Correct!</span><br /><span>You have won the game!</span>
-                            </React.Fragment>
-                        ),
-                        buttons: [{
-                            size: GameButtonSize.Small,
-                            icon: checkSvg,
-                            onClick: this.disableMessagePopup,
-                        }],
-                    });
-                }
-                // use arrow keys to move from cell to cell.
-                arrowKeys(e)(this.table);
-            }),
-            addListener(allCells, "focus", e => {
-                if (!this.cells) {
-                    return;
-                }
-                // finds cells with same values as clicked cell and highlights them
-                highlight(e)(this.cells);
-            }),
+            cellProps[key] = {
+                value,
+                withHighlight: false,
+                withError: false,
+                mode: isReadOnlyCell ? CellMode.ReadOnly : CellMode.Pencil,
+                onFocus: isInitialValues ? this.onSelect : () => {},
+                onClick: isInitialValues ? this.onSelect : () => {},
+                onKeyup: isInitialValues ? this.onKeyup : () => {},
+                onInput: isInitialValues && value === 0 ? this.onInput : () => {},
+            };
+        });
+ 
+        this.setState({
+            cellProps,
+            cellMode: CellMode.Pencil,
+            popupProps: {
+                ...this.state.popupProps,
+                hidden: true,
+            },
+            toggleCoordinates: false,
+        });
+    }
+
+    private handleCellModeChange = () => {
+        const cellProps: TableCellsMap = {};
+
+        for (const key in this.state.cellProps) {
+            let mode = this.state.cellProps[key].mode;
+            if (!this.state.cellProps[key].value) {
+                mode = this.state.cellMode === CellMode.Pencil ? CellMode.Notes : CellMode.Pencil;
+            }
+
+            cellProps[key] = {
+                ...this.state.cellProps[key],
+                mode,
+            };
+        }
+
+        this.setState({ cellProps });
+    }
+
+    private enableResetPopup = () => {
+        this.enableMessagePopup({
+            text: <span>Are you sure you want to reset?</span>,
+            buttons: [
+                {
+                    size: GameButtonSize.Small,
+                    value: "Yes",
+                    onClick: () => this.assignValues(this.props.game.mask),
+                },
+                {
+                    size: GameButtonSize.Small,
+                    value: "No",
+                    onClick: this.disableMessagePopup,
+                },
+            ],
+        });
+    }
+
+    private enableSolvePopup = () => {
+        this.enableMessagePopup({
+            text: <span>Are you sure you want to solve?</span>,
+            buttons: [
+                {
+                    size: GameButtonSize.Small,
+                    value: "Yes",
+                    onClick: () => this.assignValues(this.props.game.matrix, false),
+                },
+                {
+                    size: GameButtonSize.Small,
+                    value: "No",
+                    onClick: this.disableMessagePopup,
+                },
+            ],
+        });
+    }
+
+    /**
+     * shows cell errors and checks if game is solved
+     */
+    private checkForWin = (cellProps: TableCellsMap, showError = false) => {
+        // shows in-game error for same values
+        const result = showDuplicates(
+            cellProps,
+            this.props.game.gameType,
+            this.props.game.ratio,
         );
-        return listeners;
+
+        let hasInvalidCells = false;
+        for (const key in result.cellProps) {
+            if (result.cellProps[key].mode === CellMode.Notes || !result.cellProps[key].value) {
+                hasInvalidCells = true;
+                break;
+            }
+        }
+
+        // displays win message if conditions are met
+        if (result.duplicates.length === 0 && !hasInvalidCells) {
+            this.enableMessagePopup({
+                text: (
+                    <React.Fragment>
+                        <span>Correct!</span><br /><span>You have won the game!</span>
+                    </React.Fragment>
+                ),
+                buttons: [{
+                    size: GameButtonSize.Small,
+                    icon: checkSvg,
+                    onClick: this.disableMessagePopup,
+                }],
+            });
+
+            for (const key in result.cellProps) {
+                result.cellProps[key] = {
+                    ...result.cellProps[key],
+                    onFocus: () => {},
+                    onClick: () => {},
+                    onKeyup: () => {},
+                    onInput: () => {},
+                };
+            }
+        }
+        else if (showError) {
+            const wrongCells = result.duplicates
+                .map(pos => {
+                    const row = Math.floor(pos / this.props.game.gameType) + 1;
+                    const col = "ABCDEFGHI"[pos - (row - 1) * this.props.game.gameType];
+                    return `${row + col}`;
+                })
+                .sort()
+                .join(", ")
+            ;
+
+            this.enableMessagePopup(
+                {
+                    text: wrongCells.length > 0
+                        ? <span>Cells {wrongCells} are incorrect.</span>
+                        : <span>Correct so far!</span>,
+                    buttons: [{
+                        size: GameButtonSize.Small,
+                        icon: checkSvg,
+                        onClick: this.disableMessagePopup,
+                    }],
+                },
+                wrongCells.length > 0,
+            );
+        }
+
+        return result.cellProps;
+    }
+
+    private onSelect = (e: React.FocusEvent<HTMLTextAreaElement> | React.MouseEvent<HTMLTextAreaElement>) => {
+        const cell = e.target as HTMLTextAreaElement;
+        const { x, y } = findCoordinates(this.props.game.ratio, cell);
+        const pos = x * this.props.game.gameType + y;
+        const props = this.state.cellProps[pos];
+
+        // Selects clicked value. Gets triggered on cell focus
+        if (
+            (this.state.cellMode === CellMode.Notes && props.mode === CellMode.Pencil)
+            || (this.state.cellMode === CellMode.Pencil && props.mode !== CellMode.ReadOnly)
+        ) {
+            cell.select();
+        }
+
+        // Updates hightlight prop in all cells
+        this.setState({ cellProps: highlight(this.state.cellProps, props) });
+    }
+
+    private onKeyup = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        const cell = e.target as HTMLTextAreaElement;
+        const coor = findCoordinates(this.props.game.ratio, cell);
+        const pos = coor.x * this.props.game.gameType + coor.y;
+        const props = this.state.cellProps[pos];
+
+        // removes notes from column, row and grid where the pencil value was inserted
+        const cellProps = updateNotesCells(
+            this.state.cellMode,
+            this.props.game.gameType,
+            this.props.game.ratio,
+            this.state.cellProps,
+            props,
+            coor,
+        );
+
+        // shows cell errors and checks if game is solved
+        const cellPropsWithErrors = this.checkForWin(cellProps || this.state.cellProps);
+
+        // use arrow keys to move from cell to cell
+        arrowKeys(e.keyCode, coor);
+
+        this.setState({ cellProps: cellPropsWithErrors });
+    }
+
+    private onInput = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
+        const cell = e.target as HTMLTextAreaElement;
+        const { x, y } = findCoordinates(this.props.game.ratio, cell);
+        const pos = x * this.props.game.gameType + y;
+        const props = this.state.cellProps[pos];
+
+        // Filters invalid inputs or updates props from new input value
+        if (cell.value === "" || cell.value.match(/^[1-9]+$/g)) {
+            let value: number;
+
+            if (this.state.cellMode === CellMode.Pencil) {
+                value = parseInt(cell.value) || 0;
+            }
+            else {
+                const notes = cell.value
+                    .split("")
+                    .map(val => parseInt(val))
+                    .sort()
+                ;
+                value = parseInt(removeDuplicates(notes).join("")) || 0;
+            }
+
+            const cellProps = {
+                ...this.state.cellProps,
+                [pos]: {
+                    ...props,
+                    value,
+                    mode: this.state.cellMode,
+                },
+            };
+
+            this.setState({ cellProps });
+        }
     }
 }

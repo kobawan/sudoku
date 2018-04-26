@@ -1,16 +1,27 @@
-import { isPencilCell } from "./helpers";
-import { CellClassType, CellMode } from "../consts";
+import { CellCoordinates } from "../consts";
+
+/**
+ * Returns coordinates of selected cell
+ */
+export const findCoordinates = (gameRatio: number, selectedCell: HTMLTextAreaElement): CellCoordinates => {
+    const tableCell = selectedCell.parentElement as HTMLTableDataCellElement;
+    const tableRow = tableCell.parentElement as HTMLTableRowElement;
+    const coorRow = tableRow.rowIndex;
+    const coorCol = tableCell.cellIndex;
+    const coorGrid =
+        Math.floor(coorRow / gameRatio) * gameRatio + Math.floor(coorCol / gameRatio);
+    return { x: coorRow, y: coorCol, grid: coorGrid };
+};
 
 /**
  * Key up event to move cells using arrows
  */
-export const arrowKeys = (event: KeyboardEvent) => (sudokuTable: HTMLTableElement) => {
-    const selectedCell = event.target as HTMLTextAreaElement;
-    const tableCell = selectedCell.parentElement as HTMLTableDataCellElement;
-    const tableColumn = tableCell.parentElement as HTMLTableRowElement;
-    let coorRow = tableColumn.rowIndex;
-    let coorCol = tableCell.cellIndex;
-    switch (event.keyCode) {
+export const arrowKeys = (keyCode: number, coor: CellCoordinates) => {
+    const sudokuTable = document.querySelector("#SudokuTable") as HTMLTableElement;
+    let coorRow = coor.x;
+    let coorCol = coor.y;
+
+    switch (keyCode) {
     case 37: // left arrow
         coorCol === 0 ? coorCol = 8 : coorCol--;
         break;
@@ -26,49 +37,7 @@ export const arrowKeys = (event: KeyboardEvent) => (sudokuTable: HTMLTableElemen
     default:
         break;
     }
+
     const nextCell = sudokuTable.rows[coorRow].cells[coorCol].children[0] as HTMLTextAreaElement;
     nextCell.focus();
-};
-
-/**
- * Selects clicked value. Gets triggered on cell focus
- */
-export const selectValue = (event: FocusEvent) => (cellMode: CellMode) => {
-    const cell = event.target as HTMLTextAreaElement;
-    if (
-        (cellMode === CellMode.Notes && isPencilCell(cell)) // should not select notes in notes mode
-        || cellMode === CellMode.Pencil
-    ) {
-        cell.select();
-    }
-};
-
-/**
- * Changes cell mode of selected cell on input event
- */
-export const changeSelectedCellMode = (event: Event) => (cellMode: CellMode) => {
-    const cell = event.target as HTMLTextAreaElement;
-    if (cellMode === CellMode.Pencil) {
-        cell.maxLength = 1;
-        cell.className = CellClassType.PENCIL;
-    }
-    else if (cellMode === CellMode.Notes) {
-        cell.maxLength = 9;
-        cell.className = CellClassType.NOTES;
-    }
-};
-
-/**
- * Resets cell if invalid value is detected, for pencil mode.
- * Gets triggered on input.
- */
-export const filterInvalidInput = (event: Event) => (cellMode: CellMode) => {
-    const cell = event.target as HTMLTextAreaElement;
-    if (cellMode === CellMode.Pencil) {
-        const filterInput = parseInt(cell.value);
-        if (!filterInput || filterInput === 0) {
-            // TODO disable invalid inputs alltogether
-            cell.value = cell.defaultValue;
-        }
-    }
 };

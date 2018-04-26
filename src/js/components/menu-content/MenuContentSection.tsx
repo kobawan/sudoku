@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import "./menuContentSection.less";
+
 import { crossSvg, arrowSvg } from "../svg/Icons";
 
 export enum ArrowDirection {

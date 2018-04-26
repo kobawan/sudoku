@@ -1,12 +1,12 @@
 import { compose } from "./utils/generalUtils";
-import { GameConfig, GameType } from "./consts";
+import { GameConfig, GameType, GameDifficulty } from "./consts";
 
 export class Game {
-    public readonly gameType: number;
-    public readonly difficulty: number;
+    public readonly gameType: GameType;
+    public readonly difficulty: GameDifficulty;
     public readonly ratio: number;
     public readonly matrix: number[] = []; // Array of result ordered by rows
-    public readonly mask: number[][] = []; // 2d array of masked result ordered by grids
+    public readonly mask: number[] = []; // Array of masked result ordered by rows
     private readonly shuffle: number;
 
     constructor (props: GameConfig) {
@@ -179,30 +179,31 @@ export class Game {
     }
 
     private maskGame = (matrix: number[]) => {
-        const arr: number[][] = [];
-        let grid: number;
-        let rowPos: number;
-        let colPos: number;
-        let pos: number;
-        let rand: number;
-        for (let rowGrid = 0; rowGrid < this.ratio; rowGrid++) {
-            for (let colGrid = 0; colGrid < this.ratio; colGrid++) {
-                arr.push([]);
-                grid = rowGrid * this.ratio + colGrid;
-                for (let row = 0; row < this.ratio; row++) {
-                    rowPos = (row + rowGrid * this.ratio) * this.gameType;
-                    for (let col = 0; col < this.ratio; col++) {
-                        colPos = col + colGrid * this.ratio;
-                        pos = rowPos + colPos;
-                        arr[grid].push(matrix[pos]);
-                    }
+        const arr = matrix.slice();
+
+        for (let grid = 0; grid < this.gameType; grid++) {
+            // creates array with position of grid cells to mask
+            const maskPositions: number[] = [];
+            let rand: number;
+            for (let dif = 0; dif < this.difficulty; dif++) {
+                do {
+                    rand = Math.floor(Math.random() * this.gameType);
                 }
-                for (let dif = 0; dif < this.difficulty; dif++) {
-                    do {
-                        rand = Math.floor(Math.random() * this.gameType);
-                    }
-                    while (arr[grid][rand] === 0);
-                    arr[grid][rand] = 0;
+                while (maskPositions.includes(rand));
+                maskPositions.push(rand);
+            }
+            // masks cells in grid
+            for (let col = 0; col < this.gameType; col++) {
+                if (maskPositions.includes(col)) {
+                    const pos =
+                        // cell iterator
+                        col + (this.gameType - this.ratio) * Math.floor(col / this.ratio)
+                        // grid iterator
+                        + grid * this.ratio
+                        // rows of grids iterator
+                        + Math.floor(grid / this.ratio) * this.gameType * (this.ratio - 1)
+                    ;
+                    arr[pos] = 0;
                 }
             }
         }

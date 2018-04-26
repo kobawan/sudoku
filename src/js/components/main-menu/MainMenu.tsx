@@ -3,7 +3,7 @@ import * as React from "react";
 import "./mainMenu.less";
 
 import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
-import { getGame, initGame } from "../../game/game";
+import { getGame, initGame } from "../../game";
 import { changePage } from "../../utils/visibilityUtils";
 import { GameDifficulty } from "../../consts";
 

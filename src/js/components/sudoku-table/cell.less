@@ -1,0 +1,55 @@
+@import "../../../styles/colors.less";
+
+@height: 2.3125rem;
+
+#cell-mixin() {
+    border: 0;
+    width: @height;
+    height: @height;
+    box-sizing: border-box;
+}
+
+textarea {
+    text-align: center;
+    padding: 0;
+    resize: none;
+    vertical-align: middle;
+
+    &:focus {
+        outline: 0;
+    }
+}
+
+.pencil {
+    #cell-mixin();
+    font-size: 1.375rem;
+    letter-spacing: 0;
+    line-height: @height;
+    background-color: @whiteColor;
+}
+
+.readOnly {
+    #cell-mixin();
+    font-size: 1.375rem;
+    letter-spacing: 0;
+    line-height: @height;
+    background-color: @cellDisabledColor;
+    cursor: default;
+}
+
+.notes {
+    #cell-mixin();
+    font-size: 0.75rem;
+    line-height: 1;
+    letter-spacing: 0.1875rem;
+    background-color: @whiteColor;
+}
+
+.highlight {
+    background-color: @cellHighlightedColor;
+}
+
+.error {
+    line-height: @height - (0.25rem * 2);
+    border: 0.25rem solid @errorColor;
+}

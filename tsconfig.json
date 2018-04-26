@@ -10,7 +10,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "pretty": true,
-        // "strict": true,
+        "strict": true,
         "allowSyntheticDefaultImports": false,
         "forceConsistentCasingInFileNames": true,
         "newLine": "lf",
