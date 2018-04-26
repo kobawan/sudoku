@@ -9,6 +9,11 @@
     flex-flow: row nowrap;
     align-items: stretch;
     justify-content: flex-start;
+    transition: 0.8s ease-in-out;
+
+    &.hidden {
+        transform: translateX(-18.75rem);
+    }
 
     .menu {
         background-color: fade(@cellDisabledColor, 80%);
@@ -17,10 +22,6 @@
         align-items: center;
         justify-content: flex-start;
         padding: 1.25rem;
-
-        &.hidden {
-            display: none;
-        }
 
         .side-menu-logo {
 			width: 16.25rem;
@@ -47,6 +48,7 @@
 
         &:hover {
             background-color: @pinkColor;
+            cursor: pointer;
         }
     }
 }

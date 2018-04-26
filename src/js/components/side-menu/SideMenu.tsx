@@ -12,14 +12,14 @@ export interface SideMenuProps {
 
 export class SideMenu extends React.PureComponent<SideMenuProps> {
     public render () {
-        const menuClasses = [
-            "menu",
+        const sideMenuClasses = [
+            "side-menu",
             this.props.hidden ? "hidden" : null,
         ].join(" ");
 
         return (
-            <div className="side-menu">
-                <div className={menuClasses}>
+            <div className={sideMenuClasses}>
+                <div className="menu">
                     <svg className="side-menu-logo">
                         <text>Sudoku</text>
                     </svg>
@@ -36,7 +36,7 @@ export class SideMenu extends React.PureComponent<SideMenuProps> {
                         </a>
                     </span>
                 </div>
-                <button className="close-button" onClick={this.props.onClick} />
+                <div className="close-button" onClick={this.props.onClick} />
             </div>
         );
     }
