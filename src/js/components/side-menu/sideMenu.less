@@ -9,7 +9,7 @@
     flex-flow: row nowrap;
     align-items: stretch;
     justify-content: flex-start;
-    transition: 0.5s ease-in-out;
+    transition: 0.2s ease-in-out;
 
     &.hidden {
         transform: translateX(-18.75rem);
@@ -22,6 +22,7 @@
         align-items: center;
         justify-content: flex-start;
         padding: 1.25rem;
+        box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.45);
 
         .side-menu-logo {
 			width: 16.25rem;
@@ -40,15 +41,21 @@
         }
     }
 
-    .close-button {
-        width: 1.5625rem;
-        background-color: @blackColor;
-        border: 0;
-        transition: 0.5s;
+    .side-menu-button {
+        position: relative;
+        left: 2.5rem;
+        top: 1.875rem;
+        height: 2.5rem;
+        fill: black;
 
-        &:hover {
-            background-color: @pinkColor;
+        :hover {
             cursor: pointer;
+            fill: @pinkColor;
+        }
+
+        svg {
+            width: 2.5rem;
+            height: 2.5rem;
         }
     }
 }

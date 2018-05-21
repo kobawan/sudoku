@@ -3,6 +3,7 @@ import * as React from "react";
 import "./sideMenu.less";
 
 import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
+import { menuSvg } from "../svg/Icons";
 
 export interface SideMenuProps {
     hidden: boolean;
@@ -36,7 +37,12 @@ export class SideMenu extends React.PureComponent<SideMenuProps> {
                         </a>
                     </span>
                 </div>
-                <div className="close-button" onClick={this.props.onClick} />
+                <div
+                    className="side-menu-button"
+                    onClick={this.props.onClick}
+                >
+                    {menuSvg}
+                </div>
             </div>
         );
     }

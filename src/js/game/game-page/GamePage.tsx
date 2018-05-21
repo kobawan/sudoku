@@ -5,7 +5,6 @@ import "./gamePage.less";
 import { SideMenu } from "../../components/side-menu/SideMenu";
 import { Popup, PopupProps } from "../../components/popup/Popup";
 import {
-    GameButton, 
     MenuButtonProps,
     GameButtonProps,
     GameButtonSize,
@@ -19,6 +18,7 @@ import { removeDuplicates } from "../../utils/generalUtils";
 import { Game } from "../../generator";
 import { checkSvg } from "../../components/svg/Icons";
 import { SudokuTable } from "../../components/sudoku-table/SudokuTable";
+import { Slider } from "../../components/slider/Slider";
 
 export interface GamePageProps {
     hidden: boolean;
@@ -105,18 +105,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                         <div className="dummy-block"></div>
                     </div>
 
-                    <div className="game-buttons">
-                        <GameButton
-                            value="Pencil"
-                            onClick={this.setCellModePencil}
-                            selected={this.state.cellMode === CellMode.Pencil}
-                        />
-                        <GameButton
-                            value="Notes"
-                            onClick={this.setCellModeNotes}
-                            selected={this.state.cellMode === CellMode.Notes}
-                        />
-                    </div>
+                    <Slider onClick={this.toggleCellMode} />
                 </div>
             </div>
         );
@@ -138,12 +127,10 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
         this.setState({ toggleSideMenu: !this.state.toggleSideMenu });
     }
 
-    private setCellModePencil = () => {
-        this.setState({ cellMode: CellMode.Pencil });
-    }
-
-    private setCellModeNotes = () => {
-        this.setState({ cellMode: CellMode.Notes });
+    private toggleCellMode = () => {
+        this.setState({
+            cellMode: this.state.cellMode === CellMode.Pencil ? CellMode.Notes : CellMode.Pencil,
+        });
     }
 
     private enableMessagePopup = (

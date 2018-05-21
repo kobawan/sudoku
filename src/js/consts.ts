@@ -15,9 +15,9 @@ export interface GameConfig {
 }
 
 export enum CellMode {
-    Pencil,
-    Notes,
-    ReadOnly,
+    Pencil = "pencil",
+    Notes = "notes",
+    ReadOnly = "readOnly",
 }
 
 export interface CellProps {
