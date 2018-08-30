@@ -16,16 +16,15 @@ html {
 }
 
 body {
-    background:	@cellDisabledColor no-repeat center/cover url("../images/background.jpg");
+    background:	@popupBackgroundColor no-repeat center/cover url("../images/background.jpg");
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow: scroll;
 }
 
 #root {
-    background-color: rgba(255, 255, 255, 0.4); 
+    background-color: fade(@popupBackgroundColor, 40%);
     width: 100%;
     height: 100%;
 }
@@ -33,9 +32,10 @@ body {
 button {
     font: 1.25rem "dekiru", corbel, sans-serif;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 
     &:focus {
-        outline: 0;
+        outline: none;
     }
 }
 

@@ -21,20 +21,19 @@ export class App extends React.Component<{}, AppState> {
     };
 
     public render () {
-        const isInLobby = this.state.selectedPage === Page.Menu;
+        const isLobby = this.state.selectedPage === Page.Menu;
 
         return (
             <>
-                {isInLobby && (
-                    <LobbyPage
-                        hasCurrentGame={!!this.state.currentGame}
-                        generateGame={this.generateGame}
-                        returnToGame={this.togglePage}
-                    />
-                )}
+                <LobbyPage
+                    hidden={!isLobby}
+                    hasCurrentGame={!!this.state.currentGame}
+                    generateGame={this.generateGame}
+                    returnToGame={this.togglePage}
+                />
                 {this.state.currentGame && (
                     <GamePage
-                        hidden={isInLobby}
+                        hidden={isLobby}
                         game={this.state.currentGame}
                         returnToLobby={this.togglePage}
                     />

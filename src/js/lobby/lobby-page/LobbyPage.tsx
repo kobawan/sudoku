@@ -36,6 +36,7 @@ export interface LobbyPageProps {
     hasCurrentGame: boolean;
     generateGame: (props: GameConfig) => void;
     returnToGame: () => void;
+    hidden: boolean;
 }
 
 export class LobbyPage extends React.PureComponent<LobbyPageProps, LobbyPageState> {
@@ -77,17 +78,10 @@ export class LobbyPage extends React.PureComponent<LobbyPageProps, LobbyPageStat
         }));
 
         return (
-            <div className="lobby">
+            <div className={`lobby ${this.props.hidden ? "hidden" : ""}`}>
                 <div className="lobby-wrapper">
-                    <div className="lobby-content-box"></div>
-
-                    <div className="lobby-content-box">
-                        <MainMenu rightColumn={rightColumn} leftColumn={leftColumn} />
-                    </div>
-
-                    <div className="lobby-content-box">
-                        {this.getSectionComponent()}
-                    </div>
+                    <MainMenu rightColumn={rightColumn} leftColumn={leftColumn} />
+                    {this.getSectionComponent()}
                 </div>
             </div>
         );
@@ -97,6 +91,7 @@ export class LobbyPage extends React.PureComponent<LobbyPageProps, LobbyPageStat
         if (!this.state.currentSection) {
             return null;
         }
+
         const Component = mapMenuSectionToComponent[this.state.currentSection];
         const crossOnClick = () => this.setState({ currentSection: undefined });
         const hasSubSection = [

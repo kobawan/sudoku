@@ -10,13 +10,14 @@
     align-items: stretch;
     justify-content: flex-start;
     transition: 0.2s ease-in-out;
+    z-index: 10;
 
     &.hidden {
         transform: translateX(-18.75rem);
     }
 
     .menu {
-        background-color: fade(@cellDisabledColor, 80%);
+        background-color: fade(@popupBackgroundColor, 95%);
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
@@ -45,7 +46,7 @@
         position: relative;
         left: 2.5rem;
         top: 1.875rem;
-        height: 2.5rem;
+        height: 2rem;
         fill: black;
 
         :hover {
@@ -54,8 +55,8 @@
         }
 
         svg {
-            width: 2.5rem;
-            height: 2.5rem;
+            width: 2rem;
+            height: 2rem;
         }
     }
 }

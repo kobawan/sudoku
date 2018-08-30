@@ -27,11 +27,11 @@ export class MenuContentSection extends React.PureComponent<MenuContentSectionPr
 
         return (
             <div className="section">
+                <div className="cross" onClick={this.props.crossOnClick}>
+                    {crossSvg}
+                </div>
                 <div className="header">
                     <h2>{this.props.title}</h2>
-                    <div className="cross" onClick={this.props.crossOnClick}>
-                        {crossSvg}
-                    </div>
                 </div>
                 <div className="scrollable">
                     {this.props.content}
