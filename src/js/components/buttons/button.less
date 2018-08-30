@@ -4,14 +4,19 @@
     background-color: @blackColor;
     border: 0;
     color: @whiteColor;
-    border-radius: 0 0.75rem;
-    min-width: 6.875rem;
-    padding: 0.4375rem;
+    border-radius: 0 0.6em;
+    min-width: 5.5em;
+    min-height: 1.9em;
+    padding: 0.35em;
+    margin: 0.5em 0;
     transition: 0.5s;
-    margin: 0.625rem 0;
+
+    @media screen and (orientation: landscape) and (max-height: 400px) {
+        margin: 0.3em 0;
+    }
 
     &.reversed {
-        border-radius: 0.75rem 0;
+        border-radius: 0.6em 0;
     }
 
     &.disabled {
