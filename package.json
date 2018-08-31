@@ -6,9 +6,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server",
-    "watch": "webpack --watch",
-    "dist": "webpack --devtool false",
+    "start": "webpack-dev-server --mode=development",
+    "watch": "webpack --watch --mode=development",
+    "dist": "webpack --mode=production",
     "tslint": "tslint 'src/**/*.{ts,tsx}'",
     "lesslint": "lesshint 'src/**/*.less'"
   },
@@ -29,21 +29,22 @@
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
-    "awesome-typescript-loader": "^4.0.1",
-    "css-loader": "^0.28.4",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^0.11.2",
+    "awesome-typescript-loader": "5.2.0",
+    "css-loader": "^1.0.0",
+    "file-loader": "^2.0.0",
     "html-loader": "^0.5.1",
     "html-webpack-plugin": "^3.1.0",
-    "less": "^2.7.3",
+    "less": "^3.8.1",
     "less-loader": "^4.0.5",
-    "lesshint": "^4.6.3",
+    "lesshint": "^5.1.0",
+    "mini-css-extract-plugin": "^0.4.2",
     "source-map-loader": "^0.2.3",
-    "style-loader": "^0.19.1",
+    "style-loader": "^0.23.0",
     "tslint": "^5.9.1",
     "tslint-config-airbnb": "^5.8.0",
-    "typescript": "^2.7.2",
-    "webpack": "^3.5.4",
-    "webpack-dev-server": "^2.10.0"
+    "typescript": "3.0.3",
+    "webpack": "4.17.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "3.1.7"
   }
 }

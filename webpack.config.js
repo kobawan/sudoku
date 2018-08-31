@@ -1,6 +1,7 @@
 const path = require("path");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const devMode = process.env.NODE_ENV !== "production";
 
 module.exports = {
     entry: [
@@ -9,10 +10,15 @@ module.exports = {
         "webpack-dev-server/client?http://localhost:8080",
     ],
     output: {
-        filename: "bundle.js",
+        filename: "[name].bundle.js",
         path: path.resolve(__dirname, "dist"),
     },
-    devtool: "source-map",
+    optimization: {
+        splitChunks: {
+            chunks: "all",
+        },
+    },
+    devtool: devMode ? "inline-source-map" : "source-map",
     resolve: {
         extensions: [".ts", ".tsx", ".jsx", ".js", ".json"]
     },
@@ -35,13 +41,11 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: [
-                        "css-loader",
-                        "less-loader",
-                    ],
-                }),
+                use: [
+                    devMode ? "style-loader" : MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "less-loader",
+                ],
             },
             {
                 test: /\.tsx?$/,
@@ -63,9 +67,13 @@ module.exports = {
             favicon: path.join(__dirname, "src", "images", "heart.png"),
             template: path.join(__dirname, "src", "index.html"),
         }),
-        new ExtractTextPlugin("styles.css"),
+        new MiniCssExtractPlugin({
+            filename: devMode ? '[name].css' : '[name].[hash].css',
+            chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+        }),
     ],
     devServer: {
         contentBase: path.join(__dirname, "dist"),
+        compress: true,
     },
 };
