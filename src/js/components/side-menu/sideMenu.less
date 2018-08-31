@@ -1,4 +1,4 @@
-@import "../../../styles/colors";
+@import "../../../styles/colors.less";
 
 .side-menu {
 	position: absolute;
@@ -13,7 +13,7 @@
     z-index: 10;
 
     &.hidden {
-        transform: translateX(-18.75rem);
+        transform: translateX(-100%);
     }
 
     .menu {
@@ -26,11 +26,20 @@
         box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.45);
 
         .side-menu-logo {
-			width: 16.25rem;
-			height: 5.625rem;
+			width: 16.25em;
+            height: 4em;
+            font-size: 1rem;
+
+            @media screen and (orientation: landscape) and (max-height: 335px) {
+                font-size: 0.8rem;
+            }
+
+            @media screen and (orientation: portrait) and (max-width: 374px) {
+                font-size: calc(0.26rem + 2.5vw);
+            }
 
 			text {
-				font: bold 5rem "dekiru", corbel, sans-serif;
+				font: bold 5em "dekiru", corbel, sans-serif;
 				dominant-baseline: text-before-edge;
 			}
 		}
@@ -40,12 +49,20 @@
             flex-flow: column nowrap;
             margin: 1.875rem 0;
         }
+
+        @media screen and (orientation: landscape) and (max-height: 450px) {
+            justify-content: space-between;
+
+            .buttons-wrapper {
+                margin: 0;
+            }
+        }
     }
 
     .side-menu-button {
-        position: relative;
-        left: 2.5rem;
-        top: 1.875rem;
+        position: absolute;
+        left: 110%;
+        top: 2.85%;
         height: 2rem;
         fill: black;
 
