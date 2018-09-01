@@ -29,19 +29,21 @@
         border-radius: 2.625em;
         transition: 0.3s;
 
-        :hover& {
-            background-color: fade(@pinkColor, 40%);
-            transform: scaleX(1.1);
-            transform-origin: left;
-
-            &.notes-slider {
-                transform: scaleX(1.1) translateX(90%);
-                transform-origin: right;
-            }
-        }
-
         &.notes-slider {
             transform: translateX(100%);
+        }
+
+        @media (hover: hover) {
+            :hover& {
+                background-color: fade(@pinkColor, 40%);
+                transform: scaleX(1.1);
+                transform-origin: left;
+
+                &.notes-slider {
+                    transform: scaleX(1.1) translateX(90%);
+                    transform-origin: right;
+                }
+            }
         }
     }
 

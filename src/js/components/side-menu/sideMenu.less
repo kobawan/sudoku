@@ -1,5 +1,20 @@
 @import "../../../styles/colors.less";
 
+.side-menu-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    pointer-events: none;
+
+    &.opened {
+        background-color: fade(@popupBackgroundColor, 50%);
+        pointer-events: all;
+    }
+}
+
 .side-menu {
 	position: absolute;
     top: 0;
@@ -10,9 +25,9 @@
     align-items: stretch;
     justify-content: flex-start;
     transition: 0.2s ease-in-out;
-    z-index: 10;
+    pointer-events: all;
 
-    &.hidden {
+    .hidden & {
         transform: translateX(-100%);
     }
 
@@ -30,11 +45,11 @@
             height: 4em;
             font-size: 1rem;
 
-            @media screen and (orientation: landscape) and (max-height: 335px) {
+            @media (orientation: landscape) and (max-height: 335px) {
                 font-size: 0.8rem;
             }
 
-            @media screen and (orientation: portrait) and (max-width: 374px) {
+            @media (orientation: portrait) and (max-width: 374px) {
                 font-size: calc(0.26rem + 2.5vw);
             }
 
@@ -50,7 +65,7 @@
             margin: 1.875rem 0;
         }
 
-        @media screen and (orientation: landscape) and (max-height: 450px) {
+        @media (orientation: landscape) and (max-height: 450px) {
             justify-content: space-between;
 
             .buttons-wrapper {
@@ -65,15 +80,26 @@
         top: 2.85%;
         height: 2rem;
         fill: black;
-
-        :hover {
-            cursor: pointer;
-            fill: @pinkColor;
-        }
+        font-size: 1rem;
 
         svg {
-            width: 2rem;
-            height: 2rem;
+            width: 2em;
+            height: 2em;
+        }
+
+        @media (hover: hover) {
+            :hover {
+                cursor: pointer;
+                fill: @pinkColor;
+            }
+        }
+
+        @media (orientation: portrait) and (max-width: 450px) {
+            font-size: 0.8rem;
+        }
+    
+        @media (orientation: landscape) and (max-height: 450px) {
+            font-size: 0.8rem;
         }
     }
 }

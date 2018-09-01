@@ -139,6 +139,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
     ) => {
         this.setState({
             toggleCoordinates,
+            toggleSideMenu: false,
             popupProps: {
                 text,
                 buttons,
@@ -183,7 +184,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                 onInput: isInitialValues && value === 0 ? this.onInput : () => {},
             };
         });
- 
+
         this.setState({
             cellProps,
             cellMode: CellMode.Pencil,

@@ -34,7 +34,7 @@ button {
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 
-    @media screen and (orientation: landscape) and (max-height: 335px) {
+    @media (orientation: landscape) and (max-height: 335px) {
         font-size: 1.1rem;
     }
 
@@ -47,8 +47,10 @@ a {
     color: @blackColor;
     text-decoration: none;
 
-    &:hover {
-        color: @pinkColor;
-        text-decoration: underline;
+    @media (hover: hover) {
+        &:hover {
+            color: @pinkColor;
+            text-decoration: underline;
+        }
     }
 }

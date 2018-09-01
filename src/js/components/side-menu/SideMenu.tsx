@@ -13,35 +13,34 @@ export interface SideMenuProps {
 
 export class SideMenu extends React.PureComponent<SideMenuProps> {
     public render () {
-        const sideMenuClasses = [
-            "side-menu",
-            this.props.hidden ? "hidden" : null,
-        ].join(" ");
+        const hidden = this.props.hidden ? "hidden" : "opened";
 
         return (
-            <div className={sideMenuClasses}>
-                <div className="menu">
-                    <svg className="side-menu-logo">
-                        <text>Sudoku</text>
-                    </svg>
-                    <div className="buttons-wrapper">
-                        {mapPropsToMenuButtons(this.props.buttons)}
+            <div className={`side-menu-overlay ${hidden}`}>
+                <div className="side-menu">
+                    <div className="menu">
+                        <svg className="side-menu-logo">
+                            <text>Sudoku</text>
+                        </svg>
+                        <div className="buttons-wrapper">
+                            {mapPropsToMenuButtons(this.props.buttons)}
+                        </div>
+                        <span>
+                            <a
+                                href="https://github.com/kobawan"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                @kobawan
+                            </a>
+                        </span>
                     </div>
-                    <span>
-                        <a
-                            href="https://github.com/kobawan"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            @kobawan
-                        </a>
-                    </span>
-                </div>
-                <div
-                    className="side-menu-button"
-                    onClick={this.props.onClick}
-                >
-                    {menuSvg}
+                    <div
+                        className="side-menu-button"
+                        onClick={this.props.onClick}
+                    >
+                        {menuSvg}
+                    </div>
                 </div>
             </div>
         );
