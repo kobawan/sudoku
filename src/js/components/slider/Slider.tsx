@@ -22,7 +22,7 @@ export class Slider extends React.PureComponent<SliderProps, SliderState> {
             <div className="game-buttons" onClick={this.handleClick}>
                 <span>Pencil</span>
                 <span>Notes</span>
-                <div className={`slider ${this.state.cellMode}`} />
+                <div className={`slider ${this.state.cellMode}-slider`} />
             </div>
         );
     }

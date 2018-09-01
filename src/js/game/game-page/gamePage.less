@@ -21,6 +21,15 @@
     flex-flow: column nowrap;
     align-items: center;
     justify-content: flex-start;
+    font-size: 1rem;
+
+    @media screen and (orientation: portrait) and (max-width: 450px) {
+        font-size: calc(0.5rem + 1.2vw);
+    }
+
+    @media screen and (orientation: landscape) and (max-height: 450px) {
+        font-size: calc(0.5rem + 1.1vh);
+    }
 
     .center {
         display: flex;
@@ -29,8 +38,8 @@
         justify-content: center;
 
         .dummy-block {
-            width: 2.5625rem;
-            height: 21.6875rem;
+            width: 2.4375em;
+            height: 20.5625em;
         }
     }
 }

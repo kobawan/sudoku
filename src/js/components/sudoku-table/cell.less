@@ -1,12 +1,15 @@
 @import "../../../styles/colors.less";
 
-@height: 2.3125rem;
+@height: 1.5625em;
 
-#cell-mixin() {
+#pencil-cell-mixin() {
     border: 0;
     width: @height;
     height: @height;
     box-sizing: border-box;
+    font-size: 1.4em;
+    letter-spacing: 0;
+    line-height: @height;
 }
 
 textarea {
@@ -21,27 +24,24 @@ textarea {
 }
 
 .pencil {
-    #cell-mixin();
-    font-size: 1.375rem;
-    letter-spacing: 0;
-    line-height: @height;
+    #pencil-cell-mixin();
     background-color: @whiteColor;
 }
 
 .readOnly {
-    #cell-mixin();
-    font-size: 1.375rem;
-    letter-spacing: 0;
-    line-height: @height;
+    #pencil-cell-mixin();
     background-color: @cellDisabledColor;
     cursor: default;
 }
 
 .notes {
-    #cell-mixin();
-    font-size: 0.75rem;
+    border: 0;
+    width: 3.125em;
+    height: 3.125em;
+    box-sizing: border-box;
+    font-size: 0.7em;
     line-height: 1;
-    letter-spacing: 0.1875rem;
+    letter-spacing: 0.3em;
     background-color: @whiteColor;
 }
 
@@ -50,6 +50,6 @@ textarea {
 }
 
 .error {
-    line-height: @height - (0.25rem * 2);
-    border: 0.25rem solid @errorColor;
+    line-height: calc(@height - (4px * 2));
+    border: 4px solid @errorColor;
 }
