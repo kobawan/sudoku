@@ -26,10 +26,15 @@ export class SettingsSection extends React.PureComponent<SharedSectionProps> {
             text: "Disable cell highlighting",
             storageKey: StorageKeys.DisableHighlighting,
         };
+        const disableAutoNotesRemovalProps: CheckBoxProps = {
+            text: "Disable automatic removal of notes values",
+            storageKey: StorageKeys.DisableAutoNotesRemoval,
+        };
         return (
             <>
                 <Checkbox {...disableInGameProps} />
                 <Checkbox {...disableHighlightingProps} />
+                <Checkbox {...disableAutoNotesRemovalProps} />
             </>
         );
     }

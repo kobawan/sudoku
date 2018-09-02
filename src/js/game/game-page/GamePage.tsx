@@ -364,17 +364,19 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
         const pos = coor.x * this.props.game.gameType + coor.y;
         const props = this.state.cellProps[pos];
 
-        // removes notes from column, row and grid where the pencil value was inserted
-        const cellProps = updateNotesCells(
-            this.state.cellMode,
-            this.props.game.gameType,
-            this.props.game.ratio,
-            this.state.cellProps,
-            props,
-            coor,
-        );
+        // removes notes from column, row and grid where the pencil value was inserted, if enabled in settings
+        const disableAutoNotesRemoval = getStorageKey(StorageKeys.DisableAutoNotesRemoval);
+        const cellProps = !disableAutoNotesRemoval
+            ? updateNotesCells(
+                this.state.cellMode,
+                this.props.game.gameType,
+                this.props.game.ratio,
+                this.state.cellProps,
+                props,
+                coor,
+            ) : this.state.cellProps;
 
-        // shows cell errors and checks if game is solved
+        // shows cell errors if enabled in settings and checks if game is solved
         const cellPropsWithErrors = this.checkForWin(cellProps || this.state.cellProps);
 
         // use arrow keys to move from cell to cell

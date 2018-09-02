@@ -1,11 +1,13 @@
 export enum StorageKeys {
     DisableInGameError = "DisableInGameError",
     DisableHighlighting = "DisableHighlighting",
+    DisableAutoNotesRemoval = "DisableAutoNotesRemoval",
 }
 
 export const storageKeysToDefaultMap: { [key in StorageKeys]: boolean } = {
     [StorageKeys.DisableInGameError]: false,
     [StorageKeys.DisableHighlighting]: false,
+    [StorageKeys.DisableAutoNotesRemoval]: false,
 };
 
 export const getStorageKey = (key: StorageKeys): boolean => {
