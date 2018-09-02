@@ -351,8 +351,11 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
             cell.select();
         }
 
-        // Updates hightlight prop in all cells
-        this.setState({ cellProps: highlight(this.state.cellProps, props) });
+        // Updates hightlight prop in all cells if enabled in settings
+        const disableHighlighting = getStorageKey(StorageKeys.DisableHighlighting);
+        if (!disableHighlighting) {
+            this.setState({ cellProps: highlight(this.state.cellProps, props) });
+        }
     }
 
     private onKeyup = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

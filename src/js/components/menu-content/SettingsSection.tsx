@@ -22,9 +22,14 @@ export class SettingsSection extends React.PureComponent<SharedSectionProps> {
             text: "Disable in-game error",
             storageKey: StorageKeys.DisableInGameError,
         };
+        const disableHighlightingProps: CheckBoxProps = {
+            text: "Disable cell highlighting",
+            storageKey: StorageKeys.DisableHighlighting,
+        };
         return (
             <>
                 <Checkbox {...disableInGameProps} />
+                <Checkbox {...disableHighlightingProps} />
             </>
         );
     }
