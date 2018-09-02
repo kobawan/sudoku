@@ -4,20 +4,19 @@ import "./lobbyPage.less";
 
 import { MainMenu } from "../../components/main-menu/MainMenu";
 import {
-    StatsSection,
-    SettingsSection,
-    RulesSection,
-    AboutSection,
-    ContactsSection,
     MenuSection,
     SharedSectionProps,
-} from "../../components/menu-content/Sections";
+} from "../../components/menu-content/types";
+import { SettingsSection } from "../../components/menu-content/SettingsSection";
+import { RulesSection } from "../../components/menu-content/RulesSection";
+import { ContactsSection } from "../../components/menu-content/ContactsSection";
+import { StatsSection } from "../../components/menu-content/StatsSection";
+import { AboutSection } from "../../components/menu-content/AboutSection";
 import { MenuButtonProps } from "../../components/buttons/Button";
 import { GameConfig, GameDifficulty } from "../../consts";
 
 type MapMenuSectionToComponentIndexSignature = {
-    [k in keyof typeof MenuSection]:
-        ({ crossOnClick, arrowOnClick }: SharedSectionProps) => JSX.Element
+    [k in MenuSection]: React.ComponentClass<SharedSectionProps>;
 };
 
 const mapMenuSectionToComponent: MapMenuSectionToComponentIndexSignature = {

@@ -28,27 +28,18 @@ export const showDuplicates = (
     gameType: GameType,
     gameRatio: number,
 ) => {
-    const newCellProps: TableCellsMap = {};
-    for (const key in cellProps) {
-        newCellProps[key] = {
-            ...cellProps[key],
-            withHighlight: false,
-            withError: false,
-        };
-    }
-
     const pencilCellsRows = sortByRows(gameType, ({ arr, row, pos }) => {
-        if (newCellProps[pos].mode !== CellMode.Notes && newCellProps[pos].value) {
+        if (cellProps[pos].mode !== CellMode.Notes && cellProps[pos].value) {
             arr[row].push(pos);
         }
     });
     const pencilCellsCols = sortByCols(gameType, ({ arr, col, pos }) => {
-        if (newCellProps[pos].mode !== CellMode.Notes && newCellProps[pos].value) {
+        if (cellProps[pos].mode !== CellMode.Notes && cellProps[pos].value) {
             arr[col].push(pos);
         }
     });
     const pencilCellsGrids = sortByGrids(gameType, gameRatio, ({ arr, grid, pos }) => {
-        if (newCellProps[pos].mode !== CellMode.Notes && newCellProps[pos].value) {
+        if (cellProps[pos].mode !== CellMode.Notes && cellProps[pos].value) {
             arr[grid].push(pos);
         }
     });
@@ -56,18 +47,14 @@ export const showDuplicates = (
         pencilCellsRows,
         pencilCellsCols,
         pencilCellsGrids,
-        newCellProps,
+        cellProps,
     ));
 
-    if (duplicates.length > 0) {
-        duplicates.forEach(pos => newCellProps[pos].withError = true);
-    }
-
-    return { duplicates, cellProps: newCellProps };
+    return duplicates;
 };
 
 /**
- * Finds all occuring duplicates and returns array of their cells
+ * Finds all occuring duplicates and returns array of their cell positions
  */
 const getDuplicates = (
     rows: number[][],

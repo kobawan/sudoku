@@ -19,6 +19,7 @@ import { Game } from "../../generator";
 import { checkSvg } from "../../components/svg/Icons";
 import { SudokuTable } from "../../components/sudoku-table/SudokuTable";
 import { Slider } from "../../components/slider/Slider";
+import { getStorageKey, StorageKeys } from "../../utils/localStorage";
 
 export interface GamePageProps {
     hidden: boolean;
@@ -254,23 +255,35 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
      * shows cell errors and checks if game is solved
      */
     private checkForWin = (cellProps: TableCellsMap, showError = false) => {
-        // shows in-game error for same values
-        const result = showDuplicates(
+        // Finds pencil mode cell duplicates from rows, cols and grids
+        const duplicates = showDuplicates(
             cellProps,
             this.props.game.gameType,
             this.props.game.ratio,
         );
 
+        const newCellProps: TableCellsMap = {};
+        // Resets highlights and updates errors if enabled in settings
+        const disableInGameError = getStorageKey(StorageKeys.DisableInGameError);
+        for (const key in cellProps) {
+            const pos = +key;
+            newCellProps[pos] = {
+                ...cellProps[pos],
+                withHighlight: false,
+                withError: disableInGameError ? false : duplicates.includes(pos),
+            };
+        }
+
         let hasInvalidCells = false;
-        for (const key in result.cellProps) {
-            if (result.cellProps[key].mode === CellMode.Notes || !result.cellProps[key].value) {
+        for (const key in newCellProps) {
+            if (newCellProps[key].mode === CellMode.Notes || !newCellProps[key].value) {
                 hasInvalidCells = true;
                 break;
             }
         }
 
         // displays win message if conditions are met
-        if (result.duplicates.length === 0 && !hasInvalidCells) {
+        if (duplicates.length === 0 && !hasInvalidCells) {
             this.enableMessagePopup({
                 text: (
                     <React.Fragment>
@@ -284,9 +297,9 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                 }],
             });
 
-            for (const key in result.cellProps) {
-                result.cellProps[key] = {
-                    ...result.cellProps[key],
+            for (const key in newCellProps) {
+                newCellProps[key] = {
+                    ...newCellProps[key],
                     onFocus: () => {},
                     onClick: () => {},
                     onKeyup: () => {},
@@ -294,8 +307,9 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                 };
             }
         }
+        // displays popup with info on duplicates
         else if (showError) {
-            const wrongCells = result.duplicates
+            const wrongCells = duplicates
                 .map(pos => {
                     const row = Math.floor(pos / this.props.game.gameType) + 1;
                     const col = "ABCDEFGHI"[pos - (row - 1) * this.props.game.gameType];
@@ -320,7 +334,7 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
             );
         }
 
-        return result.cellProps;
+        return newCellProps;
     }
 
     private onSelect = (e: React.FocusEvent<HTMLTextAreaElement> | React.MouseEvent<HTMLTextAreaElement>) => {
