@@ -12,13 +12,10 @@ export interface PopupProps {
 
 export class Popup extends React.PureComponent<PopupProps> {
     public render () {
-        const containerClasses = [
-            "message-popup",
-            this.props.hidden || !this.props.text || !this.props.buttons ? "hidden" : null,
-        ].join(" ");
+        const isHidden = this.props.hidden || !this.props.text || !this.props.buttons ? "hidden" : "";
 
         return (
-            <div className={containerClasses}>
+            <div className={`message-popup ${isHidden}`}>
                 <div className="message">
                     {this.props.text}
                 </div>
