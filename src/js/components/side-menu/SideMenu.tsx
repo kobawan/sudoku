@@ -16,7 +16,8 @@ export class SideMenu extends React.PureComponent<SideMenuProps> {
         const hidden = this.props.hidden ? "hidden" : "opened";
 
         return (
-            <div className={`side-menu-overlay ${hidden}`}>
+            <div className={`side-menu-container ${hidden}`}>
+                <div className="side-menu-overlay" onClick={this.props.onClick} />
                 <div className="side-menu">
                     <div className="menu">
                         <svg className="side-menu-logo">
