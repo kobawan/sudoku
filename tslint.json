@@ -1,18 +1,33 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint-config-airbnb"
-    ],
-    "jsRules": {},
     "rules": {
         "quotemark": [true, "double"],
-        "ter-indent": [true, 4],
         "variable-name": [true, "check-format", "allow-pascal-case", "ban-keywords"],
-        "brace-style": false,
-        "no-increment-decrement": false,
-        "max-line-length": [true, { "limit": 120, "ignore-pattern": "//"}],
-        "ter-arrow-parens": [true, "as-needed"],
-        "radix": false
-    },
-    "rulesDirectory": []
+        "align": true,
+        "arrow-return-shorthand": true,
+        "await-promise": true,
+        "trailing-comma": true,
+        "no-consecutive-blank-lines": true,
+        "max-line-length": {
+            "options": [120]
+        },
+        "no-console": {
+            "options": [
+                "debug",
+                "info",
+                "log",
+                "time",
+                "timeEnd",
+                "trace"
+            ]
+        },
+        "semicolon": true,
+        "no-trailing-whitespace": true,
+        "no-duplicate-imports": true,
+        "no-default-export": false,
+        "no-var-keyword": true,
+        "prefer-const": true,
+        "triple-equals": true,
+        "class-name": true,
+        "deprecation": true
+    }
 }

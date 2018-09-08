@@ -20,7 +20,7 @@ module.exports = {
     },
     devtool: devMode ? "inline-source-map" : "source-map",
     resolve: {
-        extensions: [".ts", ".tsx", ".jsx", ".js", ".json"]
+        extensions: [".ts", ".tsx", ".jsx", ".js", ".json", ".less"]
     },
     module: {
         rules: [

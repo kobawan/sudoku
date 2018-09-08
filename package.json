@@ -6,11 +6,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "tslint": "tslint -p tsconfig.json --force",
+    "lesshint": "lesshint 'src/**/*.less'",
+    "lint": "yarn tslint && yarn lesshint",
     "start": "webpack-dev-server --mode=development",
     "watch": "webpack --watch --mode=development",
-    "dist": "webpack --mode=production",
-    "tslint": "tslint 'src/**/*.{ts,tsx}'",
-    "lesslint": "lesshint 'src/**/*.less'"
+    "dist": "webpack --mode=production"
   },
   "repository": {
     "type": "git",
@@ -22,12 +23,6 @@
     "url": "https://github.com/kobawan/sudoku/issues"
   },
   "homepage": "https://github.com/kobawan/sudoku",
-  "dependencies": {
-    "@types/react": "^16.0.41",
-    "@types/react-dom": "^16.0.4",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
-  },
   "devDependencies": {
     "awesome-typescript-loader": "5.2.0",
     "css-loader": "^1.0.0",
@@ -45,6 +40,10 @@
     "typescript": "3.0.3",
     "webpack": "4.17.1",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "3.1.7"
+    "webpack-dev-server": "3.1.7",
+    "@types/react": "^16.0.41",
+    "@types/react-dom": "^16.0.4",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
   }
 }

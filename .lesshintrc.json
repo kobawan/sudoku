@@ -54,10 +54,5 @@
     },
     "idSelector": false,
     "propertyOrdering": false,
-    "qualifyingElement": {
-        "enabled": true,
-        "allowWithAttribute": true,
-        "allowWithClass": false,
-        "allowWithId": false
-    }
+    "qualifyingElement": false
 }
