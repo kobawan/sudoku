@@ -23,23 +23,11 @@
     justify-content: flex-start;
     font-size: 1rem;
 
-    @media (orientation: portrait) and (max-width: 450px) {
+    @media (orientation: portrait) and (max-width: 400px) {
         font-size: calc(0.5rem + 1.2vw);
     }
 
     @media (orientation: landscape) and (max-height: 450px) {
         font-size: calc(0.5rem + 1.1vh);
-    }
-
-    .center {
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: flex-start;
-        justify-content: center;
-
-        .dummy-block {
-            width: 2.4375em;
-            height: 20.5625em;
-        }
     }
 }

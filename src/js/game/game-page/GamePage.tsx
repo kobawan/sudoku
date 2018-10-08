@@ -9,7 +9,6 @@ import {
     GameButtonProps,
     GameButtonSize,
  } from "../../components/buttons/Button";
-import { CoordinateTableX, CoordinateTableY } from "../../components/coordinates/Coordinates";
 import { CellMode, TableCellsMap } from "../../consts";
 import { arrowKeys, findCoordinates } from "../gameCells";
 import { highlight, showDuplicates } from "../gameTable";
@@ -31,7 +30,6 @@ interface GamePageState {
     cellMode: CellMode;
     toggleSideMenu: boolean;
     popupProps: PopupProps;
-    toggleCoordinates: boolean;
     cellProps: TableCellsMap;
 }
 
@@ -42,7 +40,6 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
         popupProps: {
             hidden: true,
         },
-        toggleCoordinates: false,
         cellProps: {},
     };
 
@@ -93,18 +90,10 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                 <Popup {...this.state.popupProps} />
 
                 <div className="game-wrapper">
-                    <CoordinateTableX hidden={!this.state.toggleCoordinates} />
-
-                    <div className="center">
-                        <CoordinateTableY hidden={!this.state.toggleCoordinates} />
-
-                        <SudokuTable
-                            cellState={this.state.cellProps}
-                            gameType={this.props.game.gameType}
-                        />
-
-                        <div className="dummy-block"></div>
-                    </div>
+					<SudokuTable
+						cellState={this.state.cellProps}
+						gameType={this.props.game.gameType}
+					/>
 
                     <Slider onClick={this.toggleCellMode} />
                 </div>
@@ -120,7 +109,6 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                 ...this.state.popupProps,
                 hidden: true,
             },
-            toggleCoordinates: false,
         });
     }
 
@@ -136,10 +124,8 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
 
     private enableMessagePopup = (
         { text, buttons }: { text: JSX.Element, buttons: GameButtonProps[] },
-        toggleCoordinates = false,
     ) => {
         this.setState({
-            toggleCoordinates,
             toggleSideMenu: false,
             popupProps: {
                 text,
@@ -155,7 +141,6 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                 ...this.state.popupProps,
                 hidden: true,
             },
-            toggleCoordinates: false,
         });
     }
 
@@ -193,7 +178,6 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                 ...this.state.popupProps,
                 hidden: true,
             },
-            toggleCoordinates: false,
         });
     }
 
@@ -307,22 +291,12 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                 };
             }
         }
-        // displays popup with info on duplicates
+        // displays popup with info on game status
         else if (showError) {
-            const wrongCells = duplicates
-                .map(pos => {
-                    const row = Math.floor(pos / this.props.game.gameType) + 1;
-                    const col = "ABCDEFGHI"[pos - (row - 1) * this.props.game.gameType];
-                    return `${row + col}`;
-                })
-                .sort()
-                .join(", ")
-            ;
-
             this.enableMessagePopup(
                 {
-                    text: wrongCells.length > 0
-                        ? <span>Cells {wrongCells} are incorrect.</span>
+                    text: duplicates.length > 0
+                        ? <span>Some cell values are incorrect.</span>
                         : <span>Correct so far!</span>,
                     buttons: [{
                         size: GameButtonSize.Small,
@@ -330,7 +304,6 @@ export class GamePage extends React.Component<GamePageProps, GamePageState> {
                         onClick: this.disableMessagePopup,
                     }],
                 },
-                wrongCells.length > 0,
             );
         }
 
