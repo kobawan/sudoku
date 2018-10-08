@@ -2,21 +2,15 @@
 
 @height: 1.5625em;
 
-#pencil-cell-mixin() {
-    border: 0;
-    width: @height;
-    height: @height;
-    box-sizing: border-box;
-    font-size: 1.4em;
-    letter-spacing: 0;
-    line-height: @height;
-}
-
 textarea {
     text-align: center;
     padding: 0;
     resize: none;
-    vertical-align: middle;
+	vertical-align: middle;
+	box-sizing: border-box;
+	border:none;
+	width: 100%;
+	height: 100%;
 
     &:focus {
         outline: 0;
@@ -24,24 +18,24 @@ textarea {
 }
 
 .pencil {
-    #pencil-cell-mixin();
-    background-color: @whiteColor;
+	font-size: 1.4em;
+    letter-spacing: 0;
+    line-height: @height;
+	background-color: @whiteColor;
 }
 
 .readOnly {
-    #pencil-cell-mixin();
+	font-size: 1.4em;
+    letter-spacing: 0;
+    line-height: @height;
     background-color: @cellDisabledColor;
     cursor: default;
 }
 
 .notes {
-    border: 0;
-    width: 3.125em;
-    height: 3.125em;
-    box-sizing: border-box;
     font-size: 0.7em;
-    line-height: 1;
     letter-spacing: 0.3em;
+    line-height: 1;
     background-color: @whiteColor;
 }
 
