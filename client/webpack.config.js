@@ -20,8 +20,8 @@ module.exports = {
     },
     devtool: devMode ? "inline-source-map" : "source-map",
     resolve: {
-        extensions: [".ts", ".tsx", ".jsx", ".js", ".json", ".less"]
-    },
+        extensions: [".mjs", ".ts", ".tsx", ".jsx", ".js", ".json", ".less"]
+	},
     module: {
         rules: [
             {
@@ -52,6 +52,7 @@ module.exports = {
                 loader: "awesome-typescript-loader",
             },
             {
+				exclude: path.join(__dirname, "node_modules"),
                 enforce: "pre",
                 test: /\.js$/,
                 loader: "source-map-loader",
@@ -59,8 +60,8 @@ module.exports = {
             {
                 test: /index\.html/,
                 use: "html-loader",
-            },
-        ],
+			},
+		],
     },
     plugins: [
         new HtmlWebpackPlugin({

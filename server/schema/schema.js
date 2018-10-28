@@ -3,6 +3,7 @@ const {
 	GraphQLSchema,
 	GraphQLID,
 	GraphQLString,
+	GraphQLNonNull,
 } = require("graphql");
 const UserModel = require("../models/user.js");
 
@@ -17,6 +18,7 @@ const GameType = new GraphQLObjectType({
 const UserType = new GraphQLObjectType({
 	name: "UserType",
 	fields: () => ({
+		id: { type: GraphQLID },
 		game: { type: GameType },
 	}),
 });
@@ -40,8 +42,8 @@ const Mutation = new GraphQLObjectType({
 		addUser: {
 			type: UserType,
 			args: {
-				config: { type: GraphQLString },
-				state: { type: GraphQLString },
+				config: { type: new GraphQLNonNull(GraphQLString) },
+				state: { type:  new GraphQLNonNull(GraphQLString) },
 			},
 			resolve: (parent, args) => {
 				const newGame = new UserModel({

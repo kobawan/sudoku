@@ -1,16 +1,20 @@
 export enum StorageKeys {
     DisableInGameError = "DisableInGameError",
     DisableHighlighting = "DisableHighlighting",
-    DisableAutoNotesRemoval = "DisableAutoNotesRemoval",
+	DisableAutoNotesRemoval = "DisableAutoNotesRemoval",
+	UserId = "UserId",
 }
 
-export const storageKeysToDefaultMap: { [key in StorageKeys]: boolean } = {
+type StorageKeysType = boolean | string;
+
+export const storageKeysToDefaultMap: { [key in StorageKeys]: StorageKeysType } = {
     [StorageKeys.DisableInGameError]: false,
     [StorageKeys.DisableHighlighting]: false,
-    [StorageKeys.DisableAutoNotesRemoval]: false,
+	[StorageKeys.DisableAutoNotesRemoval]: false,
+	[StorageKeys.UserId]: "",
 };
 
-export const getStorageKey = (key: StorageKeys): boolean => {
+export const getStorageKey = (key: StorageKeys): StorageKeysType => {
     try {
         const value = window.localStorage.getItem(key);
         if (value === null) {
@@ -22,7 +26,7 @@ export const getStorageKey = (key: StorageKeys): boolean => {
     }
 };
 
-export const setStorageKey = (key: StorageKeys, value: boolean) => {
+export const setStorageKey = (key: StorageKeys, value: StorageKeysType) => {
     try {
         window.localStorage.setItem(key, JSON.stringify(value));
     } catch {}

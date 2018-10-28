@@ -14,7 +14,7 @@ interface CheckboxState {
 
 export class Checkbox extends React.PureComponent<CheckBoxProps, CheckboxState> {
     public state: CheckboxState = {
-        isChecked: getStorageKey(this.props.storageKey),
+        isChecked: !!getStorageKey(this.props.storageKey),
     };
 
     public render () {

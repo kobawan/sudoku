@@ -38,3 +38,15 @@ export interface CellCoordinates {
     y: number;
     grid: number;
 }
+
+export interface GameData {
+	config: string;
+	state: string;
+}
+
+export interface UserData {
+	user?: {
+		id: string;
+		game: GameData;
+	};
+}
