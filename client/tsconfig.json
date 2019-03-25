@@ -8,6 +8,7 @@
         "noFallthroughCasesInSwitch": true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
+        "skipLibCheck": true,
         "noUnusedParameters": true,
         "pretty": true,
         "strict": true,
@@ -26,5 +27,8 @@
     "include": [
         "src/**/*.tsx",
         "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
     ]
 }
