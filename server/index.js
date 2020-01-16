@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const path = require('path');
 const graphqlHTTP = require("express-graphql");
@@ -9,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 mongoose.connect(
-    "mongodb://kobawan:jr66kKAgBl@ds125683.mlab.com:25683/sudoku",
+    process.env.DB_URL,
     { useNewUrlParser: true },
 )
 mongoose.connection.once("open", () => {

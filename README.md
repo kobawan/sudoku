@@ -12,8 +12,9 @@ npm run watch
 ```
 
 To run server:
+
+* Under server folder create the file `.env` and in it write: `DB_URL={YOUR_MONGODB_URL}`
 ```
-npm i -g nodemon
 cd server
 npm install
 npm start
