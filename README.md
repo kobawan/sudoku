@@ -8,7 +8,7 @@ To run client:
 ```
 cd client
 npm install
-npm run watch
+npm start
 ```
 
 To run server:

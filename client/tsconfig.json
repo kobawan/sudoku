@@ -1,34 +1,32 @@
 {
-    "compilerOptions": {
-        "outDir": "./dist/",
-        "module": "commonjs",
-        "target": "es5",
-        "jsx": "react",
-        "sourceMap": true,
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true,
-        "noUnusedLocals": true,
-        "skipLibCheck": true,
-        "noUnusedParameters": true,
-        "pretty": true,
-        "strict": true,
-        "allowSyntheticDefaultImports": false,
-        "forceConsistentCasingInFileNames": true,
-        "newLine": "lf",
-        "lib": [
-            "dom",
-            "es5",
-            "es6",
-            "es7",
-			"dom.iterable",
-			"esnext.asynciterable"
-        ]
-    },
-    "include": [
-        "src/**/*.tsx",
-        "src/**/*.ts"
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "exclude": [
-        "node_modules"
-    ]
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "noImplicitThis": true,
+    "importHelpers": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "noUnusedParameters": true,
+    "jsx": "react"
+  },
+  "include": [
+    "src"
+  ]
 }

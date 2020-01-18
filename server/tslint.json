@@ -1,0 +1,65 @@
+{
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "no-console": true,
+    "interface-name": [true, "never-prefix"],
+    "no-string-literal": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
+    "align": true,
+    "arrow-return-shorthand": true,
+    "await-promise": [true, "Bluebird"],
+    "object-literal-key-quotes": false,
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-rest-spread",
+      "check-type",
+      "check-typecast",
+      "check-type-operator"
+    ],
+    "curly": true,
+    "eofline": true,
+    "no-construct": true,
+    "indent": [true, "spaces", 2],
+    "no-magic-numbers": false,
+    "max-classes-per-file": false,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "always",
+        "singleline": "never",
+        "esSpecCompliant": true
+      }
+    ],
+    "no-consecutive-blank-lines": true,
+    "cyclomatic-complexity": [true, 6],
+    "max-line-length": {
+        "options": [120]
+    },
+    "semicolon": true,
+    "no-trailing-whitespace": true,
+    "no-duplicate-imports": true,
+    "no-default-export": true,
+    "no-var-keyword": true,
+    "prefer-const": true,
+    "quotemark": {
+        "options": "double",
+        "severity": "error"
+    },
+    "triple-equals": true,
+    "class-name": true,
+    "deprecation": true,
+    "use-isnan": true,
+    "radix": false,
+    "prefer-object-spread": true,
+    "no-redundant-jsdoc": true
+  },
+  "rulesDirectory": []
+}

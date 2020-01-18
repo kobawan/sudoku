@@ -1,3 +1,5 @@
+import { Game } from "./generator";
+
 export enum GameDifficulty {
     Easy = 4,
     Medium = 5,
@@ -31,22 +33,25 @@ export interface CellProps {
     onInput: (event: React.SyntheticEvent<HTMLTextAreaElement>) => void;
 }
 
-export type TableCellsMap = { [key: number]: CellProps };
+export interface TableCellsMap {
+  [key: number]: CellProps;
+}
 
 export interface CellCoordinates {
-    x: number;
-    y: number;
-    grid: number;
+  x: number;
+  y: number;
+  grid: number;
 }
 
 export interface GameData {
-	config: string;
-	state: string;
+  config: Game;
+  state: string;
 }
 
 export interface UserData {
-	user?: {
-		id: string;
-		game: GameData;
-	};
+  _id: string;
+  game: GameData;
 }
+
+// TODO: add production endpoint for server
+export const serverEndpoint = process.env.NODE_ENV === "development" ? "http://localhost:4000" : "";

@@ -1,107 +1,134 @@
-import * as React from "react";
-import { graphql, compose, QueryResult } from "react-apollo";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 
 import { LobbyPage } from "./lobby/lobby-page/LobbyPage";
 import { GamePage } from "./game/game-page/GamePage";
 import { Game } from "./generator";
-import { GameConfig, UserData, GameData } from "./consts";
+import { GameConfig, UserData, serverEndpoint } from "./consts";
 import { getStorageKey, StorageKeys, setStorageKey } from "./utils/localStorage";
-import { ADD_USER, GET_USER } from "./queries/queries";
 
 export enum Page {
-    Game,
-    Menu,
+  Game,
+  Menu,
 }
 
-export interface AppState {
-    selectedPage: Page;
-    currentGame?: Game;
-}
-
-export interface AppProps {
-	addUser: (options: { variables: GameData }) => Promise<{ data: { addUser: { id: string }}}>;
-	userData: QueryResult<UserData, { id: string }> & UserData;
-}
-
-export class App extends React.Component<AppProps, AppState> {
-    public state: AppState = {
-        selectedPage: Page.Menu,
-        currentGame: undefined,
-	};
-
-	public componentDidMount() {
-		this.updateCurrentGame();
-	}
-
-	public componentDidUpdate(prevProps: AppProps) {
-		if (prevProps.userData.loading !== this.props.userData.loading) {
-			this.updateCurrentGame();
-		}
-	}
-
-    public render () {
-		const isLobby = this.state.selectedPage === Page.Menu;
-
-		return <>
-			<LobbyPage
-				hidden={!isLobby}
-				hasCurrentGame={!!this.state.currentGame}
-				generateGame={this.generateGame}
-				returnToGame={this.togglePage}
-			/>
-			{this.state.currentGame && (
-				<GamePage
-					hidden={isLobby}
-					game={this.state.currentGame}
-					returnToLobby={this.togglePage}
-				/>
-			)}
-        </>;
-	}
-
-	private updateCurrentGame = () => {
-		const { loading, user } = this.props.userData;
-
-		if (!loading && user) {
-			this.setState({
-				currentGame: JSON.parse(user.game.config) as Game,
-			});
-		}
-
-	}
-
-    private generateGame = async (props: GameConfig) => {
-		const newGame = new Game(props);
-		try {
-			const { data: { addUser: { id } } } = await this.props.addUser({
-				variables: {
-					config: JSON.stringify(newGame),
-					state: "",
-				}
-			});
-			setStorageKey(StorageKeys.UserId, id);
-		} catch {}
-
-        this.setState({
-            currentGame: newGame,
-            selectedPage: Page.Game,
-        });
+const getUser = async (id: string): Promise<UserData | Error> => {
+  try {
+    const { data } = await axios.get<UserData | Error>(`${serverEndpoint}/user/${id}`);
+    if (data instanceof Error) {
+      throw data;
     }
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
 
-    private togglePage = () => {
-        this.setState({
-            selectedPage: this.state.selectedPage === Page.Menu ? Page.Game : Page.Menu,
-        });
+const registerUser = async (): Promise<string | Error> => {
+  try {
+    const { data } = await axios.get<string | Error>(`${serverEndpoint}/registerUser`);
+    if (data instanceof Error) {
+      throw data;
     }
-}
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
 
-// TODO Add typing for compose!
-export const AppQueried = compose(
-	graphql(ADD_USER, { name: "addUser" }),
-	graphql(GET_USER, {
-		name: "userData",
-		options: () => ({
-			variables: { id: getStorageKey(StorageKeys.UserId) },
-		})
-	}),
-)(App);
+const saveNewGame = async (game: Game): Promise<boolean> => {
+  try {
+    // TODO: Also record state
+    const { data } = await axios.post(`${serverEndpoint}/saveGame`, {
+      config: game,
+      state: "",
+      id: getStorageKey(StorageKeys.UserId),
+    });
+
+    if (data instanceof Error) {
+      throw data;
+    }
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const App: React.FC = () => {
+  const [selectedPage, setSelectedPage] = useState(Page.Menu);
+  const [currentGame, setCurrentGame] = useState<Game | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
+
+  const isLobby = selectedPage === Page.Menu;
+  const togglePage = useCallback(() => {
+    setSelectedPage(isLobby ? Page.Game : Page.Menu);
+  }, [isLobby]);
+
+  const generateGame = useCallback(async (props: GameConfig) => {
+    const newGame = new Game(props);
+
+    setLoading(true);
+    const res = await saveNewGame(newGame);
+    if (!res) {
+      setLoading(false);
+      setError(true);
+      return;
+    }
+    setCurrentGame(newGame);
+    setLoading(false);
+    setSelectedPage(Page.Game);
+  }, []);
+
+  useEffect(() => {
+    const id = getStorageKey(StorageKeys.UserId) as string;
+    const handleNewUser = async () => {
+      const res = await registerUser();
+      setLoading(false);
+      if (res instanceof Error) {
+        setError(true);
+        return;
+      }
+      setStorageKey(StorageKeys.UserId, res);
+    };
+    const handlePreviousUser = async () => {
+      const res = await getUser(id);
+      setLoading(false);
+      if (res instanceof Error) {
+        setError(true);
+        return;
+      }
+      setCurrentGame(res.game.config);
+    };
+
+    setLoading(true);
+    if (!id) {
+      handleNewUser();
+      return;
+    }
+    handlePreviousUser();
+  }, []);
+
+  if (error) {
+    return <h3 style={{ color: "red" }}>A wild error has appeared, please refresh!</h3>;
+  }
+  if (loading) {
+    return <h3>Loading...</h3>;
+  }
+
+  return <>
+    <LobbyPage
+      hidden={!isLobby}
+      hasCurrentGame={!!currentGame}
+      generateGame={generateGame}
+      returnToGame={togglePage}
+    />
+    {currentGame && (
+      <GamePage
+        hidden={isLobby}
+        game={currentGame}
+        returnToLobby={togglePage}
+      />
+    )}
+  </>;
+};
