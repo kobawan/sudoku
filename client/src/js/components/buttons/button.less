@@ -1,55 +1,56 @@
 @import "../../../styles/colors";
 
 .menu-button {
-    background-color: @blackColor;
-    border: 0;
-    color: @whiteColor;
-    border-radius: 0 0.6em;
-    min-width: 5.5em;
-    min-height: 1.9em;
-    padding: 0.35em;
-    margin: 0.5em 0;
-    transition: 0.5s;
+  background-color: @blackColor;
+  border: 0;
+  color: @whiteColor;
+  border-radius: 0 0.6em;
+  min-width: 5.5em;
+  min-height: 1.9em;
+  padding: 0.35em;
+  margin: 0.5em 0;
+  transition: 0.5s;
 
-    @media (orientation: landscape) and (max-height: 400px) {
-        margin: 0.3em 0;
-    }
+  @media (orientation: landscape) and (max-height: 400px) {
+    margin: 0.3em 0;
+  }
 
-    &.reversed {
-        border-radius: 0.6em 0;
-    }
+  &.reversed {
+    border-radius: 0.6em 0;
+  }
 
-    &.disabled {
-        pointer-events: none;
-        background-color: @cellDisabledColor;
-        color: @blackColor;
-    }
+  &.disabled {
+    pointer-events: none;
+    background-color: @cellDisabledColor;
+    color: @blackColor;
+  }
 
-    &:hover {
-        background-color: @pinkColor;
-    }
+  &:hover {
+    background-color: @pinkColor;
+  }
 }
 
 .game-button {
-    background-color: @blackColor;
-    border: 0;
-    color: @whiteColor;
-    border-radius: 2.625em;
-    height: 4.1875em;
-    width: 4.125em;
-    padding: 0;
-    transition: 0.5s;
+  background-color: @blackColor;
+  border: 0;
+  color: @whiteColor;
+  border-radius: 2.625em;
+  height: 4.1875em;
+  width: 4.125em;
+  padding: 0;
+  transition: 0.5s;
+  display: flex;
+  justify-content: center;
 
-    &.small {
-        padding-top: 0.25em;
-        height: 2.5em;
-        width: 2.5em;
-        font-size: 1em;
-    }
+  &.small {
+    height: 2.5em;
+    width: 2.5em;
+    font-size: 1em;
+  }
 
-    &:hover,
-    &.selected {
-        background-color: @pinkColor;
-    }
+  &:hover,
+  &.selected {
+    background-color: @pinkColor;
+  }
 }
 

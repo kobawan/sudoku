@@ -10,8 +10,7 @@
     "lesshint": "lesshint 'src/**/*.less'",
     "lint": "npm run tslint && npm run lesshint",
     "start": "webpack-dev-server --mode=development",
-    "watch": "webpack --watch --mode=development",
-    "dist": "webpack --mode=production"
+    "build": "webpack --mode=production"
   },
   "repository": {
     "type": "git",
@@ -45,7 +44,9 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
+    "@types/classnames": "^2.2.9",
     "axios": "^0.19.1",
+    "classnames": "^2.2.6",
     "ts-loader": "^6.2.1"
   }
 }
