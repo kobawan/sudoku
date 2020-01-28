@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-import { LobbyPage } from "../../lobby/lobby-page/LobbyPage";
-import { GamePage } from "../../game/game-page/GamePage";
+import { LobbyPage } from "../lobby-page/LobbyPage";
+import { GamePage } from "../game-page/GamePage";
 import { Game } from "../../generator";
 import { GameConfig, UserData, serverEndpoint } from "../../consts";
 import { getStorageKey, StorageKeys, setStorageKey } from "../../utils/localStorage";
@@ -109,10 +109,6 @@ export const App: React.FC = () => {
     handlePreviousUser();
   }, []);
 
-  if (error) {
-    return <h3 style={{ color: "red" }}>A wild error has appeared, please refresh!</h3>;
-  }
-
   return <>
     <LobbyPage
       hidden={!isLobby}
@@ -120,6 +116,7 @@ export const App: React.FC = () => {
       generateGame={generateGame}
       returnToGame={togglePage}
       isLoading={loading}
+      hasError={!!error}
     />
     {currentGame && (
       <GamePage

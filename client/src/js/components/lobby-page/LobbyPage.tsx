@@ -2,17 +2,17 @@ import React, { useState, useCallback } from "react";
 import cx from "classnames";
 import "./lobbyPage.less";
 
-import { MainMenu } from "../../components/main-menu/MainMenu";
+import { MainMenu } from "../main-menu/MainMenu";
 import {
   MenuSection,
   SharedSectionProps,
-} from "../../components/menu-content/types";
-import { SettingsSection } from "../../components/menu-content/SettingsSection";
-import { RulesSection } from "../../components/menu-content/RulesSection";
-import { ContactsSection } from "../../components/menu-content/ContactsSection";
-import { StatsSection } from "../../components/menu-content/StatsSection";
-import { AboutSection } from "../../components/menu-content/AboutSection";
-import { MenuButtonProps } from "../../components/buttons/Button";
+} from "../menu-content/types";
+import { SettingsSection } from "../menu-content/SettingsSection";
+import { RulesSection } from "../menu-content/RulesSection";
+import { ContactsSection } from "../menu-content/ContactsSection";
+import { StatsSection } from "../menu-content/StatsSection";
+import { AboutSection } from "../menu-content/AboutSection";
+import { MenuButtonProps } from "../buttons/Button";
 import { GameConfig, GameDifficulty } from "../../consts";
 
 type MapMenuSectionToComponentIndexSignature = {
@@ -37,6 +37,7 @@ export interface LobbyPageProps {
   returnToGame: () => void;
   hidden: boolean;
   isLoading: boolean;
+  hasError: boolean;
 }
 
 const menuSectionButtons = [
@@ -52,6 +53,7 @@ export const LobbyPage: React.FC<LobbyPageProps> = ({
   returnToGame,
   hidden,
   isLoading,
+  hasError,
 }) => {
   const [currentSection, setCurrentSection] = useState<MenuSection | undefined>();
   const leftColumn: MenuButtonProps[] = [
@@ -106,8 +108,13 @@ export const LobbyPage: React.FC<LobbyPageProps> = ({
   return (
     <div className={cx("lobby", hidden && "hidden")}>
       <div className="lobby-wrapper">
-        <MainMenu rightColumn={rightColumn} leftColumn={leftColumn} isLoading={isLoading} />
-        {!isLoading && getSectionComponent()}
+        <MainMenu
+          rightColumn={rightColumn}
+          leftColumn={leftColumn}
+          isLoading={isLoading}
+          hasError={hasError}
+        />
+        {!isLoading && !hasError && getSectionComponent()}
       </div>
     </div>
   );

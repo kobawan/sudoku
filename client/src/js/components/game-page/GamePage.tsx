@@ -2,22 +2,22 @@ import * as React from "react";
 
 import "./gamePage.less";
 
-import { SideMenu } from "../../components/side-menu/SideMenu";
-import { Popup, PopupProps } from "../../components/popup/Popup";
+import { SideMenu } from "../side-menu/SideMenu";
+import { Popup, PopupProps } from "../popup/Popup";
 import {
     MenuButtonProps,
     GameButtonProps,
     GameButtonSize,
- } from "../../components/buttons/Button";
+} from "../buttons/Button";
 import { CellMode, TableCellsMap } from "../../consts";
-import { arrowKeys, findCoordinates } from "../gameCells";
-import { highlight, showDuplicates } from "../gameTable";
-import { updateNotesCells } from "../gameNotesCells";
+import { arrowKeys, findCoordinates } from "../../game/gameCells";
+import { highlight, showDuplicates } from "../../game/gameTable";
+import { updateNotesCells } from "../../game/gameNotesCells";
 import { removeDuplicates } from "../../utils/generalUtils";
 import { Game } from "../../generator";
-import { checkSvg } from "../../components/svg/Icons";
-import { SudokuTable } from "../../components/sudoku-table/SudokuTable";
-import { Slider } from "../../components/slider/Slider";
+import { checkSvg } from "../svg/Icons";
+import { SudokuTable } from "../sudoku-table/SudokuTable";
+import { Slider } from "../slider/Slider";
 import { getStorageKey, StorageKeys } from "../../utils/localStorage";
 
 export interface GamePageProps {
