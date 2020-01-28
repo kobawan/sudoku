@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import axios from "axios";
 
 import { LobbyPage } from "../lobby-page/LobbyPage";
 import { GamePage } from "../game-page/GamePage";
-import { Game } from "../../generator";
-import { GameConfig, UserData, serverEndpoint } from "../../consts";
+import { UserData, serverEndpoint } from "../../consts";
 import { getStorageKey, StorageKeys, setStorageKey } from "../../utils/localStorage";
 import { Page } from "../../consts";
+import { useSelector, useDispatch } from "react-redux";
+import { getPage, getCurrentGame } from "./ducks/selectors";
+import { setPage, setCurrentGame, setLobbyIsLoading, setLobbyHasError } from "./ducks/actions";
 
 const getUser = async (id: string): Promise<UserData | Error> => {
   try {
@@ -32,72 +34,40 @@ const registerUser = async (): Promise<string | Error> => {
   }
 };
 
-const saveNewGame = async (game: Game): Promise<boolean> => {
-  try {
-    // TODO: Also record state
-    const { data } = await axios.post(`${serverEndpoint}/saveGame`, {
-      config: game,
-      state: "",
-      id: getStorageKey(StorageKeys.UserId),
-    });
 
-    if (data instanceof Error) {
-      throw data;
-    }
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
 
 export const App: React.FC = () => {
-  const [selectedPage, setSelectedPage] = useState(Page.Menu);
-  const [currentGame, setCurrentGame] = useState<Game | undefined>(undefined);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState();
+  const dispatch = useDispatch();
+  const selectedPage = useSelector(getPage);
+  const currentGame = useSelector(getCurrentGame);
 
   const isLobby = selectedPage === Page.Menu;
-  const togglePage = useCallback(() => {
-    setSelectedPage(isLobby ? Page.Game : Page.Menu);
-  }, [isLobby]);
-
-  const generateGame = useCallback(async (props: GameConfig) => {
-    const newGame = new Game(props);
-
-    setLoading(true);
-    const res = await saveNewGame(newGame);
-    if (!res) {
-      setLoading(false);
-      setError(true);
-      return;
-    }
-    setCurrentGame(newGame);
-    setLoading(false);
-    setSelectedPage(Page.Game);
+  const returnToLobby = useCallback(() => {
+    dispatch(setPage(Page.Menu));
   }, []);
 
   useEffect(() => {
     const id = getStorageKey(StorageKeys.UserId) as string;
     const handleNewUser = async () => {
       const res = await registerUser();
-      setLoading(false);
+      dispatch(setLobbyIsLoading(false));
       if (res instanceof Error) {
-        setError(true);
+        dispatch(setLobbyHasError(true));
         return;
       }
       setStorageKey(StorageKeys.UserId, res);
     };
     const handlePreviousUser = async () => {
       const res = await getUser(id);
-      setLoading(false);
+      dispatch(setLobbyIsLoading(false));
       if (res instanceof Error) {
-        setError(true);
+        dispatch(setLobbyHasError(true));
         return;
       }
-      setCurrentGame(res.game.config);
+      dispatch(setCurrentGame(res.game.config));
     };
 
-    setLoading(true);
+    dispatch(setLobbyIsLoading(true));
     if (!id) {
       handleNewUser();
       return;
@@ -108,17 +78,12 @@ export const App: React.FC = () => {
   return <>
     <LobbyPage
       hidden={!isLobby}
-      hasCurrentGame={!!currentGame}
-      generateGame={generateGame}
-      returnToGame={togglePage}
-      isLoading={loading}
-      hasError={!!error}
     />
     {currentGame && (
       <GamePage
         hidden={isLobby}
         game={currentGame}
-        returnToLobby={togglePage}
+        returnToLobby={returnToLobby}
       />
     )}
   </>;

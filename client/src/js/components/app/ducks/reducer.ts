@@ -6,17 +6,21 @@ import {
   SetCurrentGameAction,
   SetLobbyHasErrorAction,
   SetLobbyIsLoadingAction,
+  SetLobbyMenuSectionAction,
   SET_CURRENT_GAME,
   SET_PAGE,
   SET_LOBBY_IS_LOADING,
   SET_LOBBY_HAS_ERROR,
+  SET_LOBBY_MENU_SECTION,
 } from "./actions";
+import { MenuSection } from "../../menu-content/types";
 
 interface State {
   page: Page;
   currentGame: Game | undefined;
   lobbyIsLoading: boolean;
   lobbyHasError: boolean;
+  lobbyMenuSection: MenuSection | undefined;
 }
 
 type Actions = (
@@ -24,6 +28,7 @@ type Actions = (
   | SetCurrentGameAction
   | SetLobbyHasErrorAction
   | SetLobbyIsLoadingAction
+  | SetLobbyMenuSectionAction
 );
 
 const initialState: State = {
@@ -31,6 +36,7 @@ const initialState: State = {
   currentGame: undefined,
   lobbyIsLoading: true,
   lobbyHasError: false,
+  lobbyMenuSection: undefined,
 };
 
 export const appReducer: Reducer<State, Actions> = (state = initialState, action) => {
@@ -43,6 +49,8 @@ export const appReducer: Reducer<State, Actions> = (state = initialState, action
       return { ...state, lobbyHasError: action.hasError };
     case SET_LOBBY_IS_LOADING:
       return { ...state, lobbyIsLoading: action.isLoading };
+    case SET_LOBBY_MENU_SECTION:
+      return { ...state, lobbyMenuSection: action.section };
     default:
       return state;
   }

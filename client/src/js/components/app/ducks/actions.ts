@@ -1,11 +1,13 @@
 import { Action } from "redux";
 import { Page } from "../../../consts";
 import { Game } from "../../../generator";
+import { MenuSection } from "../../menu-content/types";
 
 export const SET_PAGE = "@app/SET_PAGE";
 export const SET_CURRENT_GAME = "@app/SET_CURRENT_GAME";
 export const SET_LOBBY_IS_LOADING = "@app/SET_LOBBY_IS_LOADING";
 export const SET_LOBBY_HAS_ERROR = "@app/SET_LOBBY_HAS_ERROR";
+export const SET_LOBBY_MENU_SECTION = "@app/SET_LOBBY_MENU_SECTION";
 
 export interface SetPageAction extends Action<typeof SET_PAGE> {
   page: Page;
@@ -41,4 +43,13 @@ export interface SetLobbyHasErrorAction extends Action<typeof SET_LOBBY_HAS_ERRO
 export const setLobbyHasError = (hasError: boolean): SetLobbyHasErrorAction => ({
   type: SET_LOBBY_HAS_ERROR,
   hasError,
+});
+
+export interface SetLobbyMenuSectionAction extends Action<typeof SET_LOBBY_MENU_SECTION> {
+  section: MenuSection | undefined;
+}
+
+export const setLobbyMenuSection = (section?: MenuSection): SetLobbyMenuSectionAction => ({
+  type: SET_LOBBY_MENU_SECTION,
+  section,
 });

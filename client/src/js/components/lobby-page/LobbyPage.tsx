@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import cx from "classnames";
 import "./lobbyPage.less";
 
@@ -12,8 +13,8 @@ import { RulesSection } from "../menu-content/RulesSection";
 import { ContactsSection } from "../menu-content/ContactsSection";
 import { StatsSection } from "../menu-content/StatsSection";
 import { AboutSection } from "../menu-content/AboutSection";
-import { MenuButtonProps } from "../buttons/Button";
-import { GameConfig, GameDifficulty } from "../../consts";
+import { getLobbyIsLoading, getLobbyHasError, getLobbyMenuSection } from "../app/ducks/selectors";
+import { setLobbyMenuSection } from "../app/ducks/actions";
 
 type MapMenuSectionToComponentIndexSignature = {
   [k in MenuSection]: React.ComponentClass<SharedSectionProps>;
@@ -32,53 +33,16 @@ export interface LobbyPageState {
 }
 
 export interface LobbyPageProps {
-  hasCurrentGame: boolean;
-  generateGame: (props: GameConfig) => void;
-  returnToGame: () => void;
   hidden: boolean;
-  isLoading: boolean;
-  hasError: boolean;
 }
 
-const menuSectionButtons = [
-  MenuSection.Stats,
-  MenuSection.Settings,
-  MenuSection.Rules,
-  MenuSection.About,
-];
-
 export const LobbyPage: React.FC<LobbyPageProps> = ({
-  hasCurrentGame,
-  generateGame,
-  returnToGame,
   hidden,
-  isLoading,
-  hasError,
 }) => {
-  const [currentSection, setCurrentSection] = useState<MenuSection | undefined>();
-  const leftColumn: MenuButtonProps[] = [
-    {
-      value: "Resume",
-      disabled: !hasCurrentGame,
-      onClick: hasCurrentGame ? returnToGame : () => {},
-    },
-    {
-      value: "Easy",
-      onClick: () => generateGame({ difficulty: GameDifficulty.Easy }),
-    },
-    {
-      value: "Medium",
-      onClick: () => generateGame({ difficulty: GameDifficulty.Medium }),
-    },
-    {
-      value: "Hard",
-      onClick: () => generateGame({ difficulty: GameDifficulty.Hard }),
-    },
-  ];
-  const rightColumn: MenuButtonProps[] = menuSectionButtons.map((section: MenuSection) => ({
-    value: section,
-    onClick: () => setCurrentSection(section),
-  }));
+  const dispatch = useDispatch();
+  const isLoading = useSelector(getLobbyIsLoading);
+  const hasError = useSelector(getLobbyHasError);
+  const currentSection = useSelector(getLobbyMenuSection);
 
   const getSectionComponent = useCallback(() => {
     if (!currentSection) {
@@ -88,18 +52,18 @@ export const LobbyPage: React.FC<LobbyPageProps> = ({
     const Component = mapMenuSectionToComponent[currentSection];
     const setSubSection = () => {
       if (currentSection === MenuSection.About) {
-        setCurrentSection(MenuSection.Contacts);
+        dispatch(setLobbyMenuSection(MenuSection.Contacts));
         return;
       }
       if (currentSection === MenuSection.Contacts) {
-        setCurrentSection(MenuSection.About);
+        dispatch(setLobbyMenuSection(MenuSection.About));
         return;
       }
     };
 
     return (
       <Component
-        crossOnClick={() => setCurrentSection(undefined)}
+        crossOnClick={() => dispatch(setLobbyMenuSection(undefined))}
         arrowOnClick={setSubSection}
       />
     );
@@ -108,12 +72,7 @@ export const LobbyPage: React.FC<LobbyPageProps> = ({
   return (
     <div className={cx("lobby", hidden && "hidden")}>
       <div className="lobby-wrapper">
-        <MainMenu
-          rightColumn={rightColumn}
-          leftColumn={leftColumn}
-          isLoading={isLoading}
-          hasError={hasError}
-        />
+        <MainMenu />
         {!isLoading && !hasError && getSectionComponent()}
       </div>
     </div>
