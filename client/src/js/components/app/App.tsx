@@ -6,11 +6,7 @@ import { GamePage } from "../game-page/GamePage";
 import { Game } from "../../generator";
 import { GameConfig, UserData, serverEndpoint } from "../../consts";
 import { getStorageKey, StorageKeys, setStorageKey } from "../../utils/localStorage";
-
-export enum Page {
-  Game,
-  Menu,
-}
+import { Page } from "../../consts";
 
 const getUser = async (id: string): Promise<UserData | Error> => {
   try {

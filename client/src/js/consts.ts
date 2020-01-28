@@ -1,5 +1,10 @@
 import { Game } from "./generator";
 
+export enum Page {
+  Game,
+  Menu,
+}
+
 export enum GameDifficulty {
     Easy = 4,
     Medium = 5,
