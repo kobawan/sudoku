@@ -1,4 +1,7 @@
+import { Action } from "redux";
 import { Game } from "./generator";
+import { ThunkAction } from "redux-thunk";
+import { RootState } from "./store";
 
 export enum Page {
   Game,
@@ -60,3 +63,14 @@ export interface UserData {
 
 // TODO: add production endpoint for server
 export const serverEndpoint = process.env.NODE_ENV === "development" ? "http://localhost:4000" : "";
+
+export interface ActionWithPayload<T, P> extends Action<T> {
+  payload: P;
+}
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;

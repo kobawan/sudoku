@@ -1,35 +1,14 @@
 import React, { useCallback } from "react";
-import axios from "axios";
-import { spinnerSvg } from "../svg/Icons";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./mainMenu.less";
 
+import { spinnerSvg } from "../svg/Icons";
 import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
-import { useDispatch, useSelector } from "react-redux";
 import { getLobbyIsLoading, getLobbyHasError, getHasCurrentGame } from "../app/ducks/selectors";
-import { GameConfig, Page, serverEndpoint, GameDifficulty } from "../../consts";
-import { Game } from "../../generator";
-import { setLobbyIsLoading, setLobbyHasError, setCurrentGame, setPage, setLobbyMenuSection } from "../app/ducks/actions";
-import { getStorageKey, StorageKeys } from "../../utils/localStorage";
+import { GameConfig, Page, GameDifficulty } from "../../consts";
+import { setPage, setLobbyMenuSection, startNewGame } from "../app/ducks/actions";
 import { MenuSection } from "../menu-content/types";
-
-const saveNewGame = async (game: Game): Promise<boolean> => {
-  try {
-    // TODO: Also record state
-    const { data } = await axios.post(`${serverEndpoint}/saveGame`, {
-      config: game,
-      state: "",
-      id: getStorageKey(StorageKeys.UserId),
-    });
-
-    if (data instanceof Error) {
-      throw data;
-    }
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
 
 const menuSectionButtons = [
   MenuSection.Stats,
@@ -44,19 +23,8 @@ export const MainMenu: React.FC = () => {
   const hasError = useSelector(getLobbyHasError);
   const hasCurrentGame = useSelector(getHasCurrentGame);
 
-  const generateGame = useCallback(async (props: GameConfig) => {
-    const newGame = new Game(props);
-
-    dispatch(setLobbyIsLoading(true));
-    const res = await saveNewGame(newGame);
-    if (!res) {
-      dispatch(setLobbyIsLoading(false));
-      dispatch(setLobbyHasError(true));
-      return;
-    }
-    dispatch(setCurrentGame(newGame));
-    dispatch(setLobbyIsLoading(false));
-    dispatch(setPage(Page.Game));
+  const generateGame = useCallback((props: GameConfig) => {
+    dispatch(startNewGame(props));
   }, []);
 
   const leftColumn: MenuButtonProps[] = [

@@ -42,15 +42,15 @@ const initialState: State = {
 export const appReducer: Reducer<State, Actions> = (state = initialState, action) => {
   switch (action.type) {
     case SET_PAGE:
-      return { ...state, page: action.page };
+      return { ...state, page: action.payload };
     case SET_CURRENT_GAME:
-      return { ...state, currentGame: action.game };
+      return { ...state, currentGame: action.payload };
     case SET_LOBBY_HAS_ERROR:
-      return { ...state, lobbyHasError: action.hasError };
+      return { ...state, lobbyHasError: action.payload };
     case SET_LOBBY_IS_LOADING:
-      return { ...state, lobbyIsLoading: action.isLoading };
+      return { ...state, lobbyIsLoading: action.payload };
     case SET_LOBBY_MENU_SECTION:
-      return { ...state, lobbyMenuSection: action.section };
+      return { ...state, lobbyMenuSection: action.payload };
     default:
       return state;
   }
