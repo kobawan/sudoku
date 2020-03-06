@@ -4,6 +4,8 @@ import cx from "classnames";
 import "./popup.less";
 
 import { GameButtonProps, mapPropsToGameButtons } from "../buttons/Button";
+import { useSelector } from "react-redux";
+import { getPopupProps } from "./ducks/selectors";
 
 export enum PopupText {
   Solve = "Solve",
@@ -27,11 +29,12 @@ export interface PopupProps {
     buttons?: GameButtonProps[];
 }
 
-export const Popup: React.FC<PopupProps> = ({
-  text,
-  hidden,
-  buttons
-}) => {
+export const Popup: React.FC = () => {
+  const {
+    text,
+    hidden,
+    buttons
+  } = useSelector(getPopupProps);
   const isHidden = hidden || !text || !buttons;
 
   return (

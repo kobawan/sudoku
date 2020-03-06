@@ -1,6 +1,5 @@
 import { ActionWithPayload, TableCellsMap, AppThunk, CellCoordinates, CellMode, BasicCellProps } from "../../../consts";
-import { PopupProps, PopupText } from "../../popup/Popup";
-import { Action, Dispatch } from "redux";
+import { Action } from "redux";
 import { Game } from "../../../generator";
 import { getDuplicates } from "../../../game/gameTable";
 import { getCurrentGame } from "../../app/ducks/selectors";
@@ -11,17 +10,14 @@ import {
   canAutomaticallyUpdateNotesCells,
   resetCellStatus
 } from "../helpers";
-import { GameButtonSize } from "../../buttons/Button";
-import { checkSvg } from "../../svg/Icons";
 import { GameState } from "./reducer";
 import { getCellProps, getCellMode } from "./selectors";
 import { removeDuplicateNotesCells } from "../../../game/gameNotesCells";
 import { removeDuplicates } from "../../../utils/generalUtils";
+import { showWinPopup, showCheckPopup } from "../../popup/ducks/actions";
 
 export const TOGGLE_CELL_MODE = "@game/TOGGLE_CELL_MODE";
 export const TOGGLE_SIDE_MENU = "@game/TOGGLE_SIDE_MENU";
-export const SHOW_POPUP = "@game/SHOW_POPUP";
-export const HIDE_POPUP = "@game/HIDE_POPUP";
 export const SET_CELL_PROPS = "@game/SET_CELL_PROPS";
 export const RESET_GAME_TOOLS = "@game/RESET_GAME_TOOLS";
 export const HIGHLIGHT_CELLS = "@game/HIGHLIGHT_CELLS";
@@ -36,17 +32,6 @@ export const toggleCellMode = (): ToggleCellModeAction => ({
 export type ToggleSideMenuAction = Action<typeof TOGGLE_SIDE_MENU>;
 export const toggleSideMenu = (): ToggleSideMenuAction => ({
   type: TOGGLE_SIDE_MENU,
-});
-
-export type ShowPopupAction = ActionWithPayload<typeof SHOW_POPUP, Omit<PopupProps, "hidden">>;
-export const showPopup = (payload: Omit<PopupProps, "hidden">): ShowPopupAction => ({
-  type: SHOW_POPUP,
-  payload,
-});
-
-export type HidePopupAction = Action<typeof HIDE_POPUP>;
-export const hidePopup = (): HidePopupAction => ({
-  type: HIDE_POPUP,
 });
 
 export type SetCellPropsAction = ActionWithPayload<typeof SET_CELL_PROPS, TableCellsMap>;
@@ -96,64 +81,6 @@ export const updateGameState = (gameState: GameState): AppThunk => (dispatch, ge
   dispatch(setGameState(gameState));
 };
 
-export const showWinPopup = (dispatch: Dispatch) => {
-  dispatch(showPopup({
-    text: PopupText.Win,
-    buttons: [{
-      size: GameButtonSize.Small,
-      icon: checkSvg,
-      onClick: () => dispatch(hidePopup()),
-    }],
-  }));
-};
-
-export const showCheckPopup = (dispatch: Dispatch, hasDuplicates: boolean) => {
-  dispatch(showPopup({
-    text: hasDuplicates ? PopupText.Duplicates : PopupText.Check,
-    buttons: [{
-      size: GameButtonSize.Small,
-      icon: checkSvg,
-      onClick: () => dispatch(hidePopup()),
-    }],
-  }));
-};
-
-export const showResetPopup = (dispatch: Dispatch<any>) => {
-  dispatch(showPopup({
-    text: PopupText.Reset,
-    buttons: [
-      {
-        size: GameButtonSize.Small,
-        value: "Yes",
-        onClick: () => dispatch(updateGameState(GameState.New)),
-      },
-      {
-        size: GameButtonSize.Small,
-        value: "No",
-        onClick: () => dispatch(hidePopup()),
-      },
-    ],
-  }));
-};
-
-export const showSolvePopup = (dispatch: Dispatch<any>) => {
-  dispatch(showPopup({
-    text: PopupText.Solve,
-    buttons: [
-      {
-        size: GameButtonSize.Small,
-        value: "Yes",
-        onClick: () => dispatch(updateGameState(GameState.GameOver)),
-      },
-      {
-        size: GameButtonSize.Small,
-        value: "No",
-        onClick: () => dispatch(hidePopup()),
-      },
-    ],
-  }));
-};
-
 export const checkForWin = (): AppThunk => (dispatch, getState) => {
   const game = getCurrentGame(getState()) as Game;
   const cellProps = getCellProps(getState());
@@ -171,6 +98,7 @@ export const checkForWin = (): AppThunk => (dispatch, getState) => {
   if (duplicates.length === 0 && !hasInvalidCells) {
     dispatch(updateGameState(GameState.Win));
   } else {
+    dispatch(toggleSideMenu());
     showCheckPopup(dispatch, !!duplicates.length);
   }
 };

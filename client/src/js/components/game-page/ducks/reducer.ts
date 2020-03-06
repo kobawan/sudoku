@@ -3,16 +3,12 @@ import { CellMode, TableCellsMap } from "../../../consts";
 import {
   ToggleCellModeAction,
   ToggleSideMenuAction,
-  ShowPopupAction,
   SetCellPropsAction,
   TOGGLE_CELL_MODE,
   TOGGLE_SIDE_MENU,
-  SHOW_POPUP,
   SET_CELL_PROPS,
   ResetGameToolsAction,
   RESET_GAME_TOOLS,
-  HIDE_POPUP,
-  HidePopupAction,
   SetGameStateAction,
   SET_GAME_STATE,
   HighLightCellsAction,
@@ -20,7 +16,6 @@ import {
   SetCellValueAction,
   SET_CELL_VALUE,
 } from "./actions";
-import { PopupProps } from "../../popup/Popup";
 import { SET_CURRENT_GAME, SetCurrentGameAction } from "../../app/ducks/actions";
 import { updateCellsCellMode, updateCellsHighlight } from "../helpers";
 import { getStorageKey, StorageKeys } from "../../../utils/localStorage";
@@ -35,7 +30,6 @@ export enum GameState {
 interface State {
   cellMode: CellMode;
   sideMenuIsOpen: boolean;
-  popupProps: PopupProps;
   cellProps: TableCellsMap;
   gameState: GameState;
 }
@@ -43,8 +37,6 @@ interface State {
 type Actions = (
   ToggleCellModeAction
   | ToggleSideMenuAction
-  | ShowPopupAction
-  | HidePopupAction
   | SetCellPropsAction
   | SetCurrentGameAction
   | ResetGameToolsAction
@@ -56,9 +48,6 @@ type Actions = (
 const initialState: State = {
   cellMode: CellMode.Pencil,
   sideMenuIsOpen: false,
-  popupProps: {
-      hidden: true,
-  },
   cellProps: {},
   gameState: GameState.New,
 };
@@ -100,23 +89,6 @@ export const gameReducer: Reducer<State, Actions> = (state = initialState, actio
       };
     case TOGGLE_SIDE_MENU:
       return { ...state, sideMenuIsOpen: !state.sideMenuIsOpen };
-    case SHOW_POPUP:
-      return {
-        ...state,
-        sideMenuIsOpen: false,
-        popupProps: {
-          ...action.payload,
-          hidden: false,
-        },
-      };
-    case HIDE_POPUP:
-      return {
-        ...state,
-        popupProps: {
-          ...state.popupProps,
-          hidden: true,
-        }
-      };
     case SET_GAME_STATE:
       return {
         ...state,
@@ -132,10 +104,6 @@ export const gameReducer: Reducer<State, Actions> = (state = initialState, actio
         ...state,
         cellMode: CellMode.Pencil,
         sideMenuIsOpen: false,
-        popupProps: {
-          ...state.popupProps,
-          hidden: true,
-        },
       };
     case SET_CURRENT_GAME:
       return initialState;

@@ -4,21 +4,18 @@ import cx from "classnames";
 import "./gamePage.less";
 
 import { SideMenu } from "../side-menu/SideMenu";
-import { Popup } from "../popup/Popup";
 import { MenuButtonProps } from "../buttons/Button";
 import { Game } from "../../generator";
 import { SudokuTable } from "../sudoku-table/SudokuTable";
 import { Slider } from "../slider/Slider";
 import { useDispatch, useSelector } from "react-redux";
-import { getCellMode, getSideMenuIsOpen, getPopupProps, getCellProps } from "./ducks/selectors";
+import { getCellMode, getSideMenuIsOpen, getCellProps } from "./ducks/selectors";
 import { selectCellContent } from "./helpers";
 import {
   resetGameTools,
   toggleSideMenu,
   toggleCellMode,
   updateGameState,
-  showResetPopup,
-  showSolvePopup,
   checkForWin,
   highLightCells,
   updateNotesCells,
@@ -27,6 +24,7 @@ import {
 } from "./ducks/actions";
 import { GameState } from "./ducks/reducer";
 import { findCoordinates, arrowKeys, getCellPosFromElement } from "../../game/gameCells";
+import { showResetPopup, showSolvePopup } from "../popup/ducks/actions";
 
 export interface GamePageProps {
   hidden: boolean;
@@ -42,7 +40,6 @@ export const GamePage: React.FC<GamePageProps> = ({
   const dispatch = useDispatch();
   const cellMode = useSelector(getCellMode);
   const isSideMenuOpen = useSelector(getSideMenuIsOpen);
-  const popupProps = useSelector(getPopupProps);
   const cellProps = useSelector(getCellProps);
 
   useEffect(() => {
@@ -109,7 +106,6 @@ export const GamePage: React.FC<GamePageProps> = ({
         onClick={() => dispatch(toggleSideMenu())}
         buttons={sideMenuButtons}
       />
-      <Popup {...popupProps} />
 
       <div className="game-wrapper">
         <SudokuTable

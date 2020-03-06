@@ -7,6 +7,7 @@ import { getStorageKey, StorageKeys } from "../../utils/localStorage";
 import { Page } from "../../consts";
 import { getPage, getCurrentGame, getLobbyIsLoading } from "./ducks/selectors";
 import { setPage, handleNewUser, handleCurrentUser } from "./ducks/actions";
+import { Popup } from "../popup/Popup";
 
 export const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -38,5 +39,6 @@ export const App: React.FC = () => {
         returnToLobby={returnToLobby}
       />
     )}
+    <Popup />
   </>;
 };
