@@ -1,74 +1,77 @@
 import { removeDuplicates } from "../utils/generalUtils";
 import {
-    sortByRows,
-    sortByCols,
-    sortByGrids,
+  sortByRows,
+  sortByCols,
+  sortByGrids,
 } from "../utils/arrayUtils";
-import { CellMode, TableCellsMap, CellProps, CellCoordinates, GameType } from "../consts";
+import { CellMode, TableCellsMap, CellCoordinates, GameType, BasicCellProps } from "../consts";
+
+const getDuplicateNotesCells = (
+  gameType: GameType,
+  gameRatio: number,
+  cellProps: TableCellsMap,
+  coor: CellCoordinates,
+) => {
+  const notesCellsRows = sortByRows(gameType, ({ arr, row, pos }) => {
+    if (cellProps[pos].mode === CellMode.Notes && cellProps[pos].value) {
+      arr[row].push(pos);
+    }
+  });
+  const notesCellsCols = sortByCols(gameType, ({ arr, col, pos }) => {
+    if (cellProps[pos].mode === CellMode.Notes && cellProps[pos].value) {
+      arr[col].push(pos);
+    }
+  });
+  const notesCellsGrids = sortByGrids(gameType, gameRatio, ({ arr, grid, pos }) => {
+    if (cellProps[pos].mode === CellMode.Notes && cellProps[pos].value) {
+      arr[grid].push(pos);
+    }
+  });
+  return removeDuplicates([
+    ...notesCellsRows[coor.x],
+    ...notesCellsCols[coor.y],
+    ...notesCellsGrids[coor.grid],
+  ]);
+};
 
 /**
  * Removes value from notes that match new pencil value
  */
-export const updateNotesCells = (
-    cellMode: CellMode,
-    gameType: GameType,
-    gameRatio: number,
-    cellProps: TableCellsMap,
-    selectedCell: CellProps,
-    coor: CellCoordinates,
+export const removeDuplicateNotesCells = (
+  gameType: GameType,
+  gameRatio: number,
+  cellProps: TableCellsMap,
+  selectedCell: BasicCellProps,
+  coor: CellCoordinates,
 ) => {
-    if (
-        cellMode === CellMode.Pencil
-        && selectedCell.mode === CellMode.Pencil
-        && selectedCell.value
-    ) {
-        const notesCellsRows = sortByRows(gameType, ({ arr, row, pos }) => {
-            if (cellProps[pos].mode === CellMode.Notes && cellProps[pos].value) {
-                arr[row].push(pos);
-            }
-        });
-        const notesCellsCols = sortByCols(gameType, ({ arr, col, pos }) => {
-            if (cellProps[pos].mode === CellMode.Notes && cellProps[pos].value) {
-                arr[col].push(pos);
-            }
-        });
-        const notesCellsGrids = sortByGrids(gameType, gameRatio, ({ arr, grid, pos }) => {
-            if (cellProps[pos].mode === CellMode.Notes && cellProps[pos].value) {
-                arr[grid].push(pos);
-            }
-        });
-        const duplicates = removeDuplicates([
-            ...notesCellsRows[coor.x],
-            ...notesCellsCols[coor.y],
-            ...notesCellsGrids[coor.grid],
-        ]);
-
-        // Removes numbers from notes that are related to selected cell
-        if (duplicates.length !== 0) {
-            const newCellProps: TableCellsMap = {};
-
-            for (const key in cellProps) {
-                let value = cellProps[key].value;
-
-                if (duplicates.includes(parseInt(key))) {
-                    const notes = `${cellProps[key].value}`
-                        .split("")
-                        .filter(val => `${selectedCell.value}` !== val)
-                    ;
-                    value = parseInt(notes.join("")) || 0;
-                }
-
-                newCellProps[key] = {
-                    ...cellProps[key],
-                    value,
-                };
-            }
-
-            return newCellProps;
-        }
-
-        return undefined;
-    }
-
+  const duplicates = getDuplicateNotesCells(gameType, gameRatio, cellProps, coor);
+  if (!duplicates.length) {
     return undefined;
+  }
+
+  // Removes numbers from notes that are related to selected cell
+  const newCellProps: TableCellsMap = {};
+
+  for (const key in cellProps) {
+    if (cellProps.hasOwnProperty(key)) {
+      const props = cellProps[key];
+      let value = props.value;
+
+      if (duplicates.includes(+key)) {
+        const notes = `${value}`
+          .split("")
+          .filter(val => `${selectedCell.value}` !== val)
+          .join("")
+        ;
+        value = +notes || 0;
+      }
+
+      newCellProps[key] = {
+        ...props,
+        value,
+      };
+    }
+  }
+
+  return newCellProps;
 };

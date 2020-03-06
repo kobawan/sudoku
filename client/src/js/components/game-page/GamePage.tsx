@@ -1,395 +1,127 @@
-import * as React from "react";
+import React, { useEffect } from "react";
+import cx from "classnames";
 
 import "./gamePage.less";
 
 import { SideMenu } from "../side-menu/SideMenu";
-import { Popup, PopupProps } from "../popup/Popup";
-import {
-    MenuButtonProps,
-    GameButtonProps,
-    GameButtonSize,
-} from "../buttons/Button";
-import { CellMode, TableCellsMap } from "../../consts";
-import { arrowKeys, findCoordinates } from "../../game/gameCells";
-import { highlight, showDuplicates } from "../../game/gameTable";
-import { updateNotesCells } from "../../game/gameNotesCells";
-import { removeDuplicates } from "../../utils/generalUtils";
+import { Popup } from "../popup/Popup";
+import { MenuButtonProps } from "../buttons/Button";
 import { Game } from "../../generator";
-import { checkSvg } from "../svg/Icons";
 import { SudokuTable } from "../sudoku-table/SudokuTable";
 import { Slider } from "../slider/Slider";
-import { getStorageKey, StorageKeys } from "../../utils/localStorage";
+import { useDispatch, useSelector } from "react-redux";
+import { getCellMode, getSideMenuIsOpen, getPopupProps, getCellProps } from "./ducks/selectors";
+import { selectCellContent } from "./helpers";
+import {
+  resetGameTools,
+  toggleSideMenu,
+  toggleCellMode,
+  updateGameState,
+  showResetPopup,
+  showSolvePopup,
+  checkForWin,
+  highLightCells,
+  updateNotesCells,
+  updatePencilCells,
+  updateCellValue,
+} from "./ducks/actions";
+import { GameState } from "./ducks/reducer";
+import { findCoordinates, arrowKeys, getCellPosFromElement } from "../../game/gameCells";
 
 export interface GamePageProps {
-    hidden: boolean;
-    game: Game;
-    returnToLobby: () => void;
+  hidden: boolean;
+  game: Game;
+  returnToLobby: () => void;
 }
 
-interface GamePageState {
-    cellMode: CellMode;
-    toggleSideMenu: boolean;
-    popupProps: PopupProps;
-    cellProps: TableCellsMap;
-}
+export const GamePage: React.FC<GamePageProps> = ({
+  hidden,
+  game,
+  returnToLobby,
+}) => {
+  const dispatch = useDispatch();
+  const cellMode = useSelector(getCellMode);
+  const isSideMenuOpen = useSelector(getSideMenuIsOpen);
+  const popupProps = useSelector(getPopupProps);
+  const cellProps = useSelector(getCellProps);
 
-export class GamePage extends React.Component<GamePageProps, GamePageState> {
-    public state: GamePageState = {
-        cellMode: CellMode.Pencil,
-        toggleSideMenu: false,
-        popupProps: {
-            hidden: true,
-        },
-        cellProps: {},
-    };
+  useEffect(() => {
+    dispatch(updateGameState(GameState.New));
+  }, []);
 
-    public componentWillMount () {
-        this.assignValues(this.props.game.mask);
-    }
+  useEffect(() => {
+    dispatch(resetGameTools());
+  }, [hidden]);
 
-    public componentWillUpdate (nextProps: GamePageProps, nextState: GamePageState) {
-        if (this.props.hidden && !nextProps.hidden) {
-            if (this.props.game.mask !== nextProps.game.mask) {
-                this.assignValues(nextProps.game.mask);
-            } else {
-                this.resetState();
-            }
-        }
-        if (this.state.cellMode !== nextState.cellMode) {
-            this.handleCellModeChange();
-        }
-    }
+  const sideMenuButtons: MenuButtonProps[] = [
+    {
+      value: "Return",
+      onClick: returnToLobby,
+    },
+    {
+      value: "Reset",
+      onClick: () => showResetPopup(dispatch),
+    },
+    {
+      value: "Check",
+      onClick: () => dispatch(checkForWin()),
+    },
+    {
+      value: "Solve",
+      onClick: () => showSolvePopup(dispatch),
+    },
+  ];
 
-    public render () {
-        const sideMenuButtons: MenuButtonProps[] = [
-            {
-                value: "Return",
-                onClick: this.props.returnToLobby,
-            },
-            {
-                value: "Reset",
-                onClick: this.enableResetPopup,
-            },
-            {
-                value: "Check",
-                onClick: () => this.checkForWin(this.state.cellProps, true),
-            },
-            {
-                value: "Solve",
-                onClick: this.enableSolvePopup,
-            },
-        ];
+  const onSelect = (e: React.FocusEvent<HTMLTextAreaElement> | React.MouseEvent<HTMLTextAreaElement>) => {
+    const cell = e.target as HTMLTextAreaElement;
+    const pos = getCellPosFromElement({ game, cell });
+    const props = cellProps[pos];
+    selectCellContent({ cell, props, cellMode });
+    dispatch(highLightCells(props));
+  };
 
-        return (
-            <div className={["game", this.props.hidden ? "hidden" : null].join(" ")}>
-                <SideMenu
-                    hidden={!this.state.toggleSideMenu}
-                    onClick={this.toggleSideMenu}
-                    buttons={sideMenuButtons}
-                />
-                <Popup {...this.state.popupProps} />
+  const onKeyup = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const cell = e.target as HTMLTextAreaElement;
+    const coor = findCoordinates(game.ratio, cell);
 
-                <div className="game-wrapper">
-					<SudokuTable
-						cellState={this.state.cellProps}
-						gameType={this.props.game.gameType}
-					/>
+    // removes notes from column, row and grid where the pencil value was inserted, if enabled in settings
+    dispatch(updateNotesCells(findCoordinates(game.ratio, cell)));
 
-                    <Slider onClick={this.toggleCellMode} />
-                </div>
-            </div>
-        );
-    }
+    // resets highlights, shows cell errors if enabled in settings and checks if game is solved
+    dispatch(updatePencilCells());
 
-    private resetState = () => {
-        this.setState({
-            cellMode: CellMode.Pencil,
-            toggleSideMenu: false,
-            popupProps: {
-                ...this.state.popupProps,
-                hidden: true,
-            },
-        });
-    }
+    // use arrow keys to move from cell to cell
+    arrowKeys(e.keyCode, coor);
+  };
 
-    private toggleSideMenu = () => {
-        this.setState({ toggleSideMenu: !this.state.toggleSideMenu });
-    }
+  const onInput = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
+    const cell = e.target as HTMLTextAreaElement;
+    const pos = getCellPosFromElement({ game, cell });
 
-    private toggleCellMode = () => {
-        this.setState({
-            cellMode: this.state.cellMode === CellMode.Pencil ? CellMode.Notes : CellMode.Pencil,
-        });
-    }
+    // Filters invalid inputs updates cell with new value and mode
+    dispatch(updateCellValue(pos, cell.value));
+  };
 
-    private enableMessagePopup = (
-        { text, buttons }: { text: JSX.Element, buttons: GameButtonProps[] },
-    ) => {
-        this.setState({
-            toggleSideMenu: false,
-            popupProps: {
-                text,
-                buttons,
-                hidden: false,
-            },
-        });
-    }
+  return (
+    <div className={cx("game", hidden && "hidden")}>
+      <SideMenu
+        hidden={(!isSideMenuOpen)}
+        onClick={() => dispatch(toggleSideMenu())}
+        buttons={sideMenuButtons}
+      />
+      <Popup {...popupProps} />
 
-    private disableMessagePopup = () => {
-        this.setState({
-            popupProps: {
-                ...this.state.popupProps,
-                hidden: true,
-            },
-        });
-    }
-
-    /**
-     * Assigns game values to corresponding cells.
-     */
-    private assignValues = (values: number[], isInitialValues = true) => {
-        const cellProps: TableCellsMap = {};
-        values.forEach((value, key) => {
-            const isReadOnlyCell =
-                (isInitialValues && value !== 0)
-                || (
-                    !isInitialValues
-                    && this.state.cellProps[key]
-                    && this.state.cellProps[key].mode === CellMode.ReadOnly
-                )
-            ;
-
-            cellProps[key] = {
-                value,
-                withHighlight: false,
-                withError: false,
-                mode: isReadOnlyCell ? CellMode.ReadOnly : CellMode.Pencil,
-                onFocus: isInitialValues ? this.onSelect : () => {},
-                onClick: isInitialValues ? this.onSelect : () => {},
-                onKeyup: isInitialValues ? this.onKeyup : () => {},
-                onInput: isInitialValues && value === 0 ? this.onInput : () => {},
-            };
-        });
-
-        this.setState({
-            cellProps,
-            cellMode: CellMode.Pencil,
-            popupProps: {
-                ...this.state.popupProps,
-                hidden: true,
-            },
-        });
-    }
-
-    private handleCellModeChange = () => {
-        const cellProps: TableCellsMap = {};
-
-        for (const key in this.state.cellProps) {
-            let mode = this.state.cellProps[key].mode;
-            if (!this.state.cellProps[key].value) {
-                mode = this.state.cellMode === CellMode.Pencil ? CellMode.Notes : CellMode.Pencil;
-            }
-
-            cellProps[key] = {
-                ...this.state.cellProps[key],
-                mode,
-            };
-        }
-
-        this.setState({ cellProps });
-    }
-
-    private enableResetPopup = () => {
-        this.enableMessagePopup({
-            text: <span>Are you sure you want to reset?</span>,
-            buttons: [
-                {
-                    size: GameButtonSize.Small,
-                    value: "Yes",
-                    onClick: () => this.assignValues(this.props.game.mask),
-                },
-                {
-                    size: GameButtonSize.Small,
-                    value: "No",
-                    onClick: this.disableMessagePopup,
-                },
-            ],
-        });
-    }
-
-    private enableSolvePopup = () => {
-        this.enableMessagePopup({
-            text: <span>Are you sure you want to solve?</span>,
-            buttons: [
-                {
-                    size: GameButtonSize.Small,
-                    value: "Yes",
-                    onClick: () => this.assignValues(this.props.game.matrix, false),
-                },
-                {
-                    size: GameButtonSize.Small,
-                    value: "No",
-                    onClick: this.disableMessagePopup,
-                },
-            ],
-        });
-    }
-
-    /**
-     * shows cell errors and checks if game is solved
-     */
-    private checkForWin = (cellProps: TableCellsMap, showError = false) => {
-        // Finds pencil mode cell duplicates from rows, cols and grids
-        const duplicates = showDuplicates(
-            cellProps,
-            this.props.game.gameType,
-            this.props.game.ratio,
-        );
-
-        const newCellProps: TableCellsMap = {};
-        // Resets highlights and updates errors if enabled in settings
-        const disableInGameError = getStorageKey(StorageKeys.DisableInGameError);
-        for (const key in cellProps) {
-            const pos = +key;
-            newCellProps[pos] = {
-                ...cellProps[pos],
-                withHighlight: false,
-                withError: disableInGameError ? false : duplicates.includes(pos),
-            };
-        }
-
-        let hasInvalidCells = false;
-        for (const key in newCellProps) {
-            if (newCellProps[key].mode === CellMode.Notes || !newCellProps[key].value) {
-                hasInvalidCells = true;
-                break;
-            }
-        }
-
-        // displays win message if conditions are met
-        if (duplicates.length === 0 && !hasInvalidCells) {
-            this.enableMessagePopup({
-                text: (
-                    <React.Fragment>
-                        <span>Correct!</span><br /><span>You have won the game!</span>
-                    </React.Fragment>
-                ),
-                buttons: [{
-                    size: GameButtonSize.Small,
-                    icon: checkSvg,
-                    onClick: this.disableMessagePopup,
-                }],
-            });
-
-            for (const key in newCellProps) {
-                newCellProps[key] = {
-                    ...newCellProps[key],
-                    onFocus: () => {},
-                    onClick: () => {},
-                    onKeyup: () => {},
-                    onInput: () => {},
-                };
-            }
-        }
-        // displays popup with info on game status
-        else if (showError) {
-            this.enableMessagePopup(
-                {
-                    text: duplicates.length > 0
-                        ? <span>Some cell values are incorrect.</span>
-                        : <span>Correct so far!</span>,
-                    buttons: [{
-                        size: GameButtonSize.Small,
-                        icon: checkSvg,
-                        onClick: this.disableMessagePopup,
-                    }],
-                },
-            );
-        }
-
-        return newCellProps;
-    }
-
-    private onSelect = (e: React.FocusEvent<HTMLTextAreaElement> | React.MouseEvent<HTMLTextAreaElement>) => {
-        const cell = e.target as HTMLTextAreaElement;
-        const { x, y } = findCoordinates(this.props.game.ratio, cell);
-        const pos = x * this.props.game.gameType + y;
-        const props = this.state.cellProps[pos];
-
-        // Selects clicked value. Gets triggered on cell focus
-        if (
-            (this.state.cellMode === CellMode.Notes && props.mode === CellMode.Pencil)
-            || (this.state.cellMode === CellMode.Pencil && props.mode !== CellMode.ReadOnly)
-        ) {
-            cell.select();
-        }
-
-        // Updates hightlight prop in all cells if enabled in settings
-        const disableHighlighting = getStorageKey(StorageKeys.DisableHighlighting);
-        if (!disableHighlighting) {
-            this.setState({ cellProps: highlight(this.state.cellProps, props) });
-        }
-    }
-
-    private onKeyup = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        const cell = e.target as HTMLTextAreaElement;
-        const coor = findCoordinates(this.props.game.ratio, cell);
-        const pos = coor.x * this.props.game.gameType + coor.y;
-        const props = this.state.cellProps[pos];
-
-        // removes notes from column, row and grid where the pencil value was inserted, if enabled in settings
-        const disableAutoNotesRemoval = getStorageKey(StorageKeys.DisableAutoNotesRemoval);
-        const cellProps = !disableAutoNotesRemoval
-            ? updateNotesCells(
-                this.state.cellMode,
-                this.props.game.gameType,
-                this.props.game.ratio,
-                this.state.cellProps,
-                props,
-                coor,
-            ) : this.state.cellProps;
-
-        // shows cell errors if enabled in settings and checks if game is solved
-        const cellPropsWithErrors = this.checkForWin(cellProps || this.state.cellProps);
-
-        // use arrow keys to move from cell to cell
-        arrowKeys(e.keyCode, coor);
-
-        this.setState({ cellProps: cellPropsWithErrors });
-    }
-
-    private onInput = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
-        const cell = e.target as HTMLTextAreaElement;
-        const { x, y } = findCoordinates(this.props.game.ratio, cell);
-        const pos = x * this.props.game.gameType + y;
-        const props = this.state.cellProps[pos];
-
-        // Filters invalid inputs or updates props from new input value
-        if (cell.value === "" || cell.value.match(/^[1-9]+$/g)) {
-            let value: number;
-
-            if (this.state.cellMode === CellMode.Pencil) {
-                value = parseInt(cell.value) || 0;
-            }
-            else {
-                const notes = cell.value
-                    .split("")
-                    .map(val => parseInt(val))
-                    .sort()
-                ;
-                value = parseInt(removeDuplicates(notes).join("")) || 0;
-            }
-
-            const cellProps = {
-                ...this.state.cellProps,
-                [pos]: {
-                    ...props,
-                    value,
-                    mode: this.state.cellMode,
-                },
-            };
-
-            this.setState({ cellProps });
-        }
-    }
-}
+      <div className="game-wrapper">
+        <SudokuTable
+          cellState={cellProps}
+          gameType={game.gameType}
+          onFocus={onSelect}
+          onClick={onSelect}
+          onKeyup={onKeyup}
+          onInput={onInput}
+        />
+        <Slider onClick={() => dispatch(toggleCellMode())} />
+      </div>
+    </div>
+  );
+};

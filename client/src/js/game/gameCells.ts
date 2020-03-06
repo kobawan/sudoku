@@ -1,4 +1,5 @@
 import { CellCoordinates } from "../consts";
+import { Game } from "../generator";
 
 /**
  * Returns coordinates of selected cell
@@ -11,6 +12,14 @@ export const findCoordinates = (gameRatio: number, selectedCell: HTMLTextAreaEle
     const coorGrid =
         Math.floor(coorRow / gameRatio) * gameRatio + Math.floor(coorCol / gameRatio);
     return { x: coorRow, y: coorCol, grid: coorGrid };
+};
+
+export const getCellPosFromElement = ({ game, cell }: {
+  cell: HTMLTextAreaElement,
+  game: Game,
+}) => {
+  const { x, y } = findCoordinates(game.ratio, cell);
+  return x * game.gameType + y;
 };
 
 /**
