@@ -1,49 +1,72 @@
-import * as React from "react";
+import React, { useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import cx from "classnames";
 
 import "./sideMenu.less";
 
 import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
 import { menuSvg } from "../svg/Icons";
+import { checkForWin } from "../game-page/ducks/actions";
+import { showResetPopup, showSolvePopup } from "../popup/ducks/actions";
+import { getSideMenuIsOpen } from "./ducks/selectors";
+import { toggleSideMenu } from "./ducks/actions";
 
-export interface SideMenuProps {
-    hidden: boolean;
-    onClick: () => void;
-    buttons: MenuButtonProps[];
+interface SideMenuProps {
+  returnToLobby: () => void;
 }
 
-export class SideMenu extends React.PureComponent<SideMenuProps> {
-    public render () {
-        const hidden = this.props.hidden ? "hidden" : "opened";
+export const SideMenu: React.FC<SideMenuProps> = ({ returnToLobby }) => {
+  const dispatch = useDispatch();
+  const isOpen = useSelector(getSideMenuIsOpen);
+  const onClick = useCallback(() => dispatch(toggleSideMenu()), []);
 
-        return (
-            <div className={`side-menu-container ${hidden}`}>
-                <div className="side-menu-overlay" onClick={this.props.onClick} />
-                <div className="side-menu">
-                    <div className="menu">
-                        <svg className="side-menu-logo">
-                            <text>Sudoku</text>
-                        </svg>
-                        <div className="buttons-wrapper">
-                            {mapPropsToMenuButtons(this.props.buttons)}
-                        </div>
-                        <span>
-                            <a
-                                href="https://github.com/kobawan"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                @kobawan
-                            </a>
-                        </span>
-                    </div>
-                    <div
-                        className="side-menu-button"
-                        onClick={this.props.onClick}
-                    >
-                        {menuSvg}
-                    </div>
-                </div>
-            </div>
-        );
-    }
-}
+  const sideMenuButtons: MenuButtonProps[] = [
+    {
+      value: "Return",
+      onClick: returnToLobby,
+    },
+    {
+      value: "Reset",
+      onClick: () => showResetPopup(dispatch),
+    },
+    {
+      value: "Check",
+      onClick: () => dispatch(checkForWin()),
+    },
+    {
+      value: "Solve",
+      onClick: () => showSolvePopup(dispatch),
+    },
+  ];
+
+  return (
+    <div className={cx("side-menu-container", isOpen ? "opened" : "hidden")}>
+      <div className="side-menu-overlay" onClick={onClick} />
+      <div className="side-menu">
+        <div className="menu">
+          <svg className="side-menu-logo">
+            <text>Sudoku</text>
+          </svg>
+          <div className="buttons-wrapper">
+            {mapPropsToMenuButtons(sideMenuButtons)}
+          </div>
+          <span>
+            <a
+              href="https://github.com/kobawan"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              @kobawan
+            </a>
+          </span>
+        </div>
+        <div
+          className="side-menu-button"
+          onClick={onClick}
+        >
+          {menuSvg}
+        </div>
+      </div>
+    </div>
+  );
+};

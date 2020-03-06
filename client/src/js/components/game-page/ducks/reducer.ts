@@ -2,10 +2,8 @@ import { Reducer } from "redux";
 import { CellMode, TableCellsMap } from "../../../consts";
 import {
   ToggleCellModeAction,
-  ToggleSideMenuAction,
   SetCellPropsAction,
   TOGGLE_CELL_MODE,
-  TOGGLE_SIDE_MENU,
   SET_CELL_PROPS,
   ResetGameToolsAction,
   RESET_GAME_TOOLS,
@@ -29,14 +27,12 @@ export enum GameState {
 
 interface State {
   cellMode: CellMode;
-  sideMenuIsOpen: boolean;
   cellProps: TableCellsMap;
   gameState: GameState;
 }
 
 type Actions = (
   ToggleCellModeAction
-  | ToggleSideMenuAction
   | SetCellPropsAction
   | SetCurrentGameAction
   | ResetGameToolsAction
@@ -47,7 +43,6 @@ type Actions = (
 
 const initialState: State = {
   cellMode: CellMode.Pencil,
-  sideMenuIsOpen: false,
   cellProps: {},
   gameState: GameState.New,
 };
@@ -87,8 +82,6 @@ export const gameReducer: Reducer<State, Actions> = (state = initialState, actio
           }
         }
       };
-    case TOGGLE_SIDE_MENU:
-      return { ...state, sideMenuIsOpen: !state.sideMenuIsOpen };
     case SET_GAME_STATE:
       return {
         ...state,
@@ -103,7 +96,6 @@ export const gameReducer: Reducer<State, Actions> = (state = initialState, actio
       return {
         ...state,
         cellMode: CellMode.Pencil,
-        sideMenuIsOpen: false,
       };
     case SET_CURRENT_GAME:
       return initialState;

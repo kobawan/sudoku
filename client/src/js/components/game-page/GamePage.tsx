@@ -4,19 +4,16 @@ import cx from "classnames";
 import "./gamePage.less";
 
 import { SideMenu } from "../side-menu/SideMenu";
-import { MenuButtonProps } from "../buttons/Button";
 import { Game } from "../../generator";
 import { SudokuTable } from "../sudoku-table/SudokuTable";
 import { Slider } from "../slider/Slider";
 import { useDispatch, useSelector } from "react-redux";
-import { getCellMode, getSideMenuIsOpen, getCellProps } from "./ducks/selectors";
+import { getCellMode, getCellProps } from "./ducks/selectors";
 import { selectCellContent } from "./helpers";
 import {
   resetGameTools,
-  toggleSideMenu,
   toggleCellMode,
   updateGameState,
-  checkForWin,
   highLightCells,
   updateNotesCells,
   updatePencilCells,
@@ -24,7 +21,6 @@ import {
 } from "./ducks/actions";
 import { GameState } from "./ducks/reducer";
 import { findCoordinates, arrowKeys, getCellPosFromElement } from "../../game/gameCells";
-import { showResetPopup, showSolvePopup } from "../popup/ducks/actions";
 
 export interface GamePageProps {
   hidden: boolean;
@@ -39,7 +35,6 @@ export const GamePage: React.FC<GamePageProps> = ({
 }) => {
   const dispatch = useDispatch();
   const cellMode = useSelector(getCellMode);
-  const isSideMenuOpen = useSelector(getSideMenuIsOpen);
   const cellProps = useSelector(getCellProps);
 
   useEffect(() => {
@@ -49,25 +44,6 @@ export const GamePage: React.FC<GamePageProps> = ({
   useEffect(() => {
     dispatch(resetGameTools());
   }, [hidden]);
-
-  const sideMenuButtons: MenuButtonProps[] = [
-    {
-      value: "Return",
-      onClick: returnToLobby,
-    },
-    {
-      value: "Reset",
-      onClick: () => showResetPopup(dispatch),
-    },
-    {
-      value: "Check",
-      onClick: () => dispatch(checkForWin()),
-    },
-    {
-      value: "Solve",
-      onClick: () => showSolvePopup(dispatch),
-    },
-  ];
 
   const onSelect = (e: React.FocusEvent<HTMLTextAreaElement> | React.MouseEvent<HTMLTextAreaElement>) => {
     const cell = e.target as HTMLTextAreaElement;
@@ -101,12 +77,7 @@ export const GamePage: React.FC<GamePageProps> = ({
 
   return (
     <div className={cx("game", hidden && "hidden")}>
-      <SideMenu
-        hidden={(!isSideMenuOpen)}
-        onClick={() => dispatch(toggleSideMenu())}
-        buttons={sideMenuButtons}
-      />
-
+      <SideMenu returnToLobby={returnToLobby} />
       <div className="game-wrapper">
         <SudokuTable
           cellState={cellProps}

@@ -15,9 +15,9 @@ import { getCellProps, getCellMode } from "./selectors";
 import { removeDuplicateNotesCells } from "../../../game/gameNotesCells";
 import { removeDuplicates } from "../../../utils/generalUtils";
 import { showWinPopup, showCheckPopup } from "../../popup/ducks/actions";
+import { toggleSideMenu } from "../../side-menu/ducks/actions";
 
 export const TOGGLE_CELL_MODE = "@game/TOGGLE_CELL_MODE";
-export const TOGGLE_SIDE_MENU = "@game/TOGGLE_SIDE_MENU";
 export const SET_CELL_PROPS = "@game/SET_CELL_PROPS";
 export const RESET_GAME_TOOLS = "@game/RESET_GAME_TOOLS";
 export const HIGHLIGHT_CELLS = "@game/HIGHLIGHT_CELLS";
@@ -27,11 +27,6 @@ export const SET_CELL_VALUE = "@game/SET_CELL_VALUE";
 export type ToggleCellModeAction = Action<typeof TOGGLE_CELL_MODE>;
 export const toggleCellMode = (): ToggleCellModeAction => ({
   type: TOGGLE_CELL_MODE,
-});
-
-export type ToggleSideMenuAction = Action<typeof TOGGLE_SIDE_MENU>;
-export const toggleSideMenu = (): ToggleSideMenuAction => ({
-  type: TOGGLE_SIDE_MENU,
 });
 
 export type SetCellPropsAction = ActionWithPayload<typeof SET_CELL_PROPS, TableCellsMap>;

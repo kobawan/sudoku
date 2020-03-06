@@ -3,8 +3,9 @@ import { PopupProps, PopupText } from "../../popup/Popup";
 import { Action, Dispatch } from "redux";
 import { GameButtonSize } from "../../buttons/Button";
 import { checkSvg } from "../../svg/Icons";
-import { updateGameState, toggleSideMenu } from "../../game-page/ducks/actions";
+import { updateGameState } from "../../game-page/ducks/actions";
 import { GameState } from "../../game-page/ducks/reducer";
+import { toggleSideMenu } from "../../side-menu/ducks/actions";
 
 export const SHOW_POPUP = "@popup/SHOW_POPUP";
 export const HIDE_POPUP = "@popup/HIDE_POPUP";
