@@ -4,7 +4,7 @@ import {
   sortByCols,
   sortByGrids,
 } from "../utils/arrayUtils";
-import { CellMode, TableCellsMap, CellCoordinates, GameType, BasicCellProps } from "../consts";
+import { CellMode, TableCellsMap, CellCoordinates, GameType, CellProps } from "../consts";
 
 const getDuplicateNotesCells = (
   gameType: GameType,
@@ -41,7 +41,7 @@ export const removeDuplicateNotesCells = (
   gameType: GameType,
   gameRatio: number,
   cellProps: TableCellsMap,
-  selectedCell: BasicCellProps,
+  selectedCell: CellProps,
   coor: CellCoordinates,
 ) => {
   const duplicates = getDuplicateNotesCells(gameType, gameRatio, cellProps, coor);

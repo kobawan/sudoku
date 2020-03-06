@@ -30,24 +30,15 @@ export enum CellMode {
   ReadOnly = "readOnly",
 }
 
-export interface CellHandlerProps {
-  onFocus: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
-  onKeyup: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-  onClick: (event: React.MouseEvent<HTMLTextAreaElement>) => void;
-  onInput: (event: React.SyntheticEvent<HTMLTextAreaElement>) => void;
-}
-
-export interface BasicCellProps {
+export interface CellProps {
   mode: CellMode;
   withHighlight: boolean;
   withError: boolean;
   value: number;
 }
 
-export type CellProps = BasicCellProps & CellHandlerProps;
-
 export interface TableCellsMap {
-  [key: number]: BasicCellProps;
+  [key: number]: CellProps;
 }
 
 export interface CellCoordinates {

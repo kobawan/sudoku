@@ -1,4 +1,4 @@
-import { TableCellsMap, CellMode, BasicCellProps } from "../../consts";
+import { TableCellsMap, CellMode, CellProps } from "../../consts";
 import { getStorageKey, StorageKeys } from "../../utils/localStorage";
 
 /**
@@ -96,7 +96,7 @@ export const hasInvalidEndgameCells = (cellProps: TableCellsMap) => {
   return false;
 };
 
-export const isCellHighlightable = (cell: BasicCellProps) => {
+export const isCellHighlightable = (cell: CellProps) => {
   return !!cell.value && cell.mode !== CellMode.Notes;
 };
 
@@ -105,7 +105,7 @@ export const canAutomaticallyUpdateNotesCells = ({
   selectedCell
 }: {
   cellMode: CellMode,
-  selectedCell: BasicCellProps,
+  selectedCell: CellProps,
 }) => {
   const disableAutoNotesRemoval = getStorageKey(StorageKeys.DisableAutoNotesRemoval);
   return (
@@ -122,7 +122,7 @@ export const selectCellContent = ({
   cellMode,
 }: {
   cell: HTMLTextAreaElement,
-  props: BasicCellProps,
+  props: CellProps,
   cellMode: CellMode,
 }) => {
   if (
@@ -136,7 +136,7 @@ export const selectCellContent = ({
 /**
  * Highlights pencil cells that have same value
  */
-export const updateCellsHighlight = (cellProps: TableCellsMap, selectedCell: BasicCellProps) => {
+export const updateCellsHighlight = (cellProps: TableCellsMap, selectedCell: CellProps) => {
   const newCellProps: TableCellsMap = {};
 
   for (const key in cellProps) {

@@ -1,4 +1,4 @@
-import { ActionWithPayload, TableCellsMap, AppThunk, CellCoordinates, CellMode, BasicCellProps } from "../../../consts";
+import { ActionWithPayload, TableCellsMap, AppThunk, CellCoordinates, CellMode, CellProps } from "../../../consts";
 import { Action } from "redux";
 import { Game } from "../../../generator";
 import { getDuplicates } from "../../../game/gameTable";
@@ -40,8 +40,8 @@ export const resetGameTools = (): ResetGameToolsAction => ({
   type: RESET_GAME_TOOLS,
 });
 
-export type HighLightCellsAction = ActionWithPayload<typeof HIGHLIGHT_CELLS, BasicCellProps>;
-export const highLightCells = (payload: BasicCellProps): HighLightCellsAction => ({
+export type HighLightCellsAction = ActionWithPayload<typeof HIGHLIGHT_CELLS, CellProps>;
+export const highLightCells = (payload: CellProps): HighLightCellsAction => ({
   type: HIGHLIGHT_CELLS,
   payload,
 });

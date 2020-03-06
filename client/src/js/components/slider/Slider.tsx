@@ -1,38 +1,20 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./slider.less";
 
-import { CellMode } from "../../consts";
+import { toggleCellMode } from "../game-page/ducks/actions";
+import { getCellMode } from "../game-page/ducks/selectors";
 
-export interface SliderProps {
-    onClick: () => void;
-}
+export const Slider: React.FC = () => {
+  const dispatch = useDispatch();
+  const cellMode = useSelector(getCellMode);
 
-export interface SliderState {
-    cellMode: CellMode;
-}
-
-export class Slider extends React.PureComponent<SliderProps, SliderState> {
-    public state: SliderState = {
-        cellMode: CellMode.Pencil,
-    };
-
-    public render () {
-        return (
-            <div className="game-buttons" onClick={this.handleClick}>
-                <span>Pencil</span>
-                <span>Notes</span>
-                <div className={`slider ${this.state.cellMode}-slider`} />
-            </div>
-        );
-    }
-
-    private handleClick = () => {
-        this.props.onClick();
-        this.setState({
-            cellMode: this.state.cellMode === CellMode.Pencil
-                ? CellMode.Notes
-                : CellMode.Pencil,
-        });
-    }
-}
+  return (
+    <div className="game-buttons" onClick={() => dispatch(toggleCellMode())}>
+      <span>Pencil</span>
+      <span>Notes</span>
+      <div className={`slider ${cellMode}-slider`} />
+    </div>
+  );
+};
