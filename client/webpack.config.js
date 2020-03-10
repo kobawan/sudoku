@@ -3,10 +3,13 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const devMode = process.env.NODE_ENV !== "production";
 
+const htmlFilePath = path.join(__dirname, "src", "assets", "index.html");
+const jsIndexFilePath = path.join(__dirname, "src", "js", "index.tsx");
+
 module.exports = {
   entry: [
-    path.join(__dirname, "src", "js", "index.tsx"),
-    path.join(__dirname, "src", "index.html"),
+    jsIndexFilePath,
+    htmlFilePath,
     "webpack-dev-server/client?http://localhost:8080",
   ],
   output: {
@@ -20,7 +23,7 @@ module.exports = {
   },
   devtool: devMode ? "inline-source-map" : "source-map",
   resolve: {
-    extensions: [".ts", ".tsx", ".jsx", ".js", ".json", ".less"]
+    extensions: [".ts", ".tsx", ".jsx", ".js", ".json", ".less"],
   },
   module: {
     rules: [
@@ -66,11 +69,11 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       favicon: path.join(__dirname, "src", "assets", "favicon.ico"),
-      template: path.join(__dirname, "src", "index.html"),
+      template: htmlFilePath,
     }),
     new MiniCssExtractPlugin({
-      filename: devMode ? '[name].css' : '[name].[hash].css',
-      chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+      filename: devMode ? "[name].css" : "[name].[hash].css",
+      chunkFilename: devMode ? "[id].css" : "[id].[hash].css",
     }),
   ],
   devServer: {
