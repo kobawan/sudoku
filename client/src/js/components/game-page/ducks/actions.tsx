@@ -1,4 +1,11 @@
-import { ActionWithPayload, TableCellsMap, AppThunk, CellCoordinates, CellMode, CellProps } from "../../../consts";
+import {
+  ActionWithPayload,
+  TableCellsMap,
+  AppThunk,
+  CellCoordinates,
+  CellMode,
+  CellProps,
+} from "../../../consts";
 import { Action } from "redux";
 import { Game } from "../../../generator";
 import { getDuplicates } from "../../../game/gameTable";
@@ -8,7 +15,7 @@ import {
   getNewCellProps,
   getEndgameCellProps,
   canAutomaticallyUpdateNotesCells,
-  resetCellStatus
+  resetCellStatus,
 } from "../helpers";
 import { GameState } from "./reducer";
 import { getCellProps, getCellMode } from "./selectors";
@@ -29,7 +36,10 @@ export const toggleCellMode = (): ToggleCellModeAction => ({
   type: TOGGLE_CELL_MODE,
 });
 
-export type SetCellPropsAction = ActionWithPayload<typeof SET_CELL_PROPS, TableCellsMap>;
+export type SetCellPropsAction = ActionWithPayload<
+  typeof SET_CELL_PROPS,
+  TableCellsMap
+>;
 export const setCellProps = (payload: TableCellsMap): SetCellPropsAction => ({
   type: SET_CELL_PROPS,
   payload,
@@ -40,25 +50,40 @@ export const resetGameTools = (): ResetGameToolsAction => ({
   type: RESET_GAME_TOOLS,
 });
 
-export type HighLightCellsAction = ActionWithPayload<typeof HIGHLIGHT_CELLS, CellProps>;
+export type HighLightCellsAction = ActionWithPayload<
+  typeof HIGHLIGHT_CELLS,
+  CellProps
+>;
 export const highLightCells = (payload: CellProps): HighLightCellsAction => ({
   type: HIGHLIGHT_CELLS,
   payload,
 });
 
-export type SetGameStateAction = ActionWithPayload<typeof SET_GAME_STATE, GameState>;
+export type SetGameStateAction = ActionWithPayload<
+  typeof SET_GAME_STATE,
+  GameState
+>;
 export const setGameState = (payload: GameState): SetGameStateAction => ({
   type: SET_GAME_STATE,
   payload,
 });
 
-export type SetCellValueAction = ActionWithPayload<typeof SET_CELL_VALUE, { pos: number, value: number }>;
-export const setCellValue = (payload: { pos: number, value: number }): SetCellValueAction => ({
+export type SetCellValueAction = ActionWithPayload<
+  typeof SET_CELL_VALUE,
+  { pos: number; value: number }
+>;
+export const setCellValue = (payload: {
+  pos: number;
+  value: number;
+}): SetCellValueAction => ({
   type: SET_CELL_VALUE,
   payload,
 });
 
-export const updateGameState = (gameState: GameState): AppThunk => (dispatch, getState) => {
+export const updateGameState = (gameState: GameState): AppThunk => (
+  dispatch,
+  getState
+) => {
   const game = getCurrentGame(getState());
   const cellProps = getCellProps(getState());
 
@@ -81,11 +106,7 @@ export const checkForWin = (): AppThunk => (dispatch, getState) => {
   const cellProps = getCellProps(getState());
 
   // Finds pencil mode cell duplicates from rows, cols and grids
-  const duplicates = getDuplicates(
-    cellProps,
-    game.gameType,
-    game.ratio,
-  );
+  const duplicates = getDuplicates(cellProps, game.gameType, game.ratio);
 
   const hasInvalidCells = hasInvalidEndgameCells(cellProps);
 
@@ -103,11 +124,7 @@ export const updatePencilCells = (): AppThunk => (dispatch, getState) => {
   const cellProps = getCellProps(getState());
 
   // Finds pencil mode cell duplicates from rows, cols and grids
-  const duplicates = getDuplicates(
-    cellProps,
-    game.gameType,
-    game.ratio,
-  );
+  const duplicates = getDuplicates(cellProps, game.gameType, game.ratio);
 
   // Resets highlights and updates errors if enabled in settings
   const newCellProps = resetCellStatus(cellProps, duplicates);
@@ -123,7 +140,10 @@ export const updatePencilCells = (): AppThunk => (dispatch, getState) => {
   }
 };
 
-export const updateNotesCells = (coor: CellCoordinates): AppThunk => (dispatch, getState) => {
+export const updateNotesCells = (coor: CellCoordinates): AppThunk => (
+  dispatch,
+  getState
+) => {
   const state = getState();
   const game = getCurrentGame(state) as Game;
   const cellProps = getCellProps(state);
@@ -141,7 +161,7 @@ export const updateNotesCells = (coor: CellCoordinates): AppThunk => (dispatch, 
     game.ratio,
     cellProps,
     props,
-    coor,
+    coor
   );
 
   if (!newCellProps) {
@@ -151,7 +171,10 @@ export const updateNotesCells = (coor: CellCoordinates): AppThunk => (dispatch, 
   dispatch(setCellProps(newCellProps));
 };
 
-export const updateCellValue = (pos: number, value: string): AppThunk => (dispatch, getState) => {
+export const updateCellValue = (pos: number, value: string): AppThunk => (
+  dispatch,
+  getState
+) => {
   if (value === "") {
     dispatch(setCellValue({ pos, value: 0 }));
     return;
@@ -164,10 +187,11 @@ export const updateCellValue = (pos: number, value: string): AppThunk => (dispat
     if (cellMode === CellMode.Pencil) {
       newValue = +value || 0;
     } else {
-      const notes = removeDuplicates(value
-        .split("")
-        .map(val => +val)
-        .sort()
+      const notes = removeDuplicates(
+        value
+          .split("")
+          .map(val => +val)
+          .sort()
       ).join("");
       newValue = +notes || 0;
     }

@@ -1,16 +1,18 @@
 import { removeDuplicates } from "../utils/generalUtils";
+import { sortByRows, sortByCols, sortByGrids } from "../utils/arrayUtils";
 import {
-  sortByRows,
-  sortByCols,
-  sortByGrids,
-} from "../utils/arrayUtils";
-import { CellMode, TableCellsMap, CellCoordinates, GameType, CellProps } from "../consts";
+  CellMode,
+  TableCellsMap,
+  CellCoordinates,
+  GameType,
+  CellProps,
+} from "../consts";
 
 const getDuplicateNotesCells = (
   gameType: GameType,
   gameRatio: number,
   cellProps: TableCellsMap,
-  coor: CellCoordinates,
+  coor: CellCoordinates
 ) => {
   const notesCellsRows = sortByRows(gameType, ({ arr, row, pos }) => {
     if (cellProps[pos].mode === CellMode.Notes && cellProps[pos].value) {
@@ -22,11 +24,15 @@ const getDuplicateNotesCells = (
       arr[col].push(pos);
     }
   });
-  const notesCellsGrids = sortByGrids(gameType, gameRatio, ({ arr, grid, pos }) => {
-    if (cellProps[pos].mode === CellMode.Notes && cellProps[pos].value) {
-      arr[grid].push(pos);
+  const notesCellsGrids = sortByGrids(
+    gameType,
+    gameRatio,
+    ({ arr, grid, pos }) => {
+      if (cellProps[pos].mode === CellMode.Notes && cellProps[pos].value) {
+        arr[grid].push(pos);
+      }
     }
-  });
+  );
   return removeDuplicates([
     ...notesCellsRows[coor.x],
     ...notesCellsCols[coor.y],
@@ -42,9 +48,14 @@ export const removeDuplicateNotesCells = (
   gameRatio: number,
   cellProps: TableCellsMap,
   selectedCell: CellProps,
-  coor: CellCoordinates,
+  coor: CellCoordinates
 ) => {
-  const duplicates = getDuplicateNotesCells(gameType, gameRatio, cellProps, coor);
+  const duplicates = getDuplicateNotesCells(
+    gameType,
+    gameRatio,
+    cellProps,
+    coor
+  );
   if (!duplicates.length) {
     return undefined;
   }
@@ -61,8 +72,7 @@ export const removeDuplicateNotesCells = (
         const notes = `${value}`
           .split("")
           .filter(val => `${selectedCell.value}` !== val)
-          .join("")
-        ;
+          .join("");
         value = +notes || 0;
       }
 

@@ -8,7 +8,7 @@ import { CellMode, TableCellsMap, GameType } from "../consts";
 export const getDuplicates = (
   cellProps: TableCellsMap,
   gameType: GameType,
-  gameRatio: number,
+  gameRatio: number
 ) => {
   const pencilCellsRows = sortByRows(gameType, ({ arr, row, pos }) => {
     if (cellProps[pos].mode !== CellMode.Notes && cellProps[pos].value) {
@@ -20,17 +20,23 @@ export const getDuplicates = (
       arr[col].push(pos);
     }
   });
-  const pencilCellsGrids = sortByGrids(gameType, gameRatio, ({ arr, grid, pos }) => {
-    if (cellProps[pos].mode !== CellMode.Notes && cellProps[pos].value) {
-      arr[grid].push(pos);
+  const pencilCellsGrids = sortByGrids(
+    gameType,
+    gameRatio,
+    ({ arr, grid, pos }) => {
+      if (cellProps[pos].mode !== CellMode.Notes && cellProps[pos].value) {
+        arr[grid].push(pos);
+      }
     }
-  });
-  const duplicates = removeDuplicates(findDuplicates(
-    pencilCellsRows,
-    pencilCellsCols,
-    pencilCellsGrids,
-    cellProps,
-  ));
+  );
+  const duplicates = removeDuplicates(
+    findDuplicates(
+      pencilCellsRows,
+      pencilCellsCols,
+      pencilCellsGrids,
+      cellProps
+    )
+  );
 
   return duplicates;
 };
@@ -42,7 +48,7 @@ const findDuplicates = (
   rows: number[][],
   cols: number[][],
   grids: number[][],
-  cellProps: TableCellsMap,
+  cellProps: TableCellsMap
 ) => {
   const arr: number[][] = [...rows, ...cols, ...grids];
   const duplicates: number[] = [];

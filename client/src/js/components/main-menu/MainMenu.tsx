@@ -5,9 +5,17 @@ import "./mainMenu.less";
 
 import { spinnerSvg } from "../svg/Icons";
 import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
-import { getLobbyIsLoading, getLobbyHasError, getHasCurrentGame } from "../app/ducks/selectors";
+import {
+  getLobbyIsLoading,
+  getLobbyHasError,
+  getHasCurrentGame,
+} from "../app/ducks/selectors";
 import { GameConfig, Page, GameDifficulty } from "../../consts";
-import { setPage, setLobbyMenuSection, startNewGame } from "../app/ducks/actions";
+import {
+  setPage,
+  setLobbyMenuSection,
+  startNewGame,
+} from "../app/ducks/actions";
 import { MenuSection } from "../menu-content/types";
 
 const menuSectionButtons = [
@@ -47,31 +55,27 @@ export const MainMenu: React.FC = () => {
     },
   ];
 
-  const rightColumn: MenuButtonProps[] = menuSectionButtons.map((section: MenuSection) => ({
-    value: section,
-    onClick: () => dispatch(setLobbyMenuSection(section)),
-  }));
+  const rightColumn: MenuButtonProps[] = menuSectionButtons.map(
+    (section: MenuSection) => ({
+      value: section,
+      onClick: () => dispatch(setLobbyMenuSection(section)),
+    })
+  );
 
   return (
     <>
       <h1 className="menu-logo">Sudoku</h1>
       <div className="column-container">
         {hasError && (
-          <h3>An error has occurred :(<br></br>Please refresh the page!</h3>
+          <h3>
+            An error has occurred :(<br></br>Please refresh the page!
+          </h3>
         )}
-        {isLoading && !hasError && (
-          <div className="loading">
-            {spinnerSvg}
-          </div>
-        )}
+        {isLoading && !hasError && <div className="loading">{spinnerSvg}</div>}
         {!isLoading && !hasError && (
           <>
-            <div className="column">
-              {mapPropsToMenuButtons(leftColumn)}
-            </div>
-            <div className="column">
-              {mapPropsToMenuButtons(rightColumn)}
-            </div>
+            <div className="column">{mapPropsToMenuButtons(leftColumn)}</div>
+            <div className="column">{mapPropsToMenuButtons(rightColumn)}</div>
           </>
         )}
       </div>

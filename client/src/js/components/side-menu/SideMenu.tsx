@@ -60,10 +60,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ returnToLobby }) => {
             </a>
           </span>
         </div>
-        <div
-          className="side-menu-button"
-          onClick={onClick}
-        >
+        <div className="side-menu-button" onClick={onClick}>
           {menuSvg}
         </div>
       </div>

@@ -7,7 +7,9 @@ export enum StorageKeys {
 
 type StorageKeysType = boolean | string;
 
-export const storageKeysToDefaultMap: { [key in StorageKeys]: StorageKeysType } = {
+export const storageKeysToDefaultMap: {
+  [key in StorageKeys]: StorageKeysType;
+} = {
   [StorageKeys.DisableInGameError]: false,
   [StorageKeys.DisableHighlighting]: false,
   [StorageKeys.DisableAutoNotesRemoval]: false,
@@ -29,5 +31,7 @@ export const getStorageKey = (key: StorageKeys): StorageKeysType => {
 export const setStorageKey = (key: StorageKeys, value: StorageKeysType) => {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
-  } catch {}
+  } catch {
+    console.error(`Local storage: Was not able to set item in key ${key}`);
+  }
 };

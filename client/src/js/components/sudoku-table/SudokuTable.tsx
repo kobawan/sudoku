@@ -2,7 +2,7 @@ import * as React from "react";
 
 import "./sudokuTable.less";
 
-import { Cell } from "./Cell";
+import { Cell } from "../sudoku-cell/Cell";
 import { TableCellsMap, GameType } from "../../consts";
 
 export interface SudokuTableProps {
@@ -20,23 +20,21 @@ export const SudokuTable: React.FC<SudokuTableProps> = ({
       const cols: JSX.Element[] = [];
       for (let col = 0; col < gameType; col++) {
         const props = cellState[row * gameType + col];
-        cols.push(<td key={col}><Cell {...props} /></td>);
+        cols.push(
+          <td key={col}>
+            <Cell {...props} />
+          </td>
+        );
       }
       rows.push(<tr key={row}>{cols}</tr>);
     }
 
-    return (
-      <React.Fragment>
-        {rows}
-      </React.Fragment>
-    );
+    return <>{rows}</>;
   };
 
   return (
     <table className="sudoku" id="SudokuTable">
-      <tbody>
-        {getTable()}
-      </tbody>
+      <tbody>{getTable()}</tbody>
     </table>
   );
 };

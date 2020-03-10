@@ -1,0 +1,40 @@
+module.exports = {
+  env: {
+    browser: true,
+    es6: true,
+  },
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint",
+  ],
+  globals: {
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly",
+  },
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 2018,
+    sourceType: "module",
+  },
+  plugins: ["react", "@typescript-eslint", "prettier"],
+  rules: {
+    "linebreak-style": ["error", "unix"],
+    quotes: ["error", "double"],
+    semi: ["error", "always"],
+    "no-unused-vars": 0,
+    "no-prototype-builtins": 0,
+    "react/prop-types": 0,
+    "prettier/prettier": "error",
+  },
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
+};

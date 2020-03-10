@@ -30,15 +30,17 @@ export const App: React.FC = () => {
     dispatch(handleCurrentUser(id));
   }, []);
 
-  return <>
-    <LobbyPage hidden={!isLobby} />
-    {!isLoading && currentGame && (
-      <GamePage
-        hidden={isLobby}
-        game={currentGame}
-        returnToLobby={returnToLobby}
-      />
-    )}
-    <Popup />
-  </>;
+  return (
+    <>
+      <LobbyPage hidden={!isLobby} />
+      {!isLoading && currentGame && (
+        <GamePage
+          hidden={isLobby}
+          game={currentGame}
+          returnToLobby={returnToLobby}
+        />
+      )}
+      <Popup />
+    </>
+  );
 };

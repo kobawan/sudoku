@@ -4,16 +4,17 @@ import cx from "classnames";
 import "./lobbyPage.less";
 
 import { MainMenu } from "../main-menu/MainMenu";
-import {
-  MenuSection,
-  SharedSectionProps,
-} from "../menu-content/types";
+import { MenuSection, SharedSectionProps } from "../menu-content/types";
 import { SettingsSection } from "../menu-content/SettingsSection";
 import { RulesSection } from "../menu-content/RulesSection";
 import { ContactsSection } from "../menu-content/ContactsSection";
 import { StatsSection } from "../menu-content/StatsSection";
 import { AboutSection } from "../menu-content/AboutSection";
-import { getLobbyIsLoading, getLobbyHasError, getLobbyMenuSection } from "../app/ducks/selectors";
+import {
+  getLobbyIsLoading,
+  getLobbyHasError,
+  getLobbyMenuSection,
+} from "../app/ducks/selectors";
 import { setLobbyMenuSection } from "../app/ducks/actions";
 
 type MapMenuSectionToComponentIndexSignature = {
@@ -36,9 +37,7 @@ export interface LobbyPageProps {
   hidden: boolean;
 }
 
-export const LobbyPage: React.FC<LobbyPageProps> = ({
-  hidden,
-}) => {
+export const LobbyPage: React.FC<LobbyPageProps> = ({ hidden }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(getLobbyIsLoading);
   const hasError = useSelector(getLobbyHasError);

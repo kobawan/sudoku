@@ -5,10 +5,23 @@ import cx from "classnames";
 import "./cell.less";
 
 import { CellMode, CellProps } from "../../consts";
-import { getCellPosFromElement, findCoordinates, arrowKeys } from "../../game/gameCells";
+import {
+  getCellPosFromElement,
+  findCoordinates,
+  arrowKeys,
+} from "../../game/gameCells";
 import { selectCellContent } from "../game-page/helpers";
-import { highLightCells, updateNotesCells, updatePencilCells, updateCellValue } from "../game-page/ducks/actions";
-import { getCellMode, getCellProps, areCellsDisabled } from "../game-page/ducks/selectors";
+import {
+  highLightCells,
+  updateNotesCells,
+  updatePencilCells,
+  updateCellValue,
+} from "../game-page/ducks/actions";
+import {
+  getCellMode,
+  getCellProps,
+  areCellsDisabled,
+} from "../game-page/ducks/selectors";
 import { getCurrentGame } from "../app/ducks/selectors";
 import { Game } from "../../generator";
 
@@ -24,7 +37,11 @@ export const Cell: React.FC<CellProps> = ({
   const game = useSelector(getCurrentGame) as Game;
   const isDisabled = useSelector(areCellsDisabled);
 
-  const onSelect = (e: React.FocusEvent<HTMLTextAreaElement> | React.MouseEvent<HTMLTextAreaElement>) => {
+  const onSelect = (
+    e:
+      | React.FocusEvent<HTMLTextAreaElement>
+      | React.MouseEvent<HTMLTextAreaElement>
+  ) => {
     const cell = e.target as HTMLTextAreaElement;
     const pos = getCellPosFromElement({ game, cell });
     const props = cellProps[pos];
@@ -32,7 +49,7 @@ export const Cell: React.FC<CellProps> = ({
     dispatch(highLightCells(props));
   };
 
-  const onKeyup = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const onKeyup: React.KeyboardEventHandler<HTMLTextAreaElement> = e => {
     const cell = e.target as HTMLTextAreaElement;
     const coor = findCoordinates(game.ratio, cell);
 
@@ -46,7 +63,7 @@ export const Cell: React.FC<CellProps> = ({
     arrowKeys(e.keyCode, coor);
   };
 
-  const onInput = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
+  const onInput: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
     const cell = e.target as HTMLTextAreaElement;
     const pos = getCellPosFromElement({ game, cell });
 
@@ -58,7 +75,7 @@ export const Cell: React.FC<CellProps> = ({
     <textarea
       readOnly={mode === CellMode.ReadOnly || isDisabled}
       maxLength={mode !== CellMode.Notes ? 1 : 9}
-      rows= {1}
+      rows={1}
       cols={1}
       value={value || ""}
       className={cx(
@@ -70,7 +87,7 @@ export const Cell: React.FC<CellProps> = ({
       onKeyUp={!isDisabled ? onKeyup : undefined}
       onFocus={!isDisabled ? onSelect : undefined}
       onClick={!isDisabled ? onSelect : undefined}
-      onInput={!isDisabled && mode !== CellMode.ReadOnly ? onInput : undefined}
+      onChange={!isDisabled && mode !== CellMode.ReadOnly ? onInput : undefined}
     />
   );
 };
