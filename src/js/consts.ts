@@ -57,8 +57,7 @@ export interface UserData {
   game: GameData;
 }
 
-// TODO: add production endpoint for server
-export const serverEndpoint = process.env.NODE_ENV === "development" ? "http://localhost:4000" : "";
+export const serverEndpoint = "https://damp-refuge-15092.herokuapp.com";
 
 export interface ActionWithPayload<T, P> extends Action<T> {
   payload: P;
