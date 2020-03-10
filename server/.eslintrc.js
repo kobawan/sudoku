@@ -5,7 +5,6 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
-    "plugin:react/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:prettier/recommended",
     "prettier/@typescript-eslint",
@@ -16,23 +15,13 @@ module.exports = {
   },
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  plugins: ["react", "@typescript-eslint", "prettier"],
+  plugins: ["@typescript-eslint"],
   rules: {
     "linebreak-style": ["error", "unix"],
     "no-unused-vars": 0,
-    "no-prototype-builtins": 0,
-    "react/prop-types": 0,
     "prettier/prettier": "error",
-  },
-  settings: {
-    react: {
-      version: "detect",
-    },
   },
 };

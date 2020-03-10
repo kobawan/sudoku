@@ -15,7 +15,10 @@ export class UserController {
     }
   }
 
-  public static async registerUser(_req: Request, res: Response): Promise<Response> {
+  public static async registerUser(
+    _req: Request,
+    res: Response
+  ): Promise<Response> {
     try {
       const newGame = new UserModel({
         game: {},
