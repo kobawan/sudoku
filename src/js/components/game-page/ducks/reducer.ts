@@ -14,8 +14,11 @@ import {
   SetCellValueAction,
   SET_CELL_VALUE,
 } from "./actions";
-import { SET_CURRENT_GAME, SetCurrentGameAction } from "../../app/ducks/actions";
-import { updateCellsCellMode, updateCellsHighlight } from "../helpers";
+import {
+  SET_CURRENT_GAME,
+  SetCurrentGameAction,
+} from "../../app/ducks/actions";
+import { updateCellsCellMode, updateCellsHighlight } from "../helpers/helpers";
 import { getStorageKey, StorageKeys } from "../../../utils/localStorage";
 
 export enum GameState {
@@ -31,15 +34,14 @@ interface State {
   gameState: GameState;
 }
 
-type Actions = (
-  ToggleCellModeAction
+type Actions =
+  | ToggleCellModeAction
   | SetCellPropsAction
   | SetCurrentGameAction
   | ResetGameToolsAction
   | HighLightCellsAction
   | SetGameStateAction
-  | SetCellValueAction
-);
+  | SetCellValueAction;
 
 const initialState: State = {
   cellMode: CellMode.Pencil,
@@ -47,18 +49,24 @@ const initialState: State = {
   gameState: GameState.New,
 };
 
-export const gameReducer: Reducer<State, Actions> = (state = initialState, action) => {
+export const gameReducer: Reducer<State, Actions> = (
+  state = initialState,
+  action
+) => {
   const { cellMode, cellProps } = state;
   switch (action.type) {
     case TOGGLE_CELL_MODE:
-      const newCellMode = cellMode === CellMode.Pencil ? CellMode.Notes : CellMode.Pencil;
+      const newCellMode =
+        cellMode === CellMode.Pencil ? CellMode.Notes : CellMode.Pencil;
       return {
         ...state,
         cellMode: newCellMode,
         cellProps: updateCellsCellMode(cellProps, newCellMode),
       };
     case HIGHLIGHT_CELLS:
-      const disableHighlighting = getStorageKey(StorageKeys.DisableHighlighting);
+      const disableHighlighting = getStorageKey(
+        StorageKeys.DisableHighlighting
+      );
       if (disableHighlighting) {
         return state;
       }
@@ -79,8 +87,8 @@ export const gameReducer: Reducer<State, Actions> = (state = initialState, actio
             ...props,
             value,
             mode: state.cellMode,
-          }
-        }
+          },
+        },
       };
     case SET_GAME_STATE:
       return {

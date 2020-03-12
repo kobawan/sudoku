@@ -4,7 +4,7 @@ import cx from "classnames";
 import "./gamePage.less";
 
 import { SideMenu } from "../side-menu/SideMenu";
-import { Game } from "../../generator";
+import { Game } from "../../generator/generator";
 import { SudokuTable } from "../sudoku-table/SudokuTable";
 import { Slider } from "../slider/Slider";
 import { useDispatch, useSelector } from "react-redux";

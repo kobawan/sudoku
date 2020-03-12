@@ -1,5 +1,5 @@
-import { TableCellsMap, CellMode, CellProps } from "../../consts";
-import { getStorageKey, StorageKeys } from "../../utils/localStorage";
+import { TableCellsMap, CellMode, CellProps } from "../../../consts";
+import { getStorageKey, StorageKeys } from "../../../utils/localStorage";
 
 /**
  * Assigns new game values to corresponding cells.
@@ -22,13 +22,14 @@ export const getNewCellProps = (values: number[]) => {
 /**
  * Assigns end game values to corresponding cells.
  */
-export const getEndgameCellProps = (values: number[], currentCellProps: TableCellsMap) => {
+export const getEndgameCellProps = (
+  values: number[],
+  currentCellProps: TableCellsMap
+) => {
   const cellProps: TableCellsMap = {};
   values.forEach((value, key) => {
-    const isReadOnlyCell = (
-      currentCellProps[key]
-      && currentCellProps[key].mode === CellMode.ReadOnly
-    );
+    const isReadOnlyCell =
+      currentCellProps[key] && currentCellProps[key].mode === CellMode.ReadOnly;
 
     cellProps[key] = {
       value,
@@ -43,7 +44,10 @@ export const getEndgameCellProps = (values: number[], currentCellProps: TableCel
 /**
  * Resets highlights and updates errors if enabled in settings
  */
-export const resetCellStatus = (cellProps: TableCellsMap, duplicates: number[]) => {
+export const resetCellStatus = (
+  cellProps: TableCellsMap,
+  duplicates: number[]
+) => {
   const newCellProps: TableCellsMap = {};
   const disableInGameError = getStorageKey(StorageKeys.DisableInGameError);
   const disableHighlighting = getStorageKey(StorageKeys.DisableHighlighting);
@@ -66,14 +70,15 @@ export const resetCellStatus = (cellProps: TableCellsMap, duplicates: number[]) 
   return newCellProps;
 };
 
-export const updateCellsCellMode = (cellProps: TableCellsMap, cellMode: CellMode) => {
+export const updateCellsCellMode = (
+  cellProps: TableCellsMap,
+  cellMode: CellMode
+) => {
   const newCellProps: TableCellsMap = {};
   for (const key in cellProps) {
     if (cellProps.hasOwnProperty(key)) {
       const props = cellProps[key];
-      newCellProps[key] = props.value
-        ? props
-        : { ...props, mode: cellMode };
+      newCellProps[key] = props.value ? props : { ...props, mode: cellMode };
     }
   }
 
@@ -86,9 +91,9 @@ export const updateCellsCellMode = (cellProps: TableCellsMap, cellMode: CellMode
 export const hasInvalidEndgameCells = (cellProps: TableCellsMap) => {
   for (const key in cellProps) {
     if (
-      cellProps.hasOwnProperty(key)
-      && cellProps[key].mode === CellMode.Notes
-      || !cellProps[key].value
+      (cellProps.hasOwnProperty(key) &&
+        cellProps[key].mode === CellMode.Notes) ||
+      !cellProps[key].value
     ) {
       return true;
     }
@@ -102,46 +107,36 @@ export const isCellHighlightable = (cell: CellProps) => {
 
 export const canAutomaticallyUpdateNotesCells = ({
   cellMode,
-  selectedCell
+  selectedCell,
 }: {
-  cellMode: CellMode,
-  selectedCell: CellProps,
+  cellMode: CellMode;
+  selectedCell: CellProps;
 }) => {
-  const disableAutoNotesRemoval = getStorageKey(StorageKeys.DisableAutoNotesRemoval);
-  return (
-    cellMode === CellMode.Pencil
-    && selectedCell.mode === CellMode.Pencil
-    && selectedCell.value
-    && !disableAutoNotesRemoval
+  const disableAutoNotesRemoval = getStorageKey(
+    StorageKeys.DisableAutoNotesRemoval
   );
-};
-
-export const selectCellContent = ({
-  cell,
-  props,
-  cellMode,
-}: {
-  cell: HTMLTextAreaElement,
-  props: CellProps,
-  cellMode: CellMode,
-}) => {
-  if (
-      (cellMode === CellMode.Notes && props.mode === CellMode.Pencil)
-      || (cellMode === CellMode.Pencil && props.mode !== CellMode.ReadOnly)
-  ) {
-      cell.select();
-  }
+  return (
+    cellMode === CellMode.Pencil &&
+    selectedCell.mode === CellMode.Pencil &&
+    selectedCell.value &&
+    !disableAutoNotesRemoval
+  );
 };
 
 /**
  * Highlights pencil cells that have same value
  */
-export const updateCellsHighlight = (cellProps: TableCellsMap, selectedCell: CellProps) => {
+export const updateCellsHighlight = (
+  cellProps: TableCellsMap,
+  selectedCell: CellProps
+) => {
   const newCellProps: TableCellsMap = {};
 
   for (const key in cellProps) {
     if (cellProps.hasOwnProperty(key)) {
-      const matchesValue = cellProps[key].mode !== CellMode.Notes && selectedCell.value === cellProps[key].value;
+      const matchesValue =
+        cellProps[key].mode !== CellMode.Notes &&
+        selectedCell.value === cellProps[key].value;
       newCellProps[key] = {
         ...cellProps[key],
         withHighlight: isCellHighlightable(selectedCell) && matchesValue,

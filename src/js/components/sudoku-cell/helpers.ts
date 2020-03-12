@@ -1,5 +1,5 @@
-import { CellCoordinates } from "../consts";
-import { Game } from "../generator";
+import { CellCoordinates, CellProps, CellMode } from "../../consts";
+import { Game } from "../../generator/generator";
 
 /**
  * Returns coordinates of selected cell
@@ -59,4 +59,21 @@ export const arrowKeys = (keyCode: number, coor: CellCoordinates) => {
   const nextCell = sudokuTable.rows[coorRow].cells[coorCol]
     .children[0] as HTMLTextAreaElement;
   nextCell.focus();
+};
+
+export const selectCellContent = ({
+  cell,
+  props,
+  cellMode,
+}: {
+  cell: HTMLTextAreaElement;
+  props: CellProps;
+  cellMode: CellMode;
+}) => {
+  if (
+    (cellMode === CellMode.Notes && props.mode === CellMode.Pencil) ||
+    (cellMode === CellMode.Pencil && props.mode !== CellMode.ReadOnly)
+  ) {
+    cell.select();
+  }
 };

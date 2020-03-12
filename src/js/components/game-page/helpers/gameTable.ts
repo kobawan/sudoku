@@ -1,6 +1,6 @@
-import { removeDuplicates } from "../utils/generalUtils";
-import { sortByRows, sortByCols, sortByGrids } from "../utils/arrayUtils";
-import { CellMode, TableCellsMap, GameType } from "../consts";
+import { removeDuplicates } from "../../../utils/generalUtils";
+import { sortByRows, sortByCols, sortByGrids } from "../../../utils/arrayUtils";
+import { CellMode, TableCellsMap, GameType } from "../../../consts";
 
 /**
  * Finds pencil mode cell duplicates from rows, cols and grids

@@ -1,5 +1,5 @@
 import { Reducer } from "redux";
-import { Game } from "../../../generator";
+import { Game } from "../../../generator/generator";
 import { Page } from "../../../consts";
 import {
   SetPageAction,
@@ -23,13 +23,12 @@ interface State {
   lobbyMenuSection: MenuSection | undefined;
 }
 
-type Actions = (
-  SetPageAction
+type Actions =
+  | SetPageAction
   | SetCurrentGameAction
   | SetLobbyHasErrorAction
   | SetLobbyIsLoadingAction
-  | SetLobbyMenuSectionAction
-);
+  | SetLobbyMenuSectionAction;
 
 const initialState: State = {
   page: Page.Menu,
@@ -39,7 +38,10 @@ const initialState: State = {
   lobbyMenuSection: undefined,
 };
 
-export const appReducer: Reducer<State, Actions> = (state = initialState, action) => {
+export const appReducer: Reducer<State, Actions> = (
+  state = initialState,
+  action
+) => {
   switch (action.type) {
     case SET_PAGE:
       return { ...state, page: action.payload };

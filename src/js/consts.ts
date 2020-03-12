@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { Game } from "./generator";
+import { Game } from "./generator/generator";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "./store";
 
@@ -56,8 +56,6 @@ export interface UserData {
   _id: string;
   game: GameData;
 }
-
-export const serverEndpoint = "https://damp-refuge-15092.herokuapp.com";
 
 export interface ActionWithPayload<T, P> extends Action<T> {
   payload: P;

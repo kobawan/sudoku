@@ -1,12 +1,12 @@
-import { removeDuplicates } from "../utils/generalUtils";
-import { sortByRows, sortByCols, sortByGrids } from "../utils/arrayUtils";
+import { removeDuplicates } from "../../../utils/generalUtils";
+import { sortByRows, sortByCols, sortByGrids } from "../../../utils/arrayUtils";
 import {
   CellMode,
   TableCellsMap,
   CellCoordinates,
   GameType,
   CellProps,
-} from "../consts";
+} from "../../../consts";
 
 const getDuplicateNotesCells = (
   gameType: GameType,

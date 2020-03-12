@@ -7,8 +7,8 @@ import {
   CellProps,
 } from "../../../consts";
 import { Action } from "redux";
-import { Game } from "../../../generator";
-import { getDuplicates } from "../../../game/gameTable";
+import { Game } from "../../../generator/generator";
+import { getDuplicates } from "../helpers/gameTable";
 import { getCurrentGame } from "../../app/ducks/selectors";
 import {
   hasInvalidEndgameCells,
@@ -16,10 +16,10 @@ import {
   getEndgameCellProps,
   canAutomaticallyUpdateNotesCells,
   resetCellStatus,
-} from "../helpers";
+} from "../helpers/helpers";
 import { GameState } from "./reducer";
 import { getCellProps, getCellMode } from "./selectors";
-import { removeDuplicateNotesCells } from "../../../game/gameNotesCells";
+import { removeDuplicateNotesCells } from "../helpers/gameNotesCells";
 import { removeDuplicates } from "../../../utils/generalUtils";
 import { showWinPopup, showCheckPopup } from "../../popup/ducks/actions";
 import { toggleSideMenu } from "../../side-menu/ducks/actions";

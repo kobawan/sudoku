@@ -9,8 +9,8 @@ import {
   getCellPosFromElement,
   findCoordinates,
   arrowKeys,
-} from "../../game/gameCells";
-import { selectCellContent } from "../game-page/helpers";
+  selectCellContent,
+} from "./helpers";
 import {
   highLightCells,
   updateNotesCells,
@@ -23,7 +23,7 @@ import {
   areCellsDisabled,
 } from "../game-page/ducks/selectors";
 import { getCurrentGame } from "../app/ducks/selectors";
-import { Game } from "../../generator";
+import { Game } from "../../generator/generator";
 
 export const Cell: React.FC<CellProps> = ({
   mode,
