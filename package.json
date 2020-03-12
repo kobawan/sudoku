@@ -11,7 +11,8 @@
     "lesshint": "lesshint 'src/**/*.less'",
     "lint": "npm run prettier:fix && npm run eslint",
     "start": "webpack-dev-server --mode=development",
-    "build": "webpack --mode=production"
+    "build": "npm run eslint && webpack --mode=production",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
     "file-loader": "^5.0.2",
+    "gh-pages": "^2.2.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "less": "^3.10.3",
