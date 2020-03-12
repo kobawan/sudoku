@@ -55,7 +55,7 @@ export const gameReducer: Reducer<State, Actions> = (
 ) => {
   const { cellMode, cellProps } = state;
   switch (action.type) {
-    case TOGGLE_CELL_MODE:
+    case TOGGLE_CELL_MODE: {
       const newCellMode =
         cellMode === CellMode.Pencil ? CellMode.Notes : CellMode.Pencil;
       return {
@@ -63,7 +63,8 @@ export const gameReducer: Reducer<State, Actions> = (
         cellMode: newCellMode,
         cellProps: updateCellsCellMode(cellProps, newCellMode),
       };
-    case HIGHLIGHT_CELLS:
+    }
+    case HIGHLIGHT_CELLS: {
       const disableHighlighting = getStorageKey(
         StorageKeys.DisableHighlighting
       );
@@ -75,7 +76,8 @@ export const gameReducer: Reducer<State, Actions> = (
         ...state,
         cellProps: updateCellsHighlight(cellProps, action.payload),
       };
-    case SET_CELL_VALUE:
+    }
+    case SET_CELL_VALUE: {
       const { pos, value } = action.payload;
       const props = state.cellProps[pos];
 
@@ -90,24 +92,30 @@ export const gameReducer: Reducer<State, Actions> = (
           },
         },
       };
-    case SET_GAME_STATE:
+    }
+    case SET_GAME_STATE: {
       return {
         ...state,
         gameState: action.payload,
       };
-    case SET_CELL_PROPS:
+    }
+    case SET_CELL_PROPS: {
       return {
         ...state,
         cellProps: action.payload,
       };
-    case RESET_GAME_TOOLS:
+    }
+    case RESET_GAME_TOOLS: {
       return {
         ...state,
         cellMode: CellMode.Pencil,
       };
-    case SET_CURRENT_GAME:
+    }
+    case SET_CURRENT_GAME: {
       return initialState;
-    default:
+    }
+    default: {
       return state;
+    }
   }
 };

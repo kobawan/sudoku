@@ -1,23 +1,8 @@
-import axios from "axios";
-import {
-  Page,
-  UserData,
-  ActionWithPayload,
-  AppThunk,
-  GameConfig,
-} from "../../../consts";
+import { Page, ActionWithPayload, AppThunk, GameConfig } from "../../../consts";
 import { Game } from "../../../generator/generator";
 import { MenuSection } from "../../menu-content/types";
-import {
-  setStorageKey,
-  StorageKeys,
-  getStorageKey,
-} from "../../../utils/localStorage";
-import {
-  REGISTER_USER,
-  getUserEndpoint,
-  SAVE_GAME,
-} from "../../../utils/server";
+import { setStorageKey, StorageKeys } from "../../../utils/localStorage";
+import { registerUser, isErrorResponse, getUser, saveGame } from "./requests";
 
 export const SET_PAGE = "@app/SET_PAGE";
 export const SET_CURRENT_GAME = "@app/SET_CURRENT_GAME";
@@ -71,21 +56,12 @@ export const setLobbyMenuSection = (
   payload,
 });
 
-interface ErrorResponse {
-  message: string;
-  status: number;
-}
-
-const isErrorResponse = <D>(data: D | ErrorResponse): data is ErrorResponse => {
-  return (data as ErrorResponse).status !== undefined;
-};
-
 // THUNKS
 export const handleNewUser = (): AppThunk => async dispatch => {
   dispatch(setLobbyIsLoading(true));
 
   try {
-    const { data } = await axios.post<string | ErrorResponse>(REGISTER_USER);
+    const { data } = await registerUser();
     if (isErrorResponse(data)) {
       throw data;
     }
@@ -101,9 +77,7 @@ export const handleCurrentUser = (id: string): AppThunk => async dispatch => {
   dispatch(setLobbyIsLoading(true));
 
   try {
-    const { data } = await axios.get<UserData | ErrorResponse>(
-      getUserEndpoint(id)
-    );
+    const { data } = await getUser(id);
     if (isErrorResponse(data)) {
       throw data;
     }
@@ -118,14 +92,12 @@ export const handleCurrentUser = (id: string): AppThunk => async dispatch => {
 export const startNewGame = (props: GameConfig): AppThunk => async dispatch => {
   dispatch(setLobbyIsLoading(true));
   const game = new Game(props);
+  const { shuffle, ...config } = game;
 
   try {
     // TODO: Also record state
-    const { data } = await axios.post<null | ErrorResponse>(SAVE_GAME, {
-      config: game,
-      state: "",
-      id: getStorageKey(StorageKeys.UserId),
-    });
+    const { data } = await saveGame(config, "initialState");
+    console.log(data);
 
     if (isErrorResponse(data)) {
       throw data;

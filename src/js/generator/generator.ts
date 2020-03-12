@@ -7,7 +7,7 @@ export class Game {
   public readonly ratio: number;
   public readonly matrix: number[] = []; // Array of result ordered by rows
   public readonly mask: number[] = []; // Array of masked result ordered by rows
-  private readonly shuffle: number;
+  public readonly shuffle: number;
 
   constructor(props: GameConfig) {
     this.gameType = props.type || GameType.Default;
