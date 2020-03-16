@@ -127,6 +127,7 @@ export const handleCurrentUser = (id: string): AppThunk => async dispatch => {
 export const startNewGame = (props: GameConfig): AppThunk => async dispatch => {
   dispatch(setLobbyIsLoading(true));
   const game = new Game(props);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { shuffle, ...config } = game;
 
   try {

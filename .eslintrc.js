@@ -23,8 +23,8 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react", "@typescript-eslint", "prettier"],
+  ignorePatterns: ["webpack.config.js", "node_modules"],
   rules: {
-    "linebreak-style": ["error", "unix"],
     "no-prototype-builtins": 0,
     "no-unused-vars": 0,
     "@typescript-eslint/no-unused-vars": "warn",

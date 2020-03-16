@@ -6,15 +6,21 @@ const devMode = process.env.NODE_ENV !== "production";
 const htmlFilePath = path.join(__dirname, "src", "assets", "index.html");
 const jsIndexFilePath = path.join(__dirname, "src", "js", "index.tsx");
 
+const entries = [jsIndexFilePath, htmlFilePath];
+if (devMode) {
+  entries.push("webpack-dev-server/client?http://localhost:8080");
+}
+
 module.exports = {
-  entry: [
-    jsIndexFilePath,
-    htmlFilePath,
-    "webpack-dev-server/client?http://localhost:8080",
-  ],
+  entry: entries,
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
+  },
+  stats: {
+    entrypoints: false,
+    modules: false,
+    children: false,
   },
   optimization: {
     splitChunks: {
@@ -52,7 +58,8 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        loader: "ts-loader",
+        exclude: /node_modules/,
+        loader: ["ts-loader", "eslint-loader"],
       },
       {
         exclude: path.join(__dirname, "node_modules"),
@@ -76,8 +83,10 @@ module.exports = {
       chunkFilename: devMode ? "[id].css" : "[id].[hash].css",
     }),
   ],
-  devServer: {
-    contentBase: path.join(__dirname, "dist"),
-    compress: true,
-  },
+  devServer: devMode
+    ? {
+        contentBase: path.join(__dirname, "dist"),
+        compress: true,
+      }
+    : undefined,
 };

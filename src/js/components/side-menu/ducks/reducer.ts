@@ -1,26 +1,31 @@
 import { Reducer } from "redux";
+import { ToggleSideMenuAction, TOGGLE_SIDE_MENU } from "./actions";
 import {
-  ToggleSideMenuAction,
-  TOGGLE_SIDE_MENU,
-} from "./actions";
-import { SET_CURRENT_GAME, SetCurrentGameAction } from "../../app/ducks/actions";
-import { ResetGameToolsAction, RESET_GAME_TOOLS } from "../../game-page/ducks/actions";
+  SET_CURRENT_GAME,
+  SetCurrentGameAction,
+} from "../../app/ducks/actions";
+import {
+  ResetGameToolsAction,
+  RESET_GAME_TOOLS,
+} from "../../game-page/ducks/actions";
 
 interface State {
   isOpen: boolean;
 }
 
-type Actions = (
+type Actions =
   | ToggleSideMenuAction
   | SetCurrentGameAction
-  | ResetGameToolsAction
-);
+  | ResetGameToolsAction;
 
 const initialState: State = {
   isOpen: false,
 };
 
-export const sideMenuReducer: Reducer<State, Actions> = (state = initialState, action) => {
+export const sideMenuReducer: Reducer<State, Actions> = (
+  state = initialState,
+  action
+) => {
   switch (action.type) {
     case TOGGLE_SIDE_MENU:
       return { ...state, isOpen: !state.isOpen };
