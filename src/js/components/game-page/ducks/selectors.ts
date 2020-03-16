@@ -1,4 +1,4 @@
-import { RootState } from "../../../store";
+import { RootState } from "../../../ducks/store";
 import { GameState } from "./reducer";
 
 export const getCellMode = (state: RootState) => state.game.cellMode;

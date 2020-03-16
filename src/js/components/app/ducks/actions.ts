@@ -2,13 +2,22 @@ import { Page, ActionWithPayload, AppThunk, GameConfig } from "../../../consts";
 import { Game } from "../../../generator/generator";
 import { MenuSection } from "../../menu-content/types";
 import { setStorageKey, StorageKeys } from "../../../utils/localStorage";
-import { registerUser, isErrorResponse, getUser, saveGame } from "./requests";
+import {
+  registerUser,
+  isErrorResponse,
+  getUser,
+  saveGame,
+  ErrorResponse,
+} from "./requests";
+import { HTTPStatusCode } from "../../../utils/errorCodes";
 
 export const SET_PAGE = "@app/SET_PAGE";
 export const SET_CURRENT_GAME = "@app/SET_CURRENT_GAME";
 export const SET_LOBBY_IS_LOADING = "@app/SET_LOBBY_IS_LOADING";
 export const SET_LOBBY_HAS_ERROR = "@app/SET_LOBBY_HAS_ERROR";
 export const SET_LOBBY_MENU_SECTION = "@app/SET_LOBBY_MENU_SECTION";
+export const SET_ERROR = "@app/SET_ERROR";
+export const REMOVE_ERROR = "@app/REMOVE_ERROR";
 
 export type SetPageAction = ActionWithPayload<typeof SET_PAGE, Page>;
 export const setPage = (payload: Page): SetPageAction => ({
@@ -56,6 +65,30 @@ export const setLobbyMenuSection = (
   payload,
 });
 
+export type SetErrorAction = ActionWithPayload<typeof SET_ERROR, ErrorResponse>;
+export const setError = (payload: Error | ErrorResponse): SetErrorAction => {
+  const error = {
+    message: payload.message || "Unknown error occured!",
+    status:
+      (payload as ErrorResponse).status || HTTPStatusCode.INTERNAL_SERVER_ERROR,
+  };
+  return {
+    type: SET_ERROR,
+    payload: error,
+  };
+};
+
+export type RemoveErrorAction = ActionWithPayload<
+  typeof REMOVE_ERROR,
+  Pick<ErrorResponse, "message">
+>;
+export const removeError = (
+  payload: Pick<ErrorResponse, "message">
+): RemoveErrorAction => ({
+  type: REMOVE_ERROR,
+  payload,
+});
+
 // THUNKS
 export const handleNewUser = (): AppThunk => async dispatch => {
   dispatch(setLobbyIsLoading(true));
@@ -68,6 +101,7 @@ export const handleNewUser = (): AppThunk => async dispatch => {
     dispatch(setLobbyIsLoading(false));
     setStorageKey(StorageKeys.UserId, data);
   } catch (error) {
+    dispatch(setError(error));
     dispatch(setLobbyIsLoading(false));
     dispatch(setLobbyHasError(true));
   }
@@ -84,6 +118,7 @@ export const handleCurrentUser = (id: string): AppThunk => async dispatch => {
     dispatch(setLobbyIsLoading(false));
     dispatch(setCurrentGame(data.game.config));
   } catch (error) {
+    dispatch(setError(error));
     dispatch(setLobbyIsLoading(false));
     dispatch(setLobbyHasError(true));
   }
@@ -97,8 +132,6 @@ export const startNewGame = (props: GameConfig): AppThunk => async dispatch => {
   try {
     // TODO: Also record state
     const { data } = await saveGame(config, "initialState");
-    console.log(data);
-
     if (isErrorResponse(data)) {
       throw data;
     }
@@ -107,6 +140,7 @@ export const startNewGame = (props: GameConfig): AppThunk => async dispatch => {
     dispatch(setLobbyIsLoading(false));
     dispatch(setPage(Page.Game));
   } catch (error) {
+    dispatch(setError(error));
     dispatch(setLobbyIsLoading(false));
     dispatch(setLobbyHasError(true));
   }

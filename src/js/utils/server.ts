@@ -7,10 +7,8 @@ const SERVER_URL =
 
 export const REQUEST_TIMEOUT = 15000;
 
-export const REGISTER_USER = `${SERVER_URL}/registerUser`;
-export const SAVE_GAME = `${SERVER_URL}/saveGame`;
-
-export const getUserEndpoint = (id: string) => `${SERVER_URL}/user/${id}`;
+export const USER_ENDPOINT = `${SERVER_URL}/user`;
+export const SAVE_GAME_ENDPOINT = `${SERVER_URL}/saveGame`;
 
 const commonHeaders = {
   "Cache-Control": "no-store, no-cache",
@@ -20,6 +18,8 @@ const commonOptions: AxiosRequestConfig = {
   headers: commonHeaders,
   timeout: REQUEST_TIMEOUT,
 };
+
+export const isNetworkError = (message: string) => message === "Network Error";
 
 export const request = {
   get: <R = any>(url: string) => {

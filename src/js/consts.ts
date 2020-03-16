@@ -1,7 +1,7 @@
-import { Action } from "redux";
+import { Action, Middleware } from "redux";
 import { Game } from "./generator/generator";
 import { ThunkAction } from "redux-thunk";
-import { RootState } from "./store";
+import { RootState } from "./ducks/store";
 
 export enum Page {
   Game,
@@ -67,3 +67,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
+
+export type AppMiddleware = Middleware<{}, RootState>;

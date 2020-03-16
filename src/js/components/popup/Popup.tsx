@@ -13,9 +13,10 @@ export enum PopupText {
   Win = "Win",
   Duplicates = "Duplicates",
   Check = "Check",
+  NetworkError = "NetworkError",
 }
 
-const PopupTextMap = {
+const PopupTextMap: { [key in PopupText]: JSX.Element } = {
   [PopupText.Solve]: <span>Are you sure you want to solve?</span>,
   [PopupText.Reset]: <span>Are you sure you want to reset?</span>,
   [PopupText.Win]: (
@@ -27,6 +28,11 @@ const PopupTextMap = {
   ),
   [PopupText.Duplicates]: <span>Some cell values are incorrect.</span>,
   [PopupText.Check]: <span>Correct so far!</span>,
+  [PopupText.NetworkError]: (
+    <span>
+      Your network connection is down. Please check your network and try later.
+    </span>
+  ),
 };
 
 export interface PopupProps {

@@ -6,23 +6,31 @@ import {
   HidePopupAction,
 } from "./actions";
 import { PopupProps } from "../../popup/Popup";
-import { SET_CURRENT_GAME, SetCurrentGameAction } from "../../app/ducks/actions";
-import { ResetGameToolsAction, RESET_GAME_TOOLS } from "../../game-page/ducks/actions";
+import {
+  SET_CURRENT_GAME,
+  SetCurrentGameAction,
+} from "../../app/ducks/actions";
+import {
+  ResetGameToolsAction,
+  RESET_GAME_TOOLS,
+} from "../../game-page/ducks/actions";
 
 type State = PopupProps;
 
-type Actions = (
+type Actions =
   | ShowPopupAction
   | HidePopupAction
   | SetCurrentGameAction
-  | ResetGameToolsAction
-);
+  | ResetGameToolsAction;
 
 const initialState: State = {
   hidden: true,
 };
 
-export const popupReducer: Reducer<State, Actions> = (state = initialState, action) => {
+export const popupReducer: Reducer<State, Actions> = (
+  state = initialState,
+  action
+) => {
   switch (action.type) {
     case SHOW_POPUP:
       return {

@@ -12,8 +12,13 @@ import {
   SET_LOBBY_IS_LOADING,
   SET_LOBBY_HAS_ERROR,
   SET_LOBBY_MENU_SECTION,
+  SetErrorAction,
+  RemoveErrorAction,
+  SET_ERROR,
+  REMOVE_ERROR,
 } from "./actions";
 import { MenuSection } from "../../menu-content/types";
+import { ErrorResponse } from "./requests";
 
 interface State {
   page: Page;
@@ -21,6 +26,7 @@ interface State {
   lobbyIsLoading: boolean;
   lobbyHasError: boolean;
   lobbyMenuSection: MenuSection | undefined;
+  errors: ErrorResponse[];
 }
 
 type Actions =
@@ -28,7 +34,9 @@ type Actions =
   | SetCurrentGameAction
   | SetLobbyHasErrorAction
   | SetLobbyIsLoadingAction
-  | SetLobbyMenuSectionAction;
+  | SetLobbyMenuSectionAction
+  | SetErrorAction
+  | RemoveErrorAction;
 
 const initialState: State = {
   page: Page.Menu,
@@ -36,6 +44,7 @@ const initialState: State = {
   lobbyIsLoading: true,
   lobbyHasError: false,
   lobbyMenuSection: undefined,
+  errors: [],
 };
 
 export const appReducer: Reducer<State, Actions> = (
@@ -43,17 +52,42 @@ export const appReducer: Reducer<State, Actions> = (
   action
 ) => {
   switch (action.type) {
-    case SET_PAGE:
+    case SET_PAGE: {
       return { ...state, page: action.payload };
-    case SET_CURRENT_GAME:
+    }
+    case SET_CURRENT_GAME: {
       return { ...state, currentGame: action.payload };
-    case SET_LOBBY_HAS_ERROR:
+    }
+    case SET_LOBBY_HAS_ERROR: {
       return { ...state, lobbyHasError: action.payload };
-    case SET_LOBBY_IS_LOADING:
+    }
+    case SET_LOBBY_IS_LOADING: {
       return { ...state, lobbyIsLoading: action.payload };
-    case SET_LOBBY_MENU_SECTION:
+    }
+    case SET_LOBBY_MENU_SECTION: {
       return { ...state, lobbyMenuSection: action.payload };
-    default:
+    }
+    case SET_ERROR: {
+      return {
+        ...state,
+        errors: [
+          action.payload,
+          ...state.errors.filter(
+            error => error.message !== action.payload.message
+          ),
+        ],
+      };
+    }
+    case REMOVE_ERROR: {
+      return {
+        ...state,
+        errors: state.errors.filter(
+          error => error.message !== action.payload.message
+        ),
+      };
+    }
+    default: {
       return state;
+    }
   }
 };
