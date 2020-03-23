@@ -5,6 +5,7 @@ import {
   CellCoordinates,
   CellMode,
   CellProps,
+  GamePhase,
 } from "../../../consts";
 import { Action } from "redux";
 import { Game } from "../../../generator/generator";
@@ -17,19 +18,19 @@ import {
   canAutomaticallyUpdateNotesCells,
   resetCellStatus,
 } from "../helpers/helpers";
-import { GameState } from "./reducer";
+import { State } from "./reducer";
 import { getCellProps, getCellMode } from "./selectors";
 import { removeDuplicateNotesCells } from "../helpers/gameNotesCells";
 import { removeDuplicates } from "../../../utils/generalUtils";
 import { showWinPopup, showCheckPopup } from "../../popup/ducks/actions";
-import { toggleSideMenu } from "../../side-menu/ducks/actions";
 
 export const TOGGLE_CELL_MODE = "@game/TOGGLE_CELL_MODE";
 export const SET_CELL_PROPS = "@game/SET_CELL_PROPS";
 export const RESET_GAME_TOOLS = "@game/RESET_GAME_TOOLS";
 export const HIGHLIGHT_CELLS = "@game/HIGHLIGHT_CELLS";
-export const SET_GAME_STATE = "@game/SET_GAME_STATE";
+export const SET_GAME_PHASE = "@game/SET_GAME_PHASE";
 export const SET_CELL_VALUE = "@game/SET_CELL_VALUE";
+export const SET_GAME_STATE = "@game/SET_GAME_STATE";
 
 export type ToggleCellModeAction = Action<typeof TOGGLE_CELL_MODE>;
 export const toggleCellMode = (): ToggleCellModeAction => ({
@@ -59,11 +60,20 @@ export const highLightCells = (payload: CellProps): HighLightCellsAction => ({
   payload,
 });
 
+export type SetGamePhaseAction = ActionWithPayload<
+  typeof SET_GAME_PHASE,
+  GamePhase
+>;
+export const setGamePhase = (payload: GamePhase): SetGamePhaseAction => ({
+  type: SET_GAME_PHASE,
+  payload,
+});
+
 export type SetGameStateAction = ActionWithPayload<
   typeof SET_GAME_STATE,
-  GameState
+  State
 >;
-export const setGameState = (payload: GameState): SetGameStateAction => ({
+export const setGameState = (payload: State): SetGameStateAction => ({
   type: SET_GAME_STATE,
   payload,
 });
@@ -80,25 +90,25 @@ export const setCellValue = (payload: {
   payload,
 });
 
-export const updateGameState = (gameState: GameState): AppThunk => (
+export const updateGamePhase = (phase: GamePhase): AppThunk => (
   dispatch,
   getState
 ) => {
   const game = getCurrentGame(getState());
   const cellProps = getCellProps(getState());
 
-  if (gameState === GameState.New && game) {
+  if (phase === GamePhase.New && game) {
     dispatch(setCellProps(getNewCellProps(game.mask)));
     dispatch(resetGameTools());
-  } else if (gameState === GameState.GameOver && game) {
+  } else if (phase === GamePhase.GameOver && game) {
     dispatch(setCellProps(getEndgameCellProps(game.matrix, cellProps)));
     dispatch(resetGameTools());
-  } else if (gameState === GameState.Win) {
+  } else if (phase === GamePhase.Win) {
     dispatch(resetGameTools());
     showWinPopup(dispatch);
   }
 
-  dispatch(setGameState(gameState));
+  dispatch(setGamePhase(phase));
 };
 
 export const checkForWin = (): AppThunk => (dispatch, getState) => {
@@ -112,9 +122,8 @@ export const checkForWin = (): AppThunk => (dispatch, getState) => {
 
   // displays win message if conditions are met
   if (duplicates.length === 0 && !hasInvalidCells) {
-    dispatch(updateGameState(GameState.Win));
+    dispatch(updateGamePhase(GamePhase.Win));
   } else {
-    dispatch(toggleSideMenu());
     showCheckPopup(dispatch, !!duplicates.length);
   }
 };
@@ -136,7 +145,7 @@ export const updatePencilCells = (): AppThunk => (dispatch, getState) => {
 
   // displays win message if conditions are met
   if (duplicates.length === 0 && !hasInvalidCells) {
-    dispatch(updateGameState(GameState.Win));
+    dispatch(updateGamePhase(GamePhase.Win));
   }
 };
 

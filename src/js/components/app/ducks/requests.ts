@@ -6,6 +6,7 @@ import {
 import { UserData } from "../../../consts";
 import { Game } from "../../../generator/generator";
 import { getStorageKey, StorageKeys } from "../../../utils/localStorage";
+import { State } from "../../game-page/ducks/reducer";
 
 export interface ErrorResponse {
   message: string;
@@ -28,7 +29,10 @@ export const registerUser = () =>
 export const getUser = (id: string) =>
   request.get<UserData | ErrorResponse>(`${USER_ENDPOINT}/${id}`);
 
-export const saveGame = (config: Omit<Game, "shuffle">, state: string) =>
+export const saveGame = (
+  config: Omit<Game, "shuffle">,
+  state: Omit<State, "cellProps"> & { cellProps: string }
+) =>
   request.post<null | ErrorResponse>(SAVE_GAME_ENDPOINT, {
     config,
     state,

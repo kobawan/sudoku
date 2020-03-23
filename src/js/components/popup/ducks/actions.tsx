@@ -1,11 +1,9 @@
-import { ActionWithPayload } from "../../../consts";
+import { ActionWithPayload, GamePhase } from "../../../consts";
 import { PopupProps, PopupText } from "../../popup/Popup";
 import { Action, Dispatch } from "redux";
 import { GameButtonSize } from "../../buttons/Button";
 import { checkSvg } from "../../svg/Icons";
-import { updateGameState } from "../../game-page/ducks/actions";
-import { GameState } from "../../game-page/ducks/reducer";
-import { toggleSideMenu } from "../../side-menu/ducks/actions";
+import { updateGamePhase } from "../../game-page/ducks/actions";
 
 export const SHOW_POPUP = "@popup/SHOW_POPUP";
 export const HIDE_POPUP = "@popup/HIDE_POPUP";
@@ -57,7 +55,6 @@ export const showCheckPopup = (dispatch: Dispatch, hasDuplicates: boolean) => {
 };
 
 export const showResetPopup = (dispatch: Dispatch<any>) => {
-  dispatch(toggleSideMenu());
   dispatch(
     showPopup({
       text: PopupText.Reset,
@@ -65,7 +62,7 @@ export const showResetPopup = (dispatch: Dispatch<any>) => {
         {
           size: GameButtonSize.Small,
           value: "Yes",
-          onClick: () => dispatch(updateGameState(GameState.New)),
+          onClick: () => dispatch(updateGamePhase(GamePhase.New)),
         },
         {
           size: GameButtonSize.Small,
@@ -78,7 +75,6 @@ export const showResetPopup = (dispatch: Dispatch<any>) => {
 };
 
 export const showSolvePopup = (dispatch: Dispatch<any>) => {
-  dispatch(toggleSideMenu());
   dispatch(
     showPopup({
       text: PopupText.Solve,
@@ -86,7 +82,7 @@ export const showSolvePopup = (dispatch: Dispatch<any>) => {
         {
           size: GameButtonSize.Small,
           value: "Yes",
-          onClick: () => dispatch(updateGameState(GameState.GameOver)),
+          onClick: () => dispatch(updateGamePhase(GamePhase.GameOver)),
         },
         {
           size: GameButtonSize.Small,

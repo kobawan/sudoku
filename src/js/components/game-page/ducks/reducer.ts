@@ -1,5 +1,5 @@
 import { Reducer } from "redux";
-import { CellMode, TableCellsMap } from "../../../consts";
+import { CellMode, TableCellsMap, GamePhase } from "../../../consts";
 import {
   ToggleCellModeAction,
   SetCellPropsAction,
@@ -7,12 +7,14 @@ import {
   SET_CELL_PROPS,
   ResetGameToolsAction,
   RESET_GAME_TOOLS,
-  SetGameStateAction,
-  SET_GAME_STATE,
+  SetGamePhaseAction,
+  SET_GAME_PHASE,
   HighLightCellsAction,
   HIGHLIGHT_CELLS,
   SetCellValueAction,
   SET_CELL_VALUE,
+  SetGameStateAction,
+  SET_GAME_STATE,
 } from "./actions";
 import {
   SET_CURRENT_GAME,
@@ -21,17 +23,10 @@ import {
 import { updateCellsCellMode, updateCellsHighlight } from "../helpers/helpers";
 import { getStorageKey, StorageKeys } from "../../../utils/localStorage";
 
-export enum GameState {
-  New,
-  Playing,
-  Win,
-  GameOver,
-}
-
-interface State {
+export interface State {
   cellMode: CellMode;
   cellProps: TableCellsMap;
-  gameState: GameState;
+  gamePhase: GamePhase;
 }
 
 type Actions =
@@ -40,13 +35,14 @@ type Actions =
   | SetCurrentGameAction
   | ResetGameToolsAction
   | HighLightCellsAction
-  | SetGameStateAction
-  | SetCellValueAction;
+  | SetGamePhaseAction
+  | SetCellValueAction
+  | SetGameStateAction;
 
-const initialState: State = {
+export const initialState: State = {
   cellMode: CellMode.Pencil,
   cellProps: {},
-  gameState: GameState.New,
+  gamePhase: GamePhase.New,
 };
 
 export const gameReducer: Reducer<State, Actions> = (
@@ -54,6 +50,8 @@ export const gameReducer: Reducer<State, Actions> = (
   action
 ) => {
   const { cellMode, cellProps } = state;
+
+  // ATTENTION: New actions added to reducer should also be added to save middleware
   switch (action.type) {
     case TOGGLE_CELL_MODE: {
       const newCellMode =
@@ -93,10 +91,10 @@ export const gameReducer: Reducer<State, Actions> = (
         },
       };
     }
-    case SET_GAME_STATE: {
+    case SET_GAME_PHASE: {
       return {
         ...state,
-        gameState: action.payload,
+        gamePhase: action.payload,
       };
     }
     case SET_CELL_PROPS: {
@@ -110,6 +108,9 @@ export const gameReducer: Reducer<State, Actions> = (
         ...state,
         cellMode: CellMode.Pencil,
       };
+    }
+    case SET_GAME_STATE: {
+      return action.payload;
     }
     case SET_CURRENT_GAME: {
       return initialState;

@@ -1,9 +1,10 @@
 import { RootState } from "../../../ducks/store";
-import { GameState } from "./reducer";
+import { GamePhase } from "../../../consts";
 
+export const getGameState = (state: RootState) => state.game;
 export const getCellMode = (state: RootState) => state.game.cellMode;
 export const getCellProps = (state: RootState) => state.game.cellProps;
-export const getGameState = (state: RootState) => state.game.gameState;
+export const getGamePhase = (state: RootState) => state.game.gamePhase;
 export const areCellsDisabled = (state: RootState) => {
-  return [GameState.Win, GameState.GameOver].includes(getGameState(state));
+  return [GamePhase.Win, GamePhase.GameOver].includes(getGamePhase(state));
 };

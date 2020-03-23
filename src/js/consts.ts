@@ -1,6 +1,6 @@
 import { Action, Middleware } from "redux";
 import { Game } from "./generator/generator";
-import { ThunkAction } from "redux-thunk";
+import { ThunkAction, ThunkMiddleware } from "redux-thunk";
 import { RootState } from "./ducks/store";
 
 export enum Page {
@@ -30,6 +30,13 @@ export enum CellMode {
   ReadOnly = "readOnly",
 }
 
+export enum GamePhase {
+  New,
+  Playing,
+  Win,
+  GameOver,
+}
+
 export interface CellProps {
   mode: CellMode;
   withHighlight: boolean;
@@ -49,7 +56,11 @@ export interface CellCoordinates {
 
 export interface GameData {
   config: Game;
-  state: string;
+  state: {
+    cellMode: CellMode;
+    cellProps: string;
+    gamePhase: GamePhase;
+  };
 }
 
 export interface UserData {
@@ -69,3 +80,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 >;
 
 export type AppMiddleware = Middleware<{}, RootState>;
+
+export type AppThunkMiddleware = ThunkMiddleware<RootState>;

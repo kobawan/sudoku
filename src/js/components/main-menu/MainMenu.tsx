@@ -10,11 +10,11 @@ import {
   getLobbyHasError,
   getHasCurrentGame,
 } from "../app/ducks/selectors";
-import { GameConfig, Page, GameDifficulty } from "../../consts";
+import { GameConfig, GameDifficulty } from "../../consts";
 import {
-  setPage,
   setLobbyMenuSection,
   startNewGame,
+  continueGame,
 } from "../app/ducks/actions";
 import { MenuSection } from "../menu-content/types";
 
@@ -39,7 +39,7 @@ export const MainMenu: React.FC = () => {
     {
       value: "Resume",
       disabled: !hasCurrentGame,
-      onClick: hasCurrentGame ? () => dispatch(setPage(Page.Game)) : () => {},
+      onClick: hasCurrentGame ? () => dispatch(continueGame()) : () => {},
     },
     {
       value: "Easy",

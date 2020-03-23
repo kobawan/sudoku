@@ -1,4 +1,10 @@
-import { Page, ActionWithPayload, AppThunk, GameConfig } from "../../../consts";
+import {
+  Page,
+  ActionWithPayload,
+  AppThunk,
+  GameConfig,
+  GamePhase,
+} from "../../../consts";
 import { Game } from "../../../generator/generator";
 import { MenuSection } from "../../menu-content/types";
 import { setStorageKey, StorageKeys } from "../../../utils/localStorage";
@@ -10,6 +16,10 @@ import {
   ErrorResponse,
 } from "./requests";
 import { HTTPStatusCode } from "../../../utils/errorCodes";
+import { getCurrentGame } from "./selectors";
+import { initialState } from "../../game-page/ducks/reducer";
+import { getGameState } from "../../game-page/ducks/selectors";
+import { setGameState, updateGamePhase } from "../../game-page/ducks/actions";
 
 export const SET_PAGE = "@app/SET_PAGE";
 export const SET_CURRENT_GAME = "@app/SET_CURRENT_GAME";
@@ -115,11 +125,18 @@ export const handleCurrentUser = (id: string): AppThunk => async dispatch => {
     if (isErrorResponse(data)) {
       throw data;
     }
-    dispatch(setLobbyIsLoading(false));
 
-    if (data.game) {
-      dispatch(setCurrentGame(data.game.config));
+    if (!data.game) {
+      dispatch(setLobbyIsLoading(false));
+      return;
     }
+    const { state, config } = data.game;
+
+    dispatch(setCurrentGame(config));
+    dispatch(
+      setGameState({ ...state, cellProps: JSON.parse(state.cellProps) })
+    );
+    dispatch(setLobbyIsLoading(false));
   } catch (error) {
     dispatch(setError(error));
     dispatch(setLobbyIsLoading(false));
@@ -134,18 +151,49 @@ export const startNewGame = (props: GameConfig): AppThunk => async dispatch => {
   const { shuffle, ...config } = game;
 
   try {
-    // TODO: Also record state
-    const { data } = await saveGame(config, "initialState");
+    const { data } = await saveGame(config, {
+      ...initialState,
+      cellProps: JSON.stringify(initialState.cellProps),
+    });
     if (isErrorResponse(data)) {
       throw data;
     }
 
     dispatch(setCurrentGame(game));
+    dispatch(updateGamePhase(GamePhase.New));
     dispatch(setLobbyIsLoading(false));
     dispatch(setPage(Page.Game));
   } catch (error) {
     dispatch(setError(error));
     dispatch(setLobbyIsLoading(false));
     dispatch(setLobbyHasError(true));
+  }
+};
+
+export const continueGame = (): AppThunk => dispatch => {
+  dispatch(setPage(Page.Game));
+};
+
+export const save = (): AppThunk => async (dispatch, getState) => {
+  const state = getState();
+  const game = getCurrentGame(state);
+  const gameState = getGameState(state);
+
+  if (!game) {
+    return;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { shuffle, ...config } = game;
+
+  try {
+    const { data } = await saveGame(config, {
+      ...gameState,
+      cellProps: JSON.stringify(gameState.cellProps),
+    });
+    if (isErrorResponse(data)) {
+      throw data;
+    }
+  } catch (error) {
+    dispatch(setError(error));
   }
 };
