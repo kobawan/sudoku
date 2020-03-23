@@ -1,36 +1,18 @@
 const path = require("path");
+const merge = require("webpack-merge");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const devMode = process.env.NODE_ENV !== "production";
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
+const common = require("./webpack.common.js");
 
 const htmlFilePath = path.join(__dirname, "src", "assets", "index.html");
 const jsIndexFilePath = path.join(__dirname, "src", "js", "index.tsx");
 
-const entries = [jsIndexFilePath, htmlFilePath];
-if (devMode) {
-  entries.push("webpack-dev-server/client?http://localhost:8080");
-}
-
-module.exports = {
-  entry: entries,
-  output: {
-    filename: "[name].bundle.js",
-    path: path.resolve(__dirname, "dist"),
-  },
-  stats: {
-    entrypoints: false,
-    modules: false,
-    children: false,
-  },
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-    },
-  },
-  devtool: devMode ? "inline-source-map" : "source-map",
-  resolve: {
-    extensions: [".ts", ".tsx", ".jsx", ".js", ".json", ".less"],
-  },
+module.exports = merge(common, {
+  mode: "production",
+  entry: [jsIndexFilePath, htmlFilePath],
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -50,11 +32,7 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: [
-          devMode ? "style-loader" : MiniCssExtractPlugin.loader,
-          "css-loader",
-          "less-loader",
-        ],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
       },
       {
         test: /\.tsx?$/,
@@ -74,19 +52,14 @@ module.exports = {
     ],
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       favicon: path.join(__dirname, "src", "assets", "favicon.ico"),
       template: htmlFilePath,
     }),
     new MiniCssExtractPlugin({
-      filename: devMode ? "[name].css" : "[name].[hash].css",
-      chunkFilename: devMode ? "[id].css" : "[id].[hash].css",
+      filename: "[name].[hash].css",
+      chunkFilename: "[id].[hash].css",
     }),
   ],
-  devServer: devMode
-    ? {
-        contentBase: path.join(__dirname, "dist"),
-        compress: true,
-      }
-    : undefined,
-};
+});

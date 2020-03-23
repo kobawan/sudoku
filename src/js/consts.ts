@@ -54,7 +54,7 @@ export interface GameData {
 
 export interface UserData {
   _id: string;
-  game: GameData;
+  game?: GameData;
 }
 
 export interface ActionWithPayload<T, P> extends Action<T> {

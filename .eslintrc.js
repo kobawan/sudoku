@@ -23,7 +23,12 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react", "@typescript-eslint", "prettier"],
-  ignorePatterns: ["webpack.config.js", "node_modules"],
+  ignorePatterns: [
+    "webpack.common.js",
+    "webpack.dev.js",
+    "webpack.prod.js",
+    "node_modules",
+  ],
   rules: {
     "no-prototype-builtins": 0,
     "no-unused-vars": 0,

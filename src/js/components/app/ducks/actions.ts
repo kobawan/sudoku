@@ -116,7 +116,10 @@ export const handleCurrentUser = (id: string): AppThunk => async dispatch => {
       throw data;
     }
     dispatch(setLobbyIsLoading(false));
-    dispatch(setCurrentGame(data.game.config));
+
+    if (data.game) {
+      dispatch(setCurrentGame(data.game.config));
+    }
   } catch (error) {
     dispatch(setError(error));
     dispatch(setLobbyIsLoading(false));

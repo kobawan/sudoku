@@ -29,7 +29,7 @@ export const SudokuTable: React.FC<SudokuTableProps> = ({
       rows.push(<tr key={row}>{cols}</tr>);
     }
 
-    return <>{rows}</>;
+    return rows;
   };
 
   return (
