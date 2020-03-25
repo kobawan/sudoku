@@ -15,12 +15,18 @@ import {
   SET_CELL_VALUE,
   SetGameStateAction,
   SET_GAME_STATE,
+  RESET_HIGHLIGHT_CELLS,
+  ResetHighLightCellsAction,
 } from "./actions";
 import {
   SET_CURRENT_GAME,
   SetCurrentGameAction,
 } from "../../app/ducks/actions";
-import { updateCellsCellMode, updateCellsHighlight } from "../helpers/helpers";
+import {
+  updateCellsCellMode,
+  updateCellsHighlight,
+  resetCellsHighlight,
+} from "../helpers/helpers";
 import { getStorageKey, StorageKeys } from "../../../utils/localStorage";
 
 export interface State {
@@ -37,7 +43,8 @@ type Actions =
   | HighLightCellsAction
   | SetGamePhaseAction
   | SetCellValueAction
-  | SetGameStateAction;
+  | SetGameStateAction
+  | ResetHighLightCellsAction;
 
 export const initialState: State = {
   cellMode: CellMode.Pencil,
@@ -73,6 +80,12 @@ export const gameReducer: Reducer<State, Actions> = (
       return {
         ...state,
         cellProps: updateCellsHighlight(cellProps, action.payload),
+      };
+    }
+    case RESET_HIGHLIGHT_CELLS: {
+      return {
+        ...state,
+        cellProps: resetCellsHighlight(cellProps),
       };
     }
     case SET_CELL_VALUE: {

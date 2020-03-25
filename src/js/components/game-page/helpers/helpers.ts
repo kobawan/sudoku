@@ -146,3 +146,18 @@ export const updateCellsHighlight = (
 
   return newCellProps;
 };
+
+export const resetCellsHighlight = (cellProps: TableCellsMap) => {
+  const newCellProps: TableCellsMap = {};
+
+  for (const key in cellProps) {
+    if (cellProps.hasOwnProperty(key)) {
+      newCellProps[key] = {
+        ...cellProps[key],
+        withHighlight: false,
+      };
+    }
+  }
+
+  return newCellProps;
+};

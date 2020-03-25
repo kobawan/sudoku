@@ -28,6 +28,7 @@ export const TOGGLE_CELL_MODE = "@game/TOGGLE_CELL_MODE";
 export const SET_CELL_PROPS = "@game/SET_CELL_PROPS";
 export const RESET_GAME_TOOLS = "@game/RESET_GAME_TOOLS";
 export const HIGHLIGHT_CELLS = "@game/HIGHLIGHT_CELLS";
+export const RESET_HIGHLIGHT_CELLS = "@game/RESET_HIGHLIGHT_CELLS";
 export const SET_GAME_PHASE = "@game/SET_GAME_PHASE";
 export const SET_CELL_VALUE = "@game/SET_CELL_VALUE";
 export const SET_GAME_STATE = "@game/SET_GAME_STATE";
@@ -58,6 +59,11 @@ export type HighLightCellsAction = ActionWithPayload<
 export const highLightCells = (payload: CellProps): HighLightCellsAction => ({
   type: HIGHLIGHT_CELLS,
   payload,
+});
+
+export type ResetHighLightCellsAction = Action<typeof RESET_HIGHLIGHT_CELLS>;
+export const resetHighLightCells = (): ResetHighLightCellsAction => ({
+  type: RESET_HIGHLIGHT_CELLS,
 });
 
 export type SetGamePhaseAction = ActionWithPayload<

@@ -8,6 +8,7 @@ import {
   SET_CELL_PROPS,
   RESET_GAME_TOOLS,
   SET_GAME_STATE,
+  RESET_HIGHLIGHT_CELLS,
 } from "../../components/game-page/ducks/actions";
 import { SET_CURRENT_GAME, save } from "../../components/app/ducks/actions";
 
@@ -20,6 +21,7 @@ const shouldSaveOnActions = [
   RESET_GAME_TOOLS,
   SET_GAME_STATE,
   SET_CURRENT_GAME,
+  RESET_HIGHLIGHT_CELLS,
 ];
 
 const withDebounce = debounce(func => func(), 1000, {
