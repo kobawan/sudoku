@@ -17,6 +17,8 @@ import {
   SET_GAME_STATE,
   RESET_HIGHLIGHT_CELLS,
   ResetHighLightCellsAction,
+  RESET_ERROR_CELLS,
+  ResetErrorCellsAction,
 } from "./actions";
 import {
   SET_CURRENT_GAME,
@@ -26,6 +28,7 @@ import {
   updateCellsCellMode,
   updateCellsHighlight,
   resetCellsHighlight,
+  resetCellsError,
 } from "../helpers/helpers";
 import { getStorageKey, StorageKeys } from "../../../utils/localStorage";
 
@@ -44,7 +47,8 @@ type Actions =
   | SetGamePhaseAction
   | SetCellValueAction
   | SetGameStateAction
-  | ResetHighLightCellsAction;
+  | ResetHighLightCellsAction
+  | ResetErrorCellsAction;
 
 export const initialState: State = {
   cellMode: CellMode.Pencil,
@@ -86,6 +90,12 @@ export const gameReducer: Reducer<State, Actions> = (
       return {
         ...state,
         cellProps: resetCellsHighlight(cellProps),
+      };
+    }
+    case RESET_ERROR_CELLS: {
+      return {
+        ...state,
+        cellProps: resetCellsError(cellProps),
       };
     }
     case SET_CELL_VALUE: {

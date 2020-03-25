@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState, useCallback } from "react";
+import cx from "classnames";
 import {
   StorageKeys,
   getStorageKey,
@@ -10,38 +11,33 @@ import "./checkbox.less";
 export interface CheckBoxProps {
   text: string;
   storageKey: StorageKeys;
+  onChange?: (isChecked: boolean) => void;
 }
 
-interface CheckboxState {
-  isChecked: boolean;
-}
+export const Checkbox: React.FC<CheckBoxProps> = ({
+  text,
+  storageKey,
+  onChange,
+}) => {
+  const [isChecked, setIsChecked] = useState(!!getStorageKey(storageKey));
+  const onChangeHandler = useCallback(() => {
+    const newChecked = !isChecked;
+    setStorageKey(storageKey, newChecked);
+    setIsChecked(newChecked);
+    if (onChange) {
+      onChange(newChecked);
+    }
+  }, [isChecked, setIsChecked, storageKey, onChange]);
 
-export class Checkbox extends React.PureComponent<
-  CheckBoxProps,
-  CheckboxState
-> {
-  public state: CheckboxState = {
-    isChecked: !!getStorageKey(this.props.storageKey),
-  };
-
-  public render() {
-    const checked = this.state.isChecked ? "checked" : "";
-    return (
-      <label className={`checkbox-label ${checked}`}>
-        <input
-          className="checkbox"
-          type="checkbox"
-          checked={this.state.isChecked}
-          onChange={this.onChange}
-        />
-        <span>{this.props.text}</span>
-      </label>
-    );
-  }
-
-  private onChange = () => {
-    const isChecked = !this.state.isChecked;
-    setStorageKey(this.props.storageKey, isChecked);
-    this.setState({ isChecked });
-  };
-}
+  return (
+    <label className={cx("checkbox-label", isChecked && "checked")}>
+      <input
+        className="checkbox"
+        type="checkbox"
+        checked={isChecked}
+        onChange={onChangeHandler}
+      />
+      <span>{text}</span>
+    </label>
+  );
+};

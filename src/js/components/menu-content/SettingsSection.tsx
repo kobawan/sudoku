@@ -1,41 +1,56 @@
-import * as React from "react";
+import React, { useCallback } from "react";
+import { useDispatch } from "react-redux";
 
 import { MenuContentSection } from "./MenuContentSection";
 import { SharedSectionProps, MenuSection } from "./types";
 import { Checkbox, CheckBoxProps } from "../checkbox/Checkbox";
 import { StorageKeys } from "../../utils/localStorage";
+import { resetErrorCells, updatePencilCells } from "../game-page/ducks/actions";
 
-export class SettingsSection extends React.PureComponent<SharedSectionProps> {
-  public render() {
-    return (
-      <MenuContentSection
-        title={MenuSection.Settings}
-        content={this.getContent()}
-        crossOnClick={this.props.crossOnClick}
-        arrowOnClick={this.props.arrowOnClick}
-      />
-    );
-  }
+const disableHighlightingProps: CheckBoxProps = {
+  text: "Disable cell highlighting",
+  storageKey: StorageKeys.DisableHighlighting,
+};
+const disableAutoNotesRemovalProps: CheckBoxProps = {
+  text: "Disable automatic removal of notes values",
+  storageKey: StorageKeys.DisableAutoNotesRemoval,
+};
 
-  private getContent = () => {
-    const disableInGameProps: CheckBoxProps = {
-      text: "Disable in-game error",
-      storageKey: StorageKeys.DisableInGameError,
-    };
-    const disableHighlightingProps: CheckBoxProps = {
-      text: "Disable cell highlighting",
-      storageKey: StorageKeys.DisableHighlighting,
-    };
-    const disableAutoNotesRemovalProps: CheckBoxProps = {
-      text: "Disable automatic removal of notes values",
-      storageKey: StorageKeys.DisableAutoNotesRemoval,
-    };
-    return (
-      <>
-        <Checkbox {...disableInGameProps} />
-        <Checkbox {...disableHighlightingProps} />
-        <Checkbox {...disableAutoNotesRemovalProps} />
-      </>
-    );
+export const SettingsSection: React.FC<SharedSectionProps> = ({
+  crossOnClick,
+  arrowOnClick,
+}) => {
+  const dispatch = useDispatch();
+  const onErrorDisabledChange = useCallback(
+    (isChecked: boolean) => {
+      if (isChecked) {
+        dispatch(resetErrorCells());
+      } else {
+        dispatch(updatePencilCells());
+      }
+    },
+    [dispatch]
+  );
+  const disableInGameProps: CheckBoxProps = {
+    text: "Disable in-game error",
+    storageKey: StorageKeys.DisableInGameError,
+    onChange: onErrorDisabledChange,
   };
-}
+
+  const Content = (
+    <>
+      <Checkbox {...disableInGameProps} />
+      <Checkbox {...disableHighlightingProps} />
+      <Checkbox {...disableAutoNotesRemovalProps} />
+    </>
+  );
+
+  return (
+    <MenuContentSection
+      title={MenuSection.Settings}
+      content={Content}
+      crossOnClick={crossOnClick}
+      arrowOnClick={arrowOnClick}
+    />
+  );
+};

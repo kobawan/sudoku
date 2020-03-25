@@ -19,8 +19,8 @@ import {
 import { MenuSection } from "../menu-content/types";
 
 const menuSectionButtons = [
-  MenuSection.Stats,
   MenuSection.Settings,
+  MenuSection.Stats,
   MenuSection.Rules,
   MenuSection.About,
 ];

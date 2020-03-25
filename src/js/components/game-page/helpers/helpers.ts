@@ -161,3 +161,18 @@ export const resetCellsHighlight = (cellProps: TableCellsMap) => {
 
   return newCellProps;
 };
+
+export const resetCellsError = (cellProps: TableCellsMap) => {
+  const newCellProps: TableCellsMap = {};
+
+  for (const key in cellProps) {
+    if (cellProps.hasOwnProperty(key)) {
+      newCellProps[key] = {
+        ...cellProps[key],
+        withError: false,
+      };
+    }
+  }
+
+  return newCellProps;
+};

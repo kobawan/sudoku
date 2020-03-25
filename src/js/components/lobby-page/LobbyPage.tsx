@@ -18,7 +18,7 @@ import {
 import { setLobbyMenuSection } from "../app/ducks/actions";
 
 type MapMenuSectionToComponentIndexSignature = {
-  [k in MenuSection]: React.ComponentClass<SharedSectionProps>;
+  [k in MenuSection]: React.ComponentType<SharedSectionProps>;
 };
 
 const mapMenuSectionToComponent: MapMenuSectionToComponentIndexSignature = {
