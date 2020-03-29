@@ -4,18 +4,18 @@ import { useDispatch } from "react-redux";
 import "./sudokuTable.less";
 
 import { Cell } from "../sudoku-cell/Cell";
-import { TableCellsMap, GameType } from "../../consts";
+import { GameType } from "../../consts";
 import { useOutsideClickHandle } from "../../utils/useOutsideClickHandle";
 import { resetHighLightCells } from "../game-page/ducks/actions";
 
 export interface SudokuTableProps {
-  cellState: TableCellsMap;
   gameType: GameType;
+  gameRatio: number;
 }
 
 export const SudokuTable: React.FC<SudokuTableProps> = ({
   gameType,
-  cellState,
+  gameRatio,
 }) => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLTableElement | null>(null);
@@ -29,10 +29,12 @@ export const SudokuTable: React.FC<SudokuTableProps> = ({
     for (let row = 0; row < gameType; row++) {
       const cols: JSX.Element[] = [];
       for (let col = 0; col < gameType; col++) {
-        const props = cellState[row * gameType + col];
+        const id = row * gameType + col;
+        const grid =
+          Math.floor(row / gameRatio) * gameRatio + Math.floor(col / gameRatio);
         cols.push(
           <td key={col}>
-            <Cell {...props} />
+            <Cell pos={id} col={col} row={row} grid={grid} />
           </td>
         );
       }
@@ -40,7 +42,7 @@ export const SudokuTable: React.FC<SudokuTableProps> = ({
     }
 
     return rows;
-  }, [gameType, cellState]);
+  }, [gameType, gameRatio]);
 
   return (
     <table ref={ref} className="sudoku" id="SudokuTable">

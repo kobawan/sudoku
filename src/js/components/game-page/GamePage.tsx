@@ -1,5 +1,4 @@
 import React from "react";
-import cx from "classnames";
 
 import "./gamePage.less";
 
@@ -15,10 +14,10 @@ export interface GamePageProps {
 
 export const GamePage: React.FC<GamePageProps> = ({ game, returnToLobby }) => {
   return (
-    <div className={cx("game")}>
+    <div className="game">
       <SideMenu returnToLobby={returnToLobby} />
       <div className="game-wrapper">
-        <SudokuTable gameType={game.gameType} />
+        <SudokuTable gameType={game.gameType} gameRatio={game.ratio} />
         <Slider />
       </div>
     </div>

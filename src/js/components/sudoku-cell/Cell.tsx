@@ -4,13 +4,8 @@ import cx from "classnames";
 
 import "./cell.less";
 
-import { CellMode, CellProps } from "../../consts";
-import {
-  getCellPosFromElement,
-  findCoordinates,
-  arrowKeys,
-  selectCellContent,
-} from "./helpers";
+import { CellMode } from "../../consts";
+import { arrowKeys, selectCellContent } from "./helpers";
 import {
   highLightCells,
   updateNotesCells,
@@ -19,23 +14,23 @@ import {
 } from "../game-page/ducks/actions";
 import {
   getCellMode,
-  getCellProps,
   areCellsDisabled,
+  getCellPropsById,
 } from "../game-page/ducks/selectors";
-import { getCurrentGame } from "../app/ducks/selectors";
-import { Game } from "../../generator/generator";
 
-export const Cell: React.FC<CellProps> = ({
-  mode,
-  value,
-  withError,
-  withHighlight,
-}) => {
+interface CellComponentProps {
+  pos: number;
+  col: number;
+  row: number;
+  grid: number;
+}
+
+export const Cell: React.FC<CellComponentProps> = ({ pos, col, row, grid }) => {
   const dispatch = useDispatch();
   const cellMode = useSelector(getCellMode);
-  const cellProps = useSelector(getCellProps);
-  const game = useSelector(getCurrentGame) as Game;
+  const currentCellProps = useSelector(getCellPropsById(pos));
   const isDisabled = useSelector(areCellsDisabled);
+  const { mode, value, withError, withHighlight } = currentCellProps;
 
   const onSelect = (
     e:
@@ -43,18 +38,15 @@ export const Cell: React.FC<CellProps> = ({
       | React.MouseEvent<HTMLTextAreaElement>
   ) => {
     const cell = e.target as HTMLTextAreaElement;
-    const pos = getCellPosFromElement({ game, cell });
-    const props = cellProps[pos];
-    selectCellContent({ cell, props, cellMode });
-    dispatch(highLightCells(props));
+    selectCellContent({ cell, props: currentCellProps, cellMode });
+    dispatch(highLightCells(currentCellProps));
   };
 
   const onKeyup: React.KeyboardEventHandler<HTMLTextAreaElement> = e => {
-    const cell = e.target as HTMLTextAreaElement;
-    const coor = findCoordinates(game.ratio, cell);
+    const coor = { x: row, y: col, grid };
 
     // removes notes from column, row and grid where the pencil value was inserted, if enabled in settings
-    dispatch(updateNotesCells(findCoordinates(game.ratio, cell)));
+    dispatch(updateNotesCells(coor));
 
     // resets highlights, shows cell errors if enabled in settings and checks if game is solved
     dispatch(updatePencilCells());
@@ -65,7 +57,6 @@ export const Cell: React.FC<CellProps> = ({
 
   const onInput: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
     const cell = e.target as HTMLTextAreaElement;
-    const pos = getCellPosFromElement({ game, cell });
 
     // Filters invalid inputs updates cell with new value and mode
     dispatch(updateCellValue(pos, cell.value));
@@ -73,6 +64,7 @@ export const Cell: React.FC<CellProps> = ({
 
   return (
     <textarea
+      id={`cell-${pos}`}
       readOnly={mode === CellMode.ReadOnly || isDisabled}
       maxLength={mode !== CellMode.Notes ? 1 : 9}
       rows={1}
