@@ -1,5 +1,4 @@
 import { Action, Middleware } from "redux";
-import { Game } from "./generator/generator";
 import { ThunkAction, ThunkMiddleware } from "redux-thunk";
 import { RootState } from "./ducks/store";
 
@@ -54,18 +53,15 @@ export interface CellCoordinates {
   grid: number;
 }
 
-export interface GameData {
-  config: Game;
-  state: {
-    cellMode: CellMode;
-    cellProps: string;
-    gamePhase: GamePhase;
-  };
+export interface User {
+  username: string;
+  id: string;
 }
 
-export interface UserData {
-  _id: string;
-  game?: GameData;
+export interface RequestError {
+  message: string;
+  status?: number;
+  isValidationError?: boolean;
 }
 
 export interface ActionWithPayload<T, P> extends Action<T> {

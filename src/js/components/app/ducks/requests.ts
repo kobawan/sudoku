@@ -1,40 +1,50 @@
 import {
-  USER_ENDPOINT,
   SAVE_GAME_ENDPOINT,
   request,
+  LOGIN_ENDPOINT,
+  REGISTER_ENDPOINT,
 } from "../../../utils/server";
-import { UserData } from "../../../consts";
 import { Game } from "../../../generator/generator";
-import { getStorageKey, StorageKeys } from "../../../utils/localStorage";
 import { State } from "../../game-page/ducks/reducer";
+import { CellMode, GamePhase } from "../../../consts";
 
-export interface ErrorResponse {
+interface ErrorResponse {
+  type: "fail";
   message: string;
-  status: number;
+  isValidationError?: boolean;
 }
 
-export const isErrorResponse = <D>(
-  data: D | ErrorResponse
-): data is ErrorResponse => {
-  try {
-    return (data as ErrorResponse).status !== undefined;
-  } catch {
-    return false;
-  }
-};
+export interface UserData {
+  _id: string;
+  username: string;
+  gameConfig: Game | null;
+  gameState: {
+    cellMode: CellMode;
+    cellProps: string;
+    gamePhase: GamePhase;
+  } | null;
+}
 
-export const registerUser = () =>
-  request.post<string | ErrorResponse>(USER_ENDPOINT);
+interface SuccessResponse {
+  type: "success";
+}
 
-export const getUser = (id: string) =>
-  request.get<UserData | ErrorResponse>(`${USER_ENDPOINT}/${id}`);
+type Response<D = {}> = ErrorResponse | (SuccessResponse & D);
 
-export const saveGame = (
-  config: Omit<Game, "shuffle">,
-  state: Omit<State, "cellProps"> & { cellProps: string }
-) =>
-  request.post<null | ErrorResponse>(SAVE_GAME_ENDPOINT, {
-    config,
-    state,
-    id: getStorageKey(StorageKeys.UserId),
+export const registerUser = (username: string, password: string) =>
+  request.post<Response<{ user: UserData }>>(REGISTER_ENDPOINT, {
+    username,
+    password,
   });
+
+export const getUser = (username: string, password: string) =>
+  request.post<Response<{ user: UserData }>>(LOGIN_ENDPOINT, {
+    username,
+    password,
+  });
+
+export const saveGame = (body: {
+  config: Omit<Game, "shuffle">;
+  state: Omit<State, "cellProps"> & { cellProps: string };
+  id: string;
+}) => request.post<Response>(SAVE_GAME_ENDPOINT, body);

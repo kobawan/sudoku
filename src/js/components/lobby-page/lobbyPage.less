@@ -1,28 +1,39 @@
 .lobby {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: visible;
+  opacity: 1;
+
+  &.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .lobby-wrapper {
+    height: 25rem;
+    max-height: 90%;
+    width: 100%;
+    max-width: 22.5rem;
     display: flex;
-    justify-content: center;
+    flex-flow: column nowrap;
     align-items: center;
-    visibility: visible;
-    opacity: 1;
+    justify-content: space-between;
 
-    &.hidden {
-        visibility: hidden;
-        opacity: 0;
+    .menu-logo {
+      font: bold 5.625em "dekiru", corbel, sans-serif;
+      margin: 0;
+      height: 1em;
+      user-select: none;
     }
 
-    .lobby-wrapper {
-        height: 25rem;
-        max-height: 90%;
-        width: 100%;
-        max-width: 22.5rem;
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        justify-content: space-between;
+    .loading {
+      width: 2em;
     }
+  }
 }

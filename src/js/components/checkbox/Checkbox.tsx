@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import cx from "classnames";
 import {
-  StorageKeys,
+  LocalStorageKeys,
   getStorageKey,
   setStorageKey,
 } from "../../utils/localStorage";
@@ -10,7 +10,7 @@ import "./checkbox.less";
 
 export interface CheckBoxProps {
   text: string;
-  storageKey: StorageKeys;
+  storageKey: LocalStorageKeys;
   onChange?: (isChecked: boolean) => void;
 }
 

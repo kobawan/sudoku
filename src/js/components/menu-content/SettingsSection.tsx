@@ -4,16 +4,16 @@ import { useDispatch } from "react-redux";
 import { MenuContentSection } from "./MenuContentSection";
 import { SharedSectionProps, MenuSection } from "./types";
 import { Checkbox, CheckBoxProps } from "../checkbox/Checkbox";
-import { StorageKeys } from "../../utils/localStorage";
+import { LocalStorageKeys } from "../../utils/localStorage";
 import { resetErrorCells, updatePencilCells } from "../game-page/ducks/actions";
 
 const disableHighlightingProps: CheckBoxProps = {
   text: "Disable cell highlighting",
-  storageKey: StorageKeys.DisableHighlighting,
+  storageKey: LocalStorageKeys.DisableHighlighting,
 };
 const disableAutoNotesRemovalProps: CheckBoxProps = {
   text: "Disable automatic removal of notes values",
-  storageKey: StorageKeys.DisableAutoNotesRemoval,
+  storageKey: LocalStorageKeys.DisableAutoNotesRemoval,
 };
 
 export const SettingsSection: React.FC<SharedSectionProps> = ({
@@ -33,7 +33,7 @@ export const SettingsSection: React.FC<SharedSectionProps> = ({
   );
   const disableInGameProps: CheckBoxProps = {
     text: "Disable in-game error",
-    storageKey: StorageKeys.DisableInGameError,
+    storageKey: LocalStorageKeys.DisableInGameError,
     onChange: onErrorDisabledChange,
   };
 

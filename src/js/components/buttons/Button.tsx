@@ -1,26 +1,62 @@
 import * as React from "react";
+import cx from "classnames";
 
 import "./button.less";
+import { spinnerSvg } from "../svg/Icons";
+
+export interface LoadingButtonProps {
+  value: string;
+  onClick: React.MouseEventHandler;
+  disabled?: boolean;
+  loading?: boolean;
+}
+
+export const LoadingButton = ({
+  disabled,
+  loading,
+  onClick,
+  value,
+}: LoadingButtonProps) => (
+  <button
+    className={cx("loading-button", loading && "buttonLoading")}
+    disabled={disabled}
+    onClick={onClick}
+    tabIndex={disabled ? -1 : 0}
+  >
+    {loading ? (
+      <>
+        <div className="buttonSvgLoading">{spinnerSvg}</div>
+        <span>Loading</span>
+      </>
+    ) : (
+      value
+    )}
+  </button>
+);
 
 export interface MenuButtonProps {
   value: string;
-  onClick: () => void;
+  onClick: React.MouseEventHandler;
   reversed?: boolean;
   disabled?: boolean;
   index?: number;
 }
 
-export const MenuButton = (props: MenuButtonProps) => (
+export const MenuButton = ({
+  reversed,
+  disabled,
+  onClick,
+  index,
+  value,
+}: MenuButtonProps) => (
   <button
-    className={[
-      "menu-button",
-      props.reversed ? "reversed" : null,
-      props.disabled ? "disabled" : null,
-    ].join(" ")}
-    onClick={props.onClick}
-    key={props.index}
+    className={cx("menu-button", reversed && "reversed")}
+    disabled={disabled}
+    onClick={onClick}
+    key={index}
+    tabIndex={disabled ? -1 : 0}
   >
-    {props.value}
+    {value}
   </button>
 );
 
@@ -49,11 +85,11 @@ export const GameButton = ({
   selected = false,
 }: GameButtonProps) => (
   <button
-    className={[
+    className={cx(
       "game-button",
-      selected ? "selected" : null,
-      size === GameButtonSize.Small ? "small" : null,
-    ].join(" ")}
+      selected && "selected",
+      size === GameButtonSize.Small && "small"
+    )}
     onClick={onClick}
   >
     {value}

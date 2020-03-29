@@ -1,6 +1,6 @@
 import { Reducer } from "redux";
 import { Game } from "../../../generator/generator";
-import { Page } from "../../../consts";
+import { Page, User, RequestError } from "../../../consts";
 import {
   SetPageAction,
   SetCurrentGameAction,
@@ -16,9 +16,10 @@ import {
   RemoveErrorAction,
   SET_ERROR,
   REMOVE_ERROR,
+  SetUserAction,
+  SET_USER,
 } from "./actions";
 import { MenuSection } from "../../menu-content/types";
-import { ErrorResponse } from "./requests";
 
 interface State {
   page: Page;
@@ -26,7 +27,8 @@ interface State {
   lobbyIsLoading: boolean;
   lobbyHasError: boolean;
   lobbyMenuSection: MenuSection | undefined;
-  errors: ErrorResponse[];
+  errors: RequestError[];
+  user: User | null;
 }
 
 type Actions =
@@ -36,15 +38,17 @@ type Actions =
   | SetLobbyIsLoadingAction
   | SetLobbyMenuSectionAction
   | SetErrorAction
-  | RemoveErrorAction;
+  | RemoveErrorAction
+  | SetUserAction;
 
 const initialState: State = {
   page: Page.Menu,
   currentGame: undefined,
-  lobbyIsLoading: true,
+  lobbyIsLoading: false,
   lobbyHasError: false,
   lobbyMenuSection: undefined,
   errors: [],
+  user: null,
 };
 
 export const appReducer: Reducer<State, Actions> = (
@@ -84,6 +88,12 @@ export const appReducer: Reducer<State, Actions> = (
         errors: state.errors.filter(
           error => error.message !== action.payload.message
         ),
+      };
+    }
+    case SET_USER: {
+      return {
+        ...state,
+        user: action.payload,
       };
     }
     default: {

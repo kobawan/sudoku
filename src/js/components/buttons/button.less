@@ -1,5 +1,41 @@
 @import "../../../styles/colors";
 
+.loading-button {
+  font-size: 1.125rem;
+  background-color: @blackColor;
+  border: 0;
+  color: @whiteColor;
+  border-radius: 0 0.6em;
+  min-width: 5.5em;
+  min-height: 1.9em;
+  padding: 0.5em;
+  margin: 0.5em 0;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .buttonSvgLoading {
+    width: 1em;
+    width: 1em;
+    margin: 0 0.5em 1px 0;
+  }
+
+  @media (orientation: landscape) and (max-height: 400px) {
+    margin: 0.3em 0;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    background-color: @cellDisabledColor;
+    color: @blackColor;
+  }
+
+  &:hover:not(.buttonLoading) {
+    background-color: @pinkColor;
+  }
+}
+
 .menu-button {
   background-color: @blackColor;
   border: 0;
@@ -19,7 +55,7 @@
     border-radius: 0.6em 0;
   }
 
-  &.disabled {
+  &:disabled {
     pointer-events: none;
     background-color: @cellDisabledColor;
     color: @blackColor;
@@ -53,4 +89,3 @@
     background-color: @pinkColor;
   }
 }
-

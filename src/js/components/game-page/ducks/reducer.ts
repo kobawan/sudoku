@@ -30,7 +30,7 @@ import {
   resetCellsHighlight,
   resetCellsError,
 } from "../helpers/helpers";
-import { getStorageKey, StorageKeys } from "../../../utils/localStorage";
+import { getStorageKey, LocalStorageKeys } from "../../../utils/localStorage";
 
 export interface State {
   cellMode: CellMode;
@@ -75,7 +75,7 @@ export const gameReducer: Reducer<State, Actions> = (
     }
     case HIGHLIGHT_CELLS: {
       const disableHighlighting = getStorageKey(
-        StorageKeys.DisableHighlighting
+        LocalStorageKeys.DisableHighlighting
       );
       if (disableHighlighting) {
         return state;

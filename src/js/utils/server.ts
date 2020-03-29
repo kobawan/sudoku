@@ -7,8 +7,9 @@ const SERVER_URL =
 
 export const REQUEST_TIMEOUT = 15000;
 
-export const USER_ENDPOINT = `${SERVER_URL}/user`;
-export const SAVE_GAME_ENDPOINT = `${SERVER_URL}/saveGame`;
+export const REGISTER_ENDPOINT = `${SERVER_URL}/register`;
+export const LOGIN_ENDPOINT = `${SERVER_URL}/login`;
+export const SAVE_GAME_ENDPOINT = `${SERVER_URL}/game`;
 
 const commonHeaders = {
   "Cache-Control": "no-store, no-cache",

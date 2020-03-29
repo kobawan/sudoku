@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, MouseEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import cx from "classnames";
 
@@ -56,9 +56,9 @@ export const SideMenu: React.FC<SideMenuProps> = ({ returnToLobby }) => {
             {sideMenuButtons.map((props, index) => (
               <MenuButton
                 {...props}
-                onClick={() => {
+                onClick={(e: MouseEvent) => {
                   toggleMenu();
-                  props.onClick();
+                  props.onClick(e);
                 }}
                 key={index}
               />

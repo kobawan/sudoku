@@ -4,22 +4,20 @@ import {
   AppThunk,
   GameConfig,
   GamePhase,
+  User,
+  RequestError,
 } from "../../../consts";
 import { Game } from "../../../generator/generator";
 import { MenuSection } from "../../menu-content/types";
-import { setStorageKey, StorageKeys } from "../../../utils/localStorage";
-import {
-  registerUser,
-  isErrorResponse,
-  getUser,
-  saveGame,
-  ErrorResponse,
-} from "./requests";
-import { HTTPStatusCode } from "../../../utils/errorCodes";
-import { getCurrentGame } from "./selectors";
+import { registerUser, getUser, saveGame } from "./requests";
+import { getCurrentGame, getUserId } from "./selectors";
 import { initialState } from "../../game-page/ducks/reducer";
 import { getGameState } from "../../game-page/ducks/selectors";
 import { setGameState, updateGamePhase } from "../../game-page/ducks/actions";
+import {
+  setSessionStorageKey,
+  SessionStorageKeys,
+} from "../../../utils/sessionStorage";
 
 export const SET_PAGE = "@app/SET_PAGE";
 export const SET_CURRENT_GAME = "@app/SET_CURRENT_GAME";
@@ -28,6 +26,7 @@ export const SET_LOBBY_HAS_ERROR = "@app/SET_LOBBY_HAS_ERROR";
 export const SET_LOBBY_MENU_SECTION = "@app/SET_LOBBY_MENU_SECTION";
 export const SET_ERROR = "@app/SET_ERROR";
 export const REMOVE_ERROR = "@app/REMOVE_ERROR";
+export const SET_USER = "@app/SET_USER";
 
 export type SetPageAction = ActionWithPayload<typeof SET_PAGE, Page>;
 export const setPage = (payload: Page): SetPageAction => ({
@@ -75,88 +74,98 @@ export const setLobbyMenuSection = (
   payload,
 });
 
-export type SetErrorAction = ActionWithPayload<typeof SET_ERROR, ErrorResponse>;
-export const setError = (payload: Error | ErrorResponse): SetErrorAction => {
-  const error = {
-    message: payload.message || "Unknown error occured!",
-    status:
-      (payload as ErrorResponse).status || HTTPStatusCode.INTERNAL_SERVER_ERROR,
-  };
+export type SetErrorAction = ActionWithPayload<typeof SET_ERROR, RequestError>;
+export const setError = (payload: Error | RequestError): SetErrorAction => {
   return {
     type: SET_ERROR,
-    payload: error,
+    payload,
   };
 };
 
 export type RemoveErrorAction = ActionWithPayload<
   typeof REMOVE_ERROR,
-  Pick<ErrorResponse, "message">
+  Pick<RequestError, "message">
 >;
 export const removeError = (
-  payload: Pick<ErrorResponse, "message">
+  payload: Pick<RequestError, "message">
 ): RemoveErrorAction => ({
   type: REMOVE_ERROR,
   payload,
 });
 
+export type SetUserAction = ActionWithPayload<typeof SET_USER, User>;
+export const setUser = (payload: User) => ({
+  type: SET_USER,
+  payload,
+});
+
 // THUNKS
-export const handleNewUser = (): AppThunk => async dispatch => {
-  dispatch(setLobbyIsLoading(true));
-
+export const loginUser = (
+  username: string,
+  password: string,
+  isNewUser: boolean,
+  showFormError: (msg: string) => void
+): AppThunk => async dispatch => {
   try {
-    const { data } = await registerUser();
-    if (isErrorResponse(data)) {
-      throw data;
+    const { data } = isNewUser
+      ? await registerUser(username, password)
+      : await getUser(username, password);
+
+    if (data.type === "fail") {
+      throw { ...data, status };
     }
-    dispatch(setLobbyIsLoading(false));
-    setStorageKey(StorageKeys.UserId, data);
+
+    const { gameConfig, gameState, _id: id } = data.user;
+
+    if (gameConfig && gameState) {
+      dispatch(setCurrentGame(gameConfig));
+      dispatch(
+        setGameState({
+          ...gameState,
+          cellProps: JSON.parse(gameState.cellProps),
+        })
+      );
+    }
+
+    dispatch(setUser({ id, username }));
+    setSessionStorageKey(SessionStorageKeys.UserId, id);
   } catch (error) {
-    dispatch(setError(error));
-    dispatch(setLobbyIsLoading(false));
-    dispatch(setLobbyHasError(true));
+    if (error.isValidationError) {
+      showFormError(error.message);
+    } else {
+      dispatch(setError(error));
+      dispatch(setLobbyHasError(true));
+    }
   }
 };
 
-export const handleCurrentUser = (id: string): AppThunk => async dispatch => {
+export const startNewGame = (props: GameConfig): AppThunk => async (
+  dispatch,
+  getState
+) => {
   dispatch(setLobbyIsLoading(true));
+  const id = getUserId(getState());
 
-  try {
-    const { data } = await getUser(id);
-    if (isErrorResponse(data)) {
-      throw data;
-    }
-
-    if (!data.game) {
-      dispatch(setLobbyIsLoading(false));
-      return;
-    }
-    const { state, config } = data.game;
-
-    dispatch(setCurrentGame(config));
-    dispatch(
-      setGameState({ ...state, cellProps: JSON.parse(state.cellProps) })
-    );
-    dispatch(setLobbyIsLoading(false));
-  } catch (error) {
-    dispatch(setError(error));
-    dispatch(setLobbyIsLoading(false));
-    dispatch(setLobbyHasError(true));
+  if (!id) {
+    console.error("Cannot save game. User is not logged in");
+    return;
   }
-};
 
-export const startNewGame = (props: GameConfig): AppThunk => async dispatch => {
-  dispatch(setLobbyIsLoading(true));
   const game = new Game(props);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { shuffle, ...config } = game;
 
   try {
-    const { data } = await saveGame(config, {
-      ...initialState,
-      cellProps: JSON.stringify(initialState.cellProps),
+    const { data, status } = await saveGame({
+      config,
+      state: {
+        ...initialState,
+        cellProps: JSON.stringify(initialState.cellProps),
+      },
+      id,
     });
-    if (isErrorResponse(data)) {
-      throw data;
+    if (data.type === "fail") {
+      throw { ...data, status };
     }
 
     dispatch(setCurrentGame(game));
@@ -178,20 +187,30 @@ export const save = (): AppThunk => async (dispatch, getState) => {
   const state = getState();
   const game = getCurrentGame(state);
   const gameState = getGameState(state);
+  const id = getUserId(state);
 
-  if (!game) {
+  if (!game || !id) {
+    console.error(
+      `Cannot save game. ${
+        !game ? "There is no ongoing game to save" : "User is not logged in"
+      }`
+    );
     return;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { shuffle, ...config } = game;
 
   try {
-    const { data } = await saveGame(config, {
-      ...gameState,
-      cellProps: JSON.stringify(gameState.cellProps),
+    const { data, status } = await saveGame({
+      config,
+      state: {
+        ...gameState,
+        cellProps: JSON.stringify(gameState.cellProps),
+      },
+      id,
     });
-    if (isErrorResponse(data)) {
-      throw data;
+    if (data.type === "fail") {
+      throw { ...data, status };
     }
   } catch (error) {
     dispatch(setError(error));

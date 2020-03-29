@@ -11,7 +11,7 @@
 }
 
 .side-menu {
-	position: absolute;
+  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
@@ -36,9 +36,10 @@
     box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.45);
 
     .side-menu-logo {
-			width: 16.25em;
+      width: 16.25em;
       height: 6.125em;
       font-size: 1rem;
+      user-select: none;
 
       @media (orientation: landscape) and (max-height: 335px) {
         font-size: 0.8rem;
@@ -48,11 +49,11 @@
         font-size: calc(0.26rem + 2.5vw);
       }
 
-			text {
-				font: bold 5em "dekiru", corbel, sans-serif;
-				dominant-baseline: text-before-edge;
-			}
-		}
+      text {
+        font: bold 5em "dekiru", corbel, sans-serif;
+        dominant-baseline: text-before-edge;
+      }
+    }
 
     .buttons-wrapper {
       display: flex;

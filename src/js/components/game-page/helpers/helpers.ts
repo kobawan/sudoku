@@ -1,5 +1,5 @@
 import { TableCellsMap, CellMode, CellProps } from "../../../consts";
-import { getStorageKey, StorageKeys } from "../../../utils/localStorage";
+import { getStorageKey, LocalStorageKeys } from "../../../utils/localStorage";
 
 /**
  * Assigns new game values to corresponding cells.
@@ -49,8 +49,10 @@ export const resetCellStatus = (
   duplicates: number[]
 ) => {
   const newCellProps: TableCellsMap = {};
-  const disableInGameError = getStorageKey(StorageKeys.DisableInGameError);
-  const disableHighlighting = getStorageKey(StorageKeys.DisableHighlighting);
+  const disableInGameError = getStorageKey(LocalStorageKeys.DisableInGameError);
+  const disableHighlighting = getStorageKey(
+    LocalStorageKeys.DisableHighlighting
+  );
 
   if (disableHighlighting && disableInGameError) {
     return undefined;
@@ -113,7 +115,7 @@ export const canAutomaticallyUpdateNotesCells = ({
   selectedCell: CellProps;
 }) => {
   const disableAutoNotesRemoval = getStorageKey(
-    StorageKeys.DisableAutoNotesRemoval
+    LocalStorageKeys.DisableAutoNotesRemoval
   );
   return (
     cellMode === CellMode.Pencil &&

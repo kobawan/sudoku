@@ -14,8 +14,11 @@ import {
   getLobbyIsLoading,
   getLobbyHasError,
   getLobbyMenuSection,
+  isUserLoggedIn,
 } from "../app/ducks/selectors";
 import { setLobbyMenuSection } from "../app/ducks/actions";
+import { spinnerSvg } from "../svg/Icons";
+import { LoginForm } from "../login-form/LoginForm";
 
 type MapMenuSectionToComponentIndexSignature = {
   [k in MenuSection]: React.ComponentType<SharedSectionProps>;
@@ -37,42 +40,70 @@ export interface LobbyPageProps {
   hidden: boolean;
 }
 
+const getSectionComponent = (
+  setSection: (section?: MenuSection) => void,
+  currentSection?: MenuSection
+) => {
+  if (!currentSection) {
+    return null;
+  }
+
+  const Component = mapMenuSectionToComponent[currentSection];
+  const setSubSection = () => {
+    if (currentSection === MenuSection.About) {
+      setSection(MenuSection.Contacts);
+      return;
+    }
+    if (currentSection === MenuSection.Contacts) {
+      setSection(MenuSection.About);
+      return;
+    }
+  };
+
+  return (
+    <Component
+      crossOnClick={() => setSection(undefined)}
+      arrowOnClick={setSubSection}
+    />
+  );
+};
+
 export const LobbyPage: React.FC<LobbyPageProps> = ({ hidden }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(getLobbyIsLoading);
   const hasError = useSelector(getLobbyHasError);
+  const isLoggedIn = useSelector(isUserLoggedIn);
   const currentSection = useSelector(getLobbyMenuSection);
-
-  const getSectionComponent = useCallback(() => {
-    if (!currentSection) {
-      return null;
-    }
-
-    const Component = mapMenuSectionToComponent[currentSection];
-    const setSubSection = () => {
-      if (currentSection === MenuSection.About) {
-        dispatch(setLobbyMenuSection(MenuSection.Contacts));
-        return;
-      }
-      if (currentSection === MenuSection.Contacts) {
-        dispatch(setLobbyMenuSection(MenuSection.About));
-        return;
-      }
-    };
-
-    return (
-      <Component
-        crossOnClick={() => dispatch(setLobbyMenuSection(undefined))}
-        arrowOnClick={setSubSection}
-      />
-    );
-  }, [currentSection]);
+  const isReady = !isLoading && !hasError;
+  const setSection = useCallback(
+    (section?: MenuSection) => dispatch(setLobbyMenuSection(section)),
+    [dispatch, setLobbyMenuSection]
+  );
 
   return (
     <div className={cx("lobby", hidden && "hidden")}>
       <div className="lobby-wrapper">
-        <MainMenu />
-        {!isLoading && !hasError && getSectionComponent()}
+        <h1 className="menu-logo">Sudoku</h1>
+        {hasError && (
+          <h3>
+            An error has occurred :(<br></br>Please refresh the page!
+          </h3>
+        )}
+        {isLoading && !hasError && <div className="loading">{spinnerSvg}</div>}
+        {!isLoggedIn && isReady && <LoginForm />}
+        {isLoggedIn && isReady && (
+          <>
+            <MainMenu />
+            {getSectionComponent(setSection, currentSection)}
+          </>
+        )}
+        <a
+          href="https://github.com/kobawan"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          @kobawan
+        </a>
       </div>
     </div>
   );

@@ -8,3 +8,5 @@ export const getLobbyHasError = (state: RootState) => state.app.lobbyHasError;
 export const getLobbyMenuSection = (state: RootState) =>
   state.app.lobbyMenuSection;
 export const getErrors = (state: RootState) => state.app.errors;
+export const isUserLoggedIn = (state: RootState) => !!state.app.user;
+export const getUserId = (state: RootState) => (state.app.user || {}).id;
