@@ -1,4 +1,5 @@
 import * as React from "react";
+import cx from "classnames";
 
 import "./menuContentSection.less";
 
@@ -22,25 +23,31 @@ export class MenuContentSection extends React.PureComponent<
   MenuContentSectionProps
 > {
   public render() {
-    const arrowClassNames = [
-      "arrow",
-      this.props.arrow === ArrowDirection.Left ? "left" : null,
-    ].join(" ");
-
     return (
       <div className="section">
-        <div className="cross" onClick={this.props.crossOnClick}>
+        <button
+          className="cross"
+          onClick={this.props.crossOnClick}
+          tabIndex={0}
+        >
           {crossSvg}
-        </div>
+        </button>
         <div className="header">
           <h2>{this.props.title}</h2>
         </div>
         <div className="scrollable">{this.props.content}</div>
         {this.props.withFooter && (
           <div className="footer">
-            <div className={arrowClassNames} onClick={this.props.arrowOnClick}>
+            <button
+              className={cx(
+                "arrow",
+                this.props.arrow === ArrowDirection.Left && "left"
+              )}
+              onClick={this.props.arrowOnClick}
+              tabIndex={0}
+            >
               {arrowSvg}
-            </div>
+            </button>
           </div>
         )}
       </div>

@@ -65,6 +65,7 @@ export const Cell: React.FC<CellComponentProps> = ({ pos, col, row, grid }) => {
   return (
     <textarea
       id={`cell-${pos}`}
+      tabIndex={-1}
       readOnly={mode === CellMode.ReadOnly || isDisabled}
       maxLength={mode !== CellMode.Notes ? 1 : 9}
       rows={1}

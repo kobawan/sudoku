@@ -40,6 +40,7 @@ export interface MenuButtonProps {
   reversed?: boolean;
   disabled?: boolean;
   index?: number;
+  hidden?: boolean;
 }
 
 export const MenuButton = ({
@@ -48,13 +49,14 @@ export const MenuButton = ({
   onClick,
   index,
   value,
+  hidden,
 }: MenuButtonProps) => (
   <button
     className={cx("menu-button", reversed && "reversed")}
     disabled={disabled}
     onClick={onClick}
     key={index}
-    tabIndex={disabled ? -1 : 0}
+    tabIndex={disabled || hidden ? -1 : 0}
   >
     {value}
   </button>

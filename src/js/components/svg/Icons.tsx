@@ -35,7 +35,7 @@ export const checkSvg = (
 );
 
 export const menuSvg = (
-  <svg viewBox="0 5 30 30" className="icon">
+  <svg viewBox="0 5 30 22" className="icon">
     <path d="M1.875 5.625h26.25v5.625h-26.25zM1.875 13.125h26.25v5.625h-26.25zM1.875 20.625h26.25v5.625h-26.25z"></path>
   </svg>
 );

@@ -1,60 +1,65 @@
 @import "./colors";
 
 @font-face {
-    font-family: "dekiru";
-    src: url("../assets/fonts/Dekiru.ttf") format("truetype");
-    font-weight: normal;
-      font-style: normal;
+  font-family: "dekiru";
+  src: url("../assets/fonts/Dekiru.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
 html {
-    font: 16px "dekiru", corbel, sans-serif;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+  font: 16px "dekiru", corbel, sans-serif;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    background:	@popupBackgroundColor no-repeat center/cover url("../assets/images/background.jpg");
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+  background: @popupBackgroundColor no-repeat center/cover
+    url("../assets/images/background.jpg");
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #root {
-    background-color: fade(@popupBackgroundColor, 40%);
-    width: 100%;
-    height: 100%;
+  background-color: fade(@popupBackgroundColor, 40%);
+  width: 100%;
+  height: 100%;
+}
+
+input,
+button,
+a {
+  &:focus:not(:disabled):not(.disabled) {
+    outline: 3px solid fade(@pinkColor, 60%);
+  }
 }
 
 button {
-    font: 1.25rem "dekiru", corbel, sans-serif;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
+  font: 1.25rem "dekiru", corbel, sans-serif;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 
-    @media (orientation: landscape) and (max-height: 335px) {
-        font-size: 1.1rem;
-    }
-
-    &:focus {
-        outline: none;
-    }
+  @media (orientation: landscape) and (max-height: 335px) {
+    font-size: 1.1rem;
+  }
 }
 
 a {
-    color: @blackColor;
-    text-decoration: none;
+  color: @blackColor;
+  text-decoration: none;
 
-    @media (hover: hover) {
-        &:hover {
-            color: @pinkColor;
-            text-decoration: underline;
-        }
+  @media (hover: hover) {
+    &:hover {
+      color: @pinkColor;
+      text-decoration: underline;
     }
+  }
 }
 
 svg text {
-    user-select: none;
+  user-select: none;
 }

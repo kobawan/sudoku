@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, MouseEvent } from "react";
 import { useDispatch } from "react-redux";
 import cx from "classnames";
 import "./loginForm.less";
@@ -47,13 +47,17 @@ export const LoginForm: React.FC = () => {
     setConfirmPassword("");
     setFormError("");
   }, [setUsername, setPassword, setConfirmPassword, setFormError]);
-  const toggleForm = useCallback(() => {
-    if (isLoading) {
-      return;
-    }
-    setIsRegistration(!isRegistration);
-    resetForm();
-  }, [setIsRegistration, isRegistration, resetForm, isLoading]);
+  const toggleForm = useCallback(
+    (e: MouseEvent) => {
+      e.preventDefault();
+      if (isLoading) {
+        return;
+      }
+      setIsRegistration(!isRegistration);
+      resetForm();
+    },
+    [setIsRegistration, isRegistration, resetForm, isLoading]
+  );
 
   const handleUsernameChange = onFormItemChange(setUsername, setFormError);
   const handlePasswordChange = onFormItemChange(setPassword, setFormError);
@@ -132,13 +136,13 @@ export const LoginForm: React.FC = () => {
         <span className="formError">{formError}</span>
       </div>
       <div className="row">
-        <span
+        <button
           className={cx("formSwitch", isLoading && "disabled")}
           onClick={toggleForm}
           tabIndex={isLoading ? -1 : 0}
         >
           {isRegistration ? "Login" : "Register"}
-        </span>
+        </button>
       </div>
       <div className="row buttonRow">
         <LoadingButton

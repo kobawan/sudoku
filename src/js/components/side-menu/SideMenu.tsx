@@ -61,6 +61,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ returnToLobby }) => {
                   props.onClick(e);
                 }}
                 key={index}
+                hidden={!isOpen}
               />
             ))}
           </div>
@@ -69,14 +70,15 @@ export const SideMenu: React.FC<SideMenuProps> = ({ returnToLobby }) => {
               href="https://github.com/kobawan"
               target="_blank"
               rel="noopener noreferrer"
+              tabIndex={isOpen ? 0 : -1}
             >
               @kobawan
             </a>
           </span>
         </div>
-        <div className="side-menu-button" onClick={toggleMenu}>
+        <button className="side-menu-button" onClick={toggleMenu}>
           {menuSvg}
-        </div>
+        </button>
       </div>
     </div>
   );
