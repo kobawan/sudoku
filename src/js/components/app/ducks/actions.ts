@@ -25,6 +25,7 @@ import {
   SessionStorageKeys,
   getSessionStorageKey,
 } from "../../../utils/sessionStorage";
+import { setFormError } from "../../login-form/ducks/actions";
 
 export const SET_PAGE = "@app/SET_PAGE";
 export const SET_CURRENT_GAME = "@app/SET_CURRENT_GAME";
@@ -151,8 +152,7 @@ export const findUser = (): AppThunk => async dispatch => {
 export const loginUser = (
   username: string,
   password: string,
-  isNewUser: boolean,
-  showFormError: (msg: string) => void
+  isNewUser: boolean
 ): AppThunk => async dispatch => {
   try {
     const { data, status } = isNewUser
@@ -167,7 +167,7 @@ export const loginUser = (
     setSessionStorageKey(SessionStorageKeys.UserId, data.user._id);
   } catch (error) {
     if (error.isValidationError) {
-      showFormError(error.message);
+      dispatch(setFormError(error.message));
     } else {
       dispatch(setError(error));
       dispatch(setLobbyHasError(true));

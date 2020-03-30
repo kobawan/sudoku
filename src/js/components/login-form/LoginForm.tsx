@@ -1,10 +1,19 @@
-import React, { useCallback, useState, MouseEvent } from "react";
-import { useDispatch } from "react-redux";
+import React, { useCallback, MouseEvent } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import cx from "classnames";
 import "./loginForm.less";
 import { LoadingButton } from "../buttons/Button";
 import { loginUser } from "../app/ducks/actions";
-import { onFormItemChange, onFormItemBlur } from "../../utils/formHandlers";
+import { onFormItemBlur } from "../../utils/formHandlers";
+import { getLoginFormProps, isRegistrationForm } from "./ducks/selectors";
+import {
+  toggleFormType,
+  setFormLoading,
+  setUsername,
+  setPassword,
+  setConfirmPassword,
+  setFormError,
+} from "./ducks/actions";
 
 const validateUsername = (value: string) => {
   if (!value) {
@@ -32,61 +41,73 @@ const validateConfirmPassword = (pwd: string, confirmPwd: string) => {
 };
 
 export const LoginForm: React.FC = () => {
-  // TODO move to reducer
+  const {
+    username,
+    password,
+    confirmPassword,
+    formError,
+    formIsLoading,
+  } = useSelector(getLoginFormProps);
+  const isRegistration = useSelector(isRegistrationForm);
   const dispatch = useDispatch();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [formError, setFormError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRegistration, setIsRegistration] = useState(false);
-  const resetForm = useCallback(() => {
-    // FIXME: doesn't work
-    setUsername("");
-    setPassword("");
-    setConfirmPassword("");
-    setFormError("");
-  }, [setUsername, setPassword, setConfirmPassword, setFormError]);
+
   const toggleForm = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-      if (isLoading) {
+      if (formIsLoading) {
         return;
       }
-      setIsRegistration(!isRegistration);
-      resetForm();
+      dispatch(toggleFormType());
     },
-    [setIsRegistration, isRegistration, resetForm, isLoading]
+    [formIsLoading]
   );
 
-  const handleUsernameChange = onFormItemChange(setUsername, setFormError);
-  const handlePasswordChange = onFormItemChange(setPassword, setFormError);
-  const handleConfirmPasswordChange = onFormItemChange(
-    setConfirmPassword,
-    setFormError
+  const setError = useCallback(
+    (error: string) => dispatch(setFormError(error)),
+    []
   );
-  const onUsernameBlur = onFormItemBlur(validateUsername, setFormError);
-  const onPasswordBlur = onFormItemBlur(validatePassword, setFormError);
-  const onConfirmPasswordBlur = onFormItemBlur(
-    () => validateConfirmPassword(password, confirmPassword),
-    setFormError
+  const handleUsernameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(setUsername(e.currentTarget.value));
+    },
+    []
+  );
+  const handlePasswordChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(setPassword(e.currentTarget.value));
+    },
+    []
+  );
+  const handleConfirmPasswordChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(setConfirmPassword(e.currentTarget.value));
+    },
+    []
+  );
+  const onUsernameBlur = useCallback(
+    onFormItemBlur(validateUsername, setError),
+    []
+  );
+  const onPasswordBlur = useCallback(
+    onFormItemBlur(validatePassword, setError),
+    []
+  );
+  const onConfirmPasswordBlur = useCallback(
+    onFormItemBlur(
+      () => validateConfirmPassword(password, confirmPassword),
+      setError
+    ),
+    [password, confirmPassword]
   );
 
   const onSubmit = useCallback(
     async (e: React.MouseEvent<HTMLInputElement>) => {
       e.preventDefault();
 
-      setIsLoading(true);
-      dispatch(
-        loginUser(
-          username.trim(),
-          password.trim(),
-          isRegistration,
-          setFormError
-        )
-      );
+      dispatch(setFormLoading(true));
+      dispatch(loginUser(username.trim(), password.trim(), isRegistration));
     },
-    [username, password, setIsLoading, isRegistration, setFormError]
+    [username, password, isRegistration]
   );
 
   return (
@@ -101,7 +122,8 @@ export const LoginForm: React.FC = () => {
           type="text"
           onChange={handleUsernameChange}
           onBlur={onUsernameBlur}
-          disabled={isLoading}
+          disabled={formIsLoading}
+          value={username}
         />
       </div>
       <div className="row">
@@ -114,7 +136,8 @@ export const LoginForm: React.FC = () => {
           type="password"
           onChange={handlePasswordChange}
           onBlur={onPasswordBlur}
-          disabled={isLoading}
+          disabled={formIsLoading}
+          value={password}
         />
       </div>
       {isRegistration && (
@@ -128,7 +151,8 @@ export const LoginForm: React.FC = () => {
             type="password"
             onChange={handleConfirmPasswordChange}
             onBlur={onConfirmPasswordBlur}
-            disabled={isLoading}
+            disabled={formIsLoading}
+            value={confirmPassword}
           />
         </div>
       )}
@@ -137,9 +161,9 @@ export const LoginForm: React.FC = () => {
       </div>
       <div className="row">
         <button
-          className={cx("formSwitch", isLoading && "disabled")}
+          className={cx("formSwitch", formIsLoading && "disabled")}
           onClick={toggleForm}
-          tabIndex={isLoading ? -1 : 0}
+          tabIndex={formIsLoading ? -1 : 0}
         >
           {isRegistration ? "Login" : "Register"}
         </button>
@@ -148,8 +172,10 @@ export const LoginForm: React.FC = () => {
         <LoadingButton
           onClick={onSubmit}
           value="Submit"
-          disabled={!username || !password.length || !!formError || isLoading}
-          loading={isLoading}
+          disabled={
+            !username || !password.length || !!formError || formIsLoading
+          }
+          loading={formIsLoading}
         />
       </div>
     </form>
