@@ -9,7 +9,13 @@ import {
 } from "../../../consts";
 import { Game } from "../../../generator/generator";
 import { MenuSection } from "../../menu-content/types";
-import { registerUser, getUser, saveGame } from "./requests";
+import {
+  registerUser,
+  getUser,
+  saveGame,
+  getUserFromId,
+  UserData,
+} from "./requests";
 import { getCurrentGame, getUserId } from "./selectors";
 import { initialState } from "../../game-page/ducks/reducer";
 import { getGameState } from "../../game-page/ducks/selectors";
@@ -17,6 +23,7 @@ import { setGameState, updateGamePhase } from "../../game-page/ducks/actions";
 import {
   setSessionStorageKey,
   SessionStorageKeys,
+  getSessionStorageKey,
 } from "../../../utils/sessionStorage";
 
 export const SET_PAGE = "@app/SET_PAGE";
@@ -100,6 +107,47 @@ export const setUser = (payload: User) => ({
 });
 
 // THUNKS
+const initUserInfo = (user: UserData): AppThunk => dispatch => {
+  const { gameConfig, gameState, username, _id: id } = user;
+
+  if (gameConfig && gameState) {
+    dispatch(setCurrentGame(gameConfig));
+    dispatch(
+      setGameState({
+        ...gameState,
+        cellProps: JSON.parse(gameState.cellProps),
+      })
+    );
+  }
+
+  dispatch(setUser({ id, username }));
+};
+
+export const findUser = (): AppThunk => async dispatch => {
+  dispatch(setLobbyIsLoading(true));
+
+  const userId = getSessionStorageKey(SessionStorageKeys.UserId);
+  if (!userId) {
+    dispatch(setLobbyIsLoading(false));
+    return;
+  }
+
+  try {
+    const { data, status } = await getUserFromId(userId);
+
+    if (data.type === "fail") {
+      throw { ...data, status };
+    }
+
+    dispatch(initUserInfo(data.user));
+    dispatch(setLobbyIsLoading(false));
+  } catch (error) {
+    dispatch(setError(error));
+    setSessionStorageKey(SessionStorageKeys.UserId, "");
+    dispatch(setLobbyIsLoading(false));
+  }
+};
+
 export const loginUser = (
   username: string,
   password: string,
@@ -107,7 +155,7 @@ export const loginUser = (
   showFormError: (msg: string) => void
 ): AppThunk => async dispatch => {
   try {
-    const { data } = isNewUser
+    const { data, status } = isNewUser
       ? await registerUser(username, password)
       : await getUser(username, password);
 
@@ -115,20 +163,8 @@ export const loginUser = (
       throw { ...data, status };
     }
 
-    const { gameConfig, gameState, _id: id } = data.user;
-
-    if (gameConfig && gameState) {
-      dispatch(setCurrentGame(gameConfig));
-      dispatch(
-        setGameState({
-          ...gameState,
-          cellProps: JSON.parse(gameState.cellProps),
-        })
-      );
-    }
-
-    dispatch(setUser({ id, username }));
-    setSessionStorageKey(SessionStorageKeys.UserId, id);
+    dispatch(initUserInfo(data.user));
+    setSessionStorageKey(SessionStorageKeys.UserId, data.user._id);
   } catch (error) {
     if (error.isValidationError) {
       showFormError(error.message);

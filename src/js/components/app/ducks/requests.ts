@@ -3,6 +3,7 @@ import {
   request,
   LOGIN_ENDPOINT,
   REGISTER_ENDPOINT,
+  USER_ENDPOINT,
 } from "../../../utils/server";
 import { Game } from "../../../generator/generator";
 import { State } from "../../game-page/ducks/reducer";
@@ -42,6 +43,9 @@ export const getUser = (username: string, password: string) =>
     username,
     password,
   });
+
+export const getUserFromId = (id: string) =>
+  request.get<Response<{ user: UserData }>>(`${USER_ENDPOINT}/${id}`);
 
 export const saveGame = (body: {
   config: Omit<Game, "shuffle">;
