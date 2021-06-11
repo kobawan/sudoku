@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 
 const SERVER_URL =
   process.env.NODE_ENV === "production"
-    ? "https://damp-refuge-15092.herokuapp.com"
+    ? "https://kobawan-sudoku-server.herokuapp.com"
     : "http://localhost:5000";
 
 export const REQUEST_TIMEOUT = 15000;

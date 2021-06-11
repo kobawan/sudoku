@@ -6,7 +6,7 @@ import { SharedSectionProps, MenuSection } from "./types";
 export class AboutSection extends React.PureComponent<SharedSectionProps> {
   public render() {
     const paragraph1 =
-      "Hi! My name is Sara, or Kobawan in the interwebz. I've always been a fan of puzzles, " +
+      "Hi! My name is Sara (Kobawan on github). I've always been a fan of puzzles, " +
       "so when I started programming, I came up with the idea to combine my two joys of " +
       "puzzles and programming, to create this website.";
     const paragraph2 =

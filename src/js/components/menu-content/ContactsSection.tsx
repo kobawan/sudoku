@@ -13,7 +13,7 @@ export class ContactsSection extends React.PureComponent<SharedSectionProps> {
         content={
           <React.Fragment>
             <p>
-              <strong>Developer:</strong> Sara Nordmyr da Cunha
+              <strong>Developer:</strong> Sara Nordmyr da Cunha{" "}
               <a
                 href="https://github.com/kobawan"
                 target="_blank"
