@@ -117,6 +117,7 @@
   padding: 0;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .game-button:disabled {
   pointer-events: none;
@@ -178,10 +179,15 @@
   justify-content: space-between;
 }
 .lobby .lobby-wrapper .menu-logo {
-  font: bold 5.625em "dekiru", corbel, sans-serif;
+  font: bold 5.625rem "dekiru", corbel, sans-serif;
   margin: 0;
   height: 1em;
   user-select: none;
+}
+@media screen and (max-width: 500px) {
+  .lobby .lobby-wrapper .menu-logo {
+    font-size: 4rem;
+  }
 }
 .lobby .lobby-wrapper .loading {
   width: 2em;
@@ -433,10 +439,16 @@
   transition: 0.2s ease-in-out;
   pointer-events: all;
 }
+@media screen and (max-width: 400px) {
+  .side-menu {
+    right: 0;
+  }
+}
 .hidden .side-menu {
   transform: translateX(-100%);
 }
 .side-menu .menu {
+  position: relative;
   background-color: rgba(236, 235, 235, 0.95);
   display: flex;
   flex-flow: column nowrap;
@@ -444,38 +456,32 @@
   justify-content: flex-start;
   padding: 1.25rem;
   box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.45);
+  overflow: scroll;
 }
 .side-menu .menu .side-menu-logo {
-  width: 16.25em;
-  height: 6.125em;
-  font-size: 1rem;
+  font-size: 4rem;
   user-select: none;
-}
-@media (orientation: landscape) and (max-height: 335px) {
-  .side-menu .menu .side-menu-logo {
-    font-size: 0.8rem;
-  }
-}
-@media (orientation: portrait) and (max-width: 374px) {
-  .side-menu .menu .side-menu-logo {
-    font-size: calc(0.26rem + 2.5vw);
-  }
-}
-.side-menu .menu .side-menu-logo text {
-  font: bold 5em "dekiru", corbel, sans-serif;
-  dominant-baseline: text-before-edge;
+  margin: 1rem 0 0 0;
 }
 .side-menu .menu .buttons-wrapper {
   display: flex;
   flex-flow: column nowrap;
   margin: 1.875rem 0;
 }
-@media (orientation: landscape) and (max-height: 450px) {
-  .side-menu .menu {
-    justify-content: space-between;
-  }
+@media (orientation: landscape) and (max-height: 475px) {
   .side-menu .menu .buttons-wrapper {
     margin: 0;
+  }
+}
+@media screen and (max-width: 400px) {
+  .side-menu .menu .buttons-wrapper {
+    margin: 0;
+  }
+}
+@media screen and (max-width: 400px) {
+  .side-menu .menu {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 .side-menu .side-menu-button {
@@ -498,14 +504,9 @@
     fill: #d45287;
   }
 }
-@media (orientation: portrait) and (max-width: 400px) {
-  .side-menu .side-menu-button {
-    font-size: 0.8rem;
-  }
-}
-@media (orientation: landscape) and (max-height: 450px) {
-  .side-menu .side-menu-button {
-    font-size: 0.8rem;
+@media screen and (max-width: 400px) {
+  .side-menu .side-menu-button.opened {
+    display: none;
   }
 }
 .side-menu-overlay {
@@ -627,6 +628,7 @@ textarea:focus {
   font-family: "dekiru";
   src: url(Dekiru.ttf) format("truetype");
   font-weight: normal;
+  font-display: swap;
   font-style: normal;
 }
 html {
@@ -678,4 +680,4 @@ svg text {
 }
 
 
-/*# sourceMappingURL=main.7557cb3f7fe655f590e8.css.map*/
+/*# sourceMappingURL=main.3f1ba24f8112d5efdf0a.css.map*/
