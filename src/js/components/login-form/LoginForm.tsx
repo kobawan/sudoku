@@ -159,15 +159,6 @@ export const LoginForm: React.FC = () => {
       <div className={cx("row", !formError && "hidden")}>
         <span className="formError">{formError}</span>
       </div>
-      <div className="row">
-        <button
-          className={cx("formSwitch", formIsLoading && "disabled")}
-          onClick={toggleForm}
-          tabIndex={formIsLoading ? -1 : 0}
-        >
-          {isRegistration ? "Login" : "Register"}
-        </button>
-      </div>
       <div className="row buttonRow">
         <LoadingButton
           onClick={onSubmit}
@@ -177,6 +168,15 @@ export const LoginForm: React.FC = () => {
           }
           loading={formIsLoading}
         />
+      </div>
+      <div className="row">
+        <button
+          className={cx("formSwitch", formIsLoading && "disabled")}
+          onClick={toggleForm}
+          disabled={formIsLoading}
+        >
+          {isRegistration ? "Login" : "Register"}
+        </button>
       </div>
     </form>
   );
