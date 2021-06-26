@@ -83,7 +83,7 @@ export const LobbyPage: React.FC<LobbyPageProps> = ({ hidden }) => {
   return (
     <div className={cx("lobby", hidden && "hidden")}>
       <div className="lobby-wrapper">
-        <h1 className="menu-logo">Sudoku</h1>
+        <h1 className="menu-logo">Sudokuuu</h1>
         {hasError && (
           <h3>
             An error has occurred :(<br></br>Please refresh the page!

@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/kobawan/sudoku/issues"
   },
-  "homepage": "https://github.com/kobawan/sudoku",
+  "homepage": "https://sudokuuu.com",
   "devDependencies": {
     "@types/classnames": "^2.2.9",
     "@types/lodash.debounce": "^4.0.6",

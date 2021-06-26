@@ -26,10 +26,14 @@
     justify-content: space-between;
 
     .menu-logo {
-      font: bold 5.625em "dekiru", corbel, sans-serif;
+      font: bold 5.625rem "dekiru", corbel, sans-serif;
       margin: 0;
       height: 1em;
       user-select: none;
+
+      @media screen and (max-width: 500px) {
+        font-size: 4rem;
+      }
     }
 
     .loading {

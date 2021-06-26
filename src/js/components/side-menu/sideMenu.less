@@ -22,11 +22,16 @@
   transition: 0.2s ease-in-out;
   pointer-events: all;
 
+  @media screen and (max-width: 400px) {
+    right: 0;
+  }
+
   .hidden & {
     transform: translateX(-100%);
   }
 
   .menu {
+    position: relative;
     background-color: fade(@popupBackgroundColor, 95%);
     display: flex;
     flex-flow: column nowrap;
@@ -34,39 +39,31 @@
     justify-content: flex-start;
     padding: 1.25rem;
     box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.45);
+    overflow: scroll;
 
     .side-menu-logo {
-      width: 16.25em;
-      height: 6.125em;
-      font-size: 1rem;
+      font-size: 4rem;
       user-select: none;
-
-      @media (orientation: landscape) and (max-height: 335px) {
-        font-size: 0.8rem;
-      }
-
-      @media (orientation: portrait) and (max-width: 374px) {
-        font-size: calc(0.26rem + 2.5vw);
-      }
-
-      text {
-        font: bold 5em "dekiru", corbel, sans-serif;
-        dominant-baseline: text-before-edge;
-      }
+      margin: 1rem 0 0 0;
     }
 
     .buttons-wrapper {
       display: flex;
       flex-flow: column nowrap;
       margin: 1.875rem 0;
-    }
 
-    @media (orientation: landscape) and (max-height: 450px) {
-      justify-content: space-between;
-
-      .buttons-wrapper {
+      @media (orientation: landscape) and (max-height: 475px) {
         margin: 0;
       }
+
+      @media screen and (max-width: 400px) {
+        margin: 0;
+      }
+    }
+
+    @media screen and (max-width: 400px) {
+      width: 100%;
+      justify-content: space-between;
     }
   }
 
@@ -92,12 +89,10 @@
       }
     }
 
-    @media (orientation: portrait) and (max-width: 400px) {
-      font-size: 0.8rem;
-    }
-
-    @media (orientation: landscape) and (max-height: 450px) {
-      font-size: 0.8rem;
+    &.opened {
+      @media screen and (max-width: 400px) {
+        display: none;
+      }
     }
   }
 }

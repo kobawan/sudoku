@@ -24,7 +24,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ returnToLobby }) => {
   const sideMenuButtons: MenuButtonProps[] = [
     {
       value: "Return",
-      onClick: returnToLobby,
+      onClick: () => {},
     },
     {
       value: "Reset",
@@ -42,6 +42,10 @@ export const SideMenu: React.FC<SideMenuProps> = ({ returnToLobby }) => {
       value: "Save",
       onClick: () => dispatch(save()),
     },
+    {
+      value: "Quit",
+      onClick: returnToLobby,
+    },
   ];
 
   return (
@@ -49,9 +53,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ returnToLobby }) => {
       <div className="side-menu-overlay" onClick={toggleMenu} />
       <div className="side-menu">
         <div className="menu">
-          <svg className="side-menu-logo">
-            <text>Sudoku</text>
-          </svg>
+          <h1 className="side-menu-logo">Sudokuuu</h1>
           <div className="buttons-wrapper">
             {sideMenuButtons.map((props, index) => (
               <MenuButton
@@ -76,7 +78,10 @@ export const SideMenu: React.FC<SideMenuProps> = ({ returnToLobby }) => {
             </a>
           </span>
         </div>
-        <button className="side-menu-button" onClick={toggleMenu}>
+        <button
+          className={cx("side-menu-button", isOpen && "opened")}
+          onClick={toggleMenu}
+        >
           {menuSvg}
         </button>
       </div>
