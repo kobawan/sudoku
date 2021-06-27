@@ -1,10 +1,13 @@
+import { SavedGame } from "../components/app/ducks/requests";
+
 export enum LocalStorageKeys {
   DisableInGameError = "DisableInGameError",
   DisableHighlighting = "DisableHighlighting",
   DisableAutoNotesRemoval = "DisableAutoNotesRemoval",
+  CurrentGame = "CurrentGame",
 }
 
-type StorageKeysType = boolean;
+type StorageKeysType = boolean | SavedGame | undefined;
 
 const storageKeysToDefaultMap: {
   [key in LocalStorageKeys]: StorageKeysType;
@@ -12,6 +15,7 @@ const storageKeysToDefaultMap: {
   [LocalStorageKeys.DisableInGameError]: false,
   [LocalStorageKeys.DisableHighlighting]: false,
   [LocalStorageKeys.DisableAutoNotesRemoval]: false,
+  [LocalStorageKeys.CurrentGame]: undefined,
 };
 
 export const getStorageKey = (key: LocalStorageKeys): StorageKeysType => {

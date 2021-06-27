@@ -6,7 +6,6 @@ import {
   USER_ENDPOINT,
 } from "../../../utils/server";
 import { Game } from "../../../generator/generator";
-import { State } from "../../game-page/ducks/reducer";
 import { CellMode, GamePhase } from "../../../consts";
 
 interface ErrorResponse {
@@ -24,6 +23,11 @@ export interface UserData {
     cellProps: string;
     gamePhase: GamePhase;
   } | null;
+}
+
+export interface SavedGame {
+  config: NonNullable<UserData["gameConfig"]>;
+  state: NonNullable<UserData["gameState"]>;
 }
 
 interface SuccessResponse {
@@ -47,8 +51,5 @@ export const getUser = (username: string, password: string) =>
 export const getUserFromId = (id: string) =>
   request.get<Response<{ user: UserData }>>(`${USER_ENDPOINT}/${id}`);
 
-export const saveGame = (body: {
-  config: Omit<Game, "shuffle">;
-  state: Omit<State, "cellProps"> & { cellProps: string };
-  id: string;
-}) => request.post<Response>(SAVE_GAME_ENDPOINT, body);
+export const saveGame = (body: SavedGame & { id: string }) =>
+  request.post<Response>(SAVE_GAME_ENDPOINT, body);

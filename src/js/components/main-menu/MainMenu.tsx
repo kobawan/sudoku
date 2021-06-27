@@ -1,10 +1,15 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import cx from "classnames";
 
 import "./mainMenu.less";
 
-import { mapPropsToMenuButtons, MenuButtonProps } from "../buttons/Button";
-import { getHasCurrentGame } from "../app/ducks/selectors";
+import {
+  LinkButton,
+  mapPropsToMenuButtons,
+  MenuButtonProps,
+} from "../buttons/Button";
+import { getHasCurrentGame, isUserLoggedIn } from "../app/ducks/selectors";
 import { GameConfig, GameDifficulty } from "../../consts";
 import {
   setLobbyMenuSection,
@@ -12,6 +17,8 @@ import {
   continueGame,
 } from "../app/ducks/actions";
 import { MenuSection } from "../menu-content/types";
+import { openForm } from "../login-form/ducks/actions";
+import { logout } from "../../utils/logout";
 
 const menuSectionButtons = [
   MenuSection.Settings,
@@ -23,7 +30,14 @@ const menuSectionButtons = [
 export const MainMenu: React.FC = () => {
   const dispatch = useDispatch();
   const hasCurrentGame = useSelector(getHasCurrentGame);
+  const isLoggedIn = useSelector(isUserLoggedIn);
 
+  const showLogin = () => {
+    dispatch(openForm("Login"));
+  };
+  const showRegister = () => {
+    dispatch(openForm("Register"));
+  };
   const generateGame = useCallback((props: GameConfig) => {
     dispatch(startNewGame(props));
   }, []);
@@ -56,9 +70,26 @@ export const MainMenu: React.FC = () => {
   );
 
   return (
-    <div className="column-container">
-      <div className="column">{mapPropsToMenuButtons(leftColumn)}</div>
-      <div className="column">{mapPropsToMenuButtons(rightColumn)}</div>
-    </div>
+    <>
+      <div className="column-container">
+        <div className="column">{mapPropsToMenuButtons(leftColumn)}</div>
+        <div className="column">{mapPropsToMenuButtons(rightColumn)}</div>
+      </div>
+      <div className={cx("column-container", "login-btns")}>
+        {isLoggedIn ? (
+          <LinkButton value="Logout" onClick={logout} />
+        ) : (
+          <>
+            <LinkButton value="Login" textAlign="right" onClick={showLogin} />
+            <span className={"separator"}>/</span>
+            <LinkButton
+              value="Sign Up"
+              textAlign="left"
+              onClick={showRegister}
+            />
+          </>
+        )}
+      </div>
+    </>
   );
 };

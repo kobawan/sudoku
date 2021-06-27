@@ -12,6 +12,10 @@ import {
   SET_FORM_ERROR,
   SET_FORM_LOADING,
   TOGGLE_FORM_TYPE,
+  OPEN_FORM,
+  OpenFormAction,
+  CLOSE_FORM,
+  CloseFormAction,
 } from "./actions";
 
 interface State {
@@ -21,6 +25,7 @@ interface State {
   formError: string;
   formIsLoading: boolean;
   formType: "Login" | "Register";
+  isFormOpen: boolean;
 }
 
 type Actions =
@@ -29,7 +34,9 @@ type Actions =
   | SetConfirmPasswordAction
   | SetFormErrorAction
   | SetFormLoadingAction
-  | ToggleFormTypeAction;
+  | ToggleFormTypeAction
+  | OpenFormAction
+  | CloseFormAction;
 
 const initialState: State = {
   username: "",
@@ -38,6 +45,7 @@ const initialState: State = {
   formError: "",
   formIsLoading: false,
   formType: "Login",
+  isFormOpen: false,
 };
 
 export const loginFormReducer: Reducer<State, Actions> = (
@@ -76,7 +84,18 @@ export const loginFormReducer: Reducer<State, Actions> = (
     case TOGGLE_FORM_TYPE:
       return {
         ...initialState,
+        isFormOpen: true,
         formType: state.formType === "Login" ? "Register" : "Login",
+      };
+    case OPEN_FORM:
+      return {
+        ...initialState,
+        isFormOpen: true,
+        formType: action.payload,
+      };
+    case CLOSE_FORM:
+      return {
+        ...initialState,
       };
     default:
       return state;

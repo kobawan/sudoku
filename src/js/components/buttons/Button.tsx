@@ -102,3 +102,26 @@ export const GameButton = ({
 export const mapPropsToGameButtons = (buttons: GameButtonProps[]) => {
   return buttons.map((props, index) => <GameButton {...props} key={index} />);
 };
+
+export interface LinkButtonProps {
+  value: string;
+  onClick: React.MouseEventHandler;
+  disabled?: boolean;
+  textAlign?: "left" | "right" | "center";
+}
+
+export const LinkButton = ({
+  onClick,
+  value,
+  disabled,
+  textAlign = "center",
+}: LinkButtonProps) => (
+  <button
+    className="link-button"
+    disabled={disabled}
+    onClick={onClick}
+    style={{ textAlign }}
+  >
+    {value}
+  </button>
+);

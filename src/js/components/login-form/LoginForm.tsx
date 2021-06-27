@@ -13,6 +13,7 @@ import {
   setPassword,
   setConfirmPassword,
   setFormError,
+  closeForm,
 } from "./ducks/actions";
 
 const validateUsername = (value: string) => {
@@ -105,10 +106,17 @@ export const LoginForm: React.FC = () => {
       e.preventDefault();
 
       dispatch(setFormLoading(true));
-      dispatch(loginUser(username.trim(), password.trim(), isRegistration));
+      await dispatch(
+        loginUser(username.trim(), password.trim(), isRegistration)
+      );
+      dispatch(closeForm());
     },
     [username, password, isRegistration]
   );
+
+  const onCancel = () => {
+    dispatch(closeForm());
+  };
 
   return (
     <form className="loginForm">
@@ -160,6 +168,7 @@ export const LoginForm: React.FC = () => {
         <span className="formError">{formError}</span>
       </div>
       <div className="row buttonRow">
+        <LoadingButton onClick={onCancel} value="Cancel" />
         <LoadingButton
           onClick={onSubmit}
           value="Submit"

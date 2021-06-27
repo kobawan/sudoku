@@ -23,6 +23,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ returnToLobby }) => {
 
   const sideMenuButtons: MenuButtonProps[] = [
     {
+      // FIXME: Hide this button when screen is smaller
       value: "Return",
       onClick: () => {},
     },

@@ -9,13 +9,7 @@ import {
 } from "../../../consts";
 import { Game } from "../../../generator/generator";
 import { MenuSection } from "../../menu-content/types";
-import {
-  registerUser,
-  getUser,
-  saveGame,
-  getUserFromId,
-  UserData,
-} from "./requests";
+import { registerUser, getUser, getUserFromId, UserData } from "./requests";
 import { getCurrentGame, getUserId } from "./selectors";
 import { initialState } from "../../game-page/ducks/reducer";
 import { getGameState } from "../../game-page/ducks/selectors";
@@ -26,6 +20,9 @@ import {
   getSessionStorageKey,
 } from "../../../utils/sessionStorage";
 import { setFormError } from "../../login-form/ducks/actions";
+import { saveToDatabaseOrStorage } from "../../../utils/saveToDatabaseOrStorage";
+import { getStorageKey, LocalStorageKeys } from "../../../utils/localStorage";
+import { SavedGame } from "./requests";
 
 export const SET_PAGE = "@app/SET_PAGE";
 export const SET_CURRENT_GAME = "@app/SET_CURRENT_GAME";
@@ -108,7 +105,7 @@ export const setUser = (payload: User) => ({
 });
 
 // THUNKS
-const initUserInfo = (user: UserData): AppThunk => dispatch => {
+const initLoggedInUserInfo = (user: UserData): AppThunk => dispatch => {
   const { gameConfig, gameState, username, _id: id } = user;
 
   if (gameConfig && gameState) {
@@ -124,23 +121,41 @@ const initUserInfo = (user: UserData): AppThunk => dispatch => {
   dispatch(setUser({ id, username }));
 };
 
+const initGuestUserInfo = ({
+  config,
+  state,
+}: SavedGame): AppThunk => dispatch => {
+  if (config && state) {
+    dispatch(setCurrentGame(config));
+    dispatch(
+      setGameState({
+        ...state,
+        cellProps: JSON.parse(state.cellProps),
+      })
+    );
+  }
+};
+
 export const findUser = (): AppThunk => async dispatch => {
   dispatch(setLobbyIsLoading(true));
 
   const userId = getSessionStorageKey(SessionStorageKeys.UserId);
-  if (!userId) {
-    dispatch(setLobbyIsLoading(false));
-    return;
-  }
+  const storageGame = getStorageKey(LocalStorageKeys.CurrentGame) as
+    | SavedGame
+    | undefined;
 
   try {
-    const { data, status } = await getUserFromId(userId);
+    if (userId) {
+      const { data, status } = await getUserFromId(userId);
 
-    if (data.type === "fail") {
-      throw { ...data, status };
+      if (data.type === "fail") {
+        throw { ...data, status };
+      }
+      dispatch(initLoggedInUserInfo(data.user));
+    } else if (storageGame) {
+      dispatch(initGuestUserInfo(storageGame));
     }
 
-    dispatch(initUserInfo(data.user));
     dispatch(setLobbyIsLoading(false));
   } catch (error) {
     dispatch(setError(error));
@@ -163,7 +178,7 @@ export const loginUser = (
       throw { ...data, status };
     }
 
-    dispatch(initUserInfo(data.user));
+    dispatch(initLoggedInUserInfo(data.user));
     setSessionStorageKey(SessionStorageKeys.UserId, data.user._id);
   } catch (error) {
     if (error.isValidationError) {
@@ -180,31 +195,23 @@ export const startNewGame = (props: GameConfig): AppThunk => async (
   getState
 ) => {
   dispatch(setLobbyIsLoading(true));
-  const id = getUserId(getState());
+  const userId = getUserId(getState());
 
-  if (!id) {
-    console.error("Cannot save game. User is not logged in");
-    return;
-  }
-
-  const game = new Game(props);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { shuffle, ...config } = game;
+  const config = new Game(props);
 
   try {
-    const { data, status } = await saveGame({
-      config,
-      state: {
-        ...initialState,
-        cellProps: JSON.stringify(initialState.cellProps),
+    await saveToDatabaseOrStorage(
+      {
+        config,
+        state: {
+          ...initialState,
+          cellProps: JSON.stringify(initialState.cellProps),
+        },
       },
-      id,
-    });
-    if (data.type === "fail") {
-      throw { ...data, status };
-    }
+      userId
+    );
 
-    dispatch(setCurrentGame(game));
+    dispatch(setCurrentGame(config));
     dispatch(updateGamePhase(GamePhase.New));
     dispatch(setLobbyIsLoading(false));
     dispatch(setPage(Page.Game));
@@ -221,33 +228,26 @@ export const continueGame = (): AppThunk => dispatch => {
 
 export const save = (): AppThunk => async (dispatch, getState) => {
   const state = getState();
-  const game = getCurrentGame(state);
+  const config = getCurrentGame(state);
   const gameState = getGameState(state);
-  const id = getUserId(state);
+  const userId = getUserId(state);
 
-  if (!game || !id) {
-    console.error(
-      `Cannot save game. ${
-        !game ? "There is no ongoing game to save" : "User is not logged in"
-      }`
-    );
+  if (!config) {
+    console.error(`Cannot save game. There is no ongoing game to save`);
     return;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { shuffle, ...config } = game;
 
   try {
-    const { data, status } = await saveGame({
-      config,
-      state: {
-        ...gameState,
-        cellProps: JSON.stringify(gameState.cellProps),
+    await saveToDatabaseOrStorage(
+      {
+        config,
+        state: {
+          ...gameState,
+          cellProps: JSON.stringify(gameState.cellProps),
+        },
       },
-      id,
-    });
-    if (data.type === "fail") {
-      throw { ...data, status };
-    }
+      userId
+    );
   } catch (error) {
     dispatch(setError(error));
   }

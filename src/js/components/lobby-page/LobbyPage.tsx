@@ -14,11 +14,11 @@ import {
   getLobbyIsLoading,
   getLobbyHasError,
   getLobbyMenuSection,
-  isUserLoggedIn,
 } from "../app/ducks/selectors";
 import { setLobbyMenuSection } from "../app/ducks/actions";
 import { spinnerSvg } from "../svg/Icons";
 import { LoginForm } from "../login-form/LoginForm";
+import { isLoginRegistrationFormOpen } from "../login-form/ducks/selectors";
 
 type MapMenuSectionToComponentIndexSignature = {
   [k in MenuSection]: React.ComponentType<SharedSectionProps>;
@@ -72,13 +72,13 @@ export const LobbyPage: React.FC<LobbyPageProps> = ({ hidden }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(getLobbyIsLoading);
   const hasError = useSelector(getLobbyHasError);
-  const isLoggedIn = useSelector(isUserLoggedIn);
   const currentSection = useSelector(getLobbyMenuSection);
   const isReady = !isLoading && !hasError;
   const setSection = useCallback(
     (section?: MenuSection) => dispatch(setLobbyMenuSection(section)),
     [dispatch, setLobbyMenuSection]
   );
+  const isFormOpen = useSelector(isLoginRegistrationFormOpen);
 
   return (
     <div className={cx("lobby", hidden && "hidden")}>
@@ -90,8 +90,8 @@ export const LobbyPage: React.FC<LobbyPageProps> = ({ hidden }) => {
           </h3>
         )}
         {isLoading && !hasError && <div className="loading">{spinnerSvg}</div>}
-        {!isLoggedIn && isReady && <LoginForm />}
-        {isLoggedIn && isReady && (
+        {isFormOpen && isReady && <LoginForm />}
+        {!isFormOpen && isReady && (
           <>
             <MainMenu />
             {getSectionComponent(setSection, currentSection)}
@@ -101,6 +101,7 @@ export const LobbyPage: React.FC<LobbyPageProps> = ({ hidden }) => {
           href="https://github.com/kobawan"
           target="_blank"
           rel="noopener noreferrer"
+          className={"copyright"}
         >
           @kobawan
         </a>
