@@ -12,6 +12,10 @@ const jsIndexFilePath = path.join(__dirname, "src", "js", "index.tsx");
 module.exports = merge(common, {
   mode: "production",
   entry: [jsIndexFilePath, htmlFilePath],
+  output: {
+    filename: "[name].bundle.[hash].js",
+    path: path.resolve(__dirname, "dist"),
+  },
   devtool: "source-map",
   module: {
     rules: [
