@@ -27,6 +27,9 @@ const menuSectionButtons = [
   MenuSection.About,
 ];
 
+// TODO: Re-enable once backend is back online
+const isLoginRegisterEnabled = false;
+
 export const MainMenu: React.FC = () => {
   const dispatch = useDispatch();
   const hasCurrentGame = useSelector(getHasCurrentGame);
@@ -75,21 +78,23 @@ export const MainMenu: React.FC = () => {
         <div className="column">{mapPropsToMenuButtons(leftColumn)}</div>
         <div className="column">{mapPropsToMenuButtons(rightColumn)}</div>
       </div>
-      <div className={cx("column-container", "login-btns")}>
-        {isLoggedIn ? (
-          <LinkButton value="Logout" onClick={logout} />
-        ) : (
-          <>
-            <LinkButton value="Login" textAlign="right" onClick={showLogin} />
-            <span className={"separator"}>/</span>
-            <LinkButton
-              value="Sign Up"
-              textAlign="left"
-              onClick={showRegister}
-            />
-          </>
-        )}
-      </div>
+      {isLoginRegisterEnabled && (
+        <div className={cx("column-container", "login-btns")}>
+          {isLoggedIn ? (
+            <LinkButton value="Logout" onClick={logout} />
+          ) : (
+            <>
+              <LinkButton value="Login" textAlign="right" onClick={showLogin} />
+              <span className={"separator"}>/</span>
+              <LinkButton
+                value="Sign Up"
+                textAlign="left"
+                onClick={showRegister}
+              />
+            </>
+          )}
+        </div>
+      )}
     </>
   );
 };
