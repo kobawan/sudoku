@@ -133,6 +133,18 @@
 .game-button.selected {
   background-color: #d45287;
 }
+.link-button {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: #000000;
+  font-size: 1rem;
+  background-color: transparent;
+}
+.link-button:hover {
+  color: #d45287;
+  text-decoration: underline;
+}
 
 @keyframes rotating {
   from {
@@ -192,15 +204,29 @@
 .lobby .lobby-wrapper .loading {
   width: 2em;
 }
+.lobby .lobby-wrapper .copyright {
+  font-size: 0.75rem;
+}
 
 .column-container {
   display: flex;
   flex-flow: row nowrap;
 }
+.column-container.login-btns {
+  margin: 0.5rem 0;
+}
+.column-container.login-btns button {
+  width: 4.375rem;
+}
 .column-container .column {
   padding: 0 0.625rem;
   display: flex;
   flex-flow: column nowrap;
+}
+.column-container .separator {
+  font-size: 1.25rem;
+  margin-right: 0.75rem;
+  margin-left: 0.5rem;
 }
 
 .section {
@@ -346,6 +372,9 @@
 }
 .loginForm .row.buttonRow {
   padding: 0 0.625em;
+}
+.loginForm .row.buttonRow button:not(last-child) {
+  margin-right: 0.5rem;
 }
 .loginForm .row .label {
   display: inline-block;
@@ -680,4 +709,4 @@ svg text {
 }
 
 
-/*# sourceMappingURL=main.3f1ba24f8112d5efdf0a.css.map*/
+/*# sourceMappingURL=main.6a425b74038a6c68becb.css.map*/
