@@ -31,9 +31,11 @@
     &.notes-slider {
       transform: translateX(100%);
     }
+  }
 
-    @media (hover: hover) {
-      :hover& {
+  @media (hover: hover) {
+    &:hover {
+      .slider {
         background-color: rgba($pinkColor, 0.4);
         transform: scaleX(1.1);
         transform-origin: left;
