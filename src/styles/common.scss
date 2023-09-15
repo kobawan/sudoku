@@ -1,0 +1,72 @@
+@import "./colors";
+
+@font-face {
+  font-family: "dekiru";
+  src: url("../assets/fonts/Dekiru.ttf") format("truetype");
+  font-weight: normal;
+  font-display: swap;
+  font-style: normal;
+}
+
+html {
+  font:
+    16px "dekiru",
+    corbel,
+    sans-serif;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: $popupBackgroundColor no-repeat center/cover
+    url("../assets/images/background.jpg");
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  background-color: rgba($popupBackgroundColor, 0.4);
+  width: 100%;
+  height: 100%;
+}
+
+input,
+button,
+a {
+  &:focus:not(:disabled):not(.disabled) {
+    outline: 3px solid rgba($pinkColor, 0.6);
+  }
+}
+
+button {
+  font:
+    1.25rem "dekiru",
+    corbel,
+    sans-serif;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  @media (orientation: landscape) and (max-height: 335px) {
+    font-size: 1.1rem;
+  }
+}
+
+a {
+  color: $blackColor;
+  text-decoration: none;
+
+  @media (hover: hover) {
+    &:hover {
+      color: $pinkColor;
+      text-decoration: underline;
+    }
+  }
+}
+
+svg text {
+  user-select: none;
+}

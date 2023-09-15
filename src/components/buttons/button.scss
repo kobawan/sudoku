@@ -1,0 +1,99 @@
+@import "../../styles/colors";
+
+@mixin commonButtonStyles {
+  background-color: $blackColor;
+  border: 0;
+  box-sizing: border-box;
+  color: $whiteColor;
+  transition: 0.3s color;
+
+  &:disabled {
+    pointer-events: none;
+    background-color: $cellDisabledColor;
+    color: $blackColor;
+  }
+}
+
+.loading-button {
+  @include commonButtonStyles;
+  font-size: 1.125rem;
+  min-width: 5.5em;
+  min-height: 1.9em;
+  padding: 0.5em;
+  margin: 0.5em 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0.6em;
+
+  .buttonSvgLoading {
+    width: 1em;
+    width: 1em;
+    margin: 0 0.5em 1px 0;
+  }
+
+  @media (orientation: landscape) and (max-height: 400px) {
+    margin: 0.3em 0;
+  }
+
+  &:hover:not(.buttonLoading) {
+    background-color: $pinkColor;
+  }
+}
+
+.menu-button {
+  @include commonButtonStyles;
+  min-width: 5.5em;
+  min-height: 1.9em;
+  padding: 0.35em;
+  margin: 0.5em 0;
+  border-radius: 0 0.6em;
+
+  @media (orientation: landscape) and (max-height: 400px) {
+    margin: 0.3em 0;
+  }
+
+  &.reversed {
+    border-radius: 0.6em 0;
+  }
+
+  &:hover {
+    background-color: $pinkColor;
+  }
+}
+
+.game-button {
+  @include commonButtonStyles;
+  border-radius: 2.625em;
+  height: 4.1875em;
+  width: 4.125em;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.small {
+    height: 2.5em;
+    width: 2.5em;
+    font-size: 1em;
+  }
+
+  &:hover,
+  &.selected {
+    background-color: $pinkColor;
+  }
+}
+
+.link-button {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: $blackColor;
+  font-size: 1rem;
+  background-color: transparent;
+
+  &:hover {
+    color: $pinkColor;
+    text-decoration: underline;
+  }
+}

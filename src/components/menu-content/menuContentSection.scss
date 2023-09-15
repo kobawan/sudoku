@@ -1,0 +1,95 @@
+@import "../../styles/colors";
+
+.section {
+  box-sizing: border-box;
+  box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  border-radius: 1.875rem 0;
+  padding: 1.25rem;
+  background-color: $popupBackgroundColor;
+  position: fixed;
+  max-width: 90%;
+  max-height: 90%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 31.25rem;
+  height: 25rem;
+  font-size: 1rem;
+  user-select: none;
+
+  .cross {
+    position: absolute;
+    right: 1em;
+    cursor: pointer;
+    border: 0;
+    background: none;
+    transition: 0.5s fill;
+    padding: 0.15em;
+
+    svg {
+      width: 0.8em;
+      height: 0.8em;
+    }
+
+    &:hover {
+      fill: $pinkColor;
+    }
+  }
+
+  .header {
+    h2 {
+      color: $pinkColor;
+      font-size: 1.25em;
+      text-align: center;
+      margin: 0;
+      padding-bottom: 1em;
+    }
+  }
+
+  .scrollable {
+    flex-grow: 2;
+    overflow-y: scroll;
+
+    p {
+      color: $blackColor;
+      margin: 0;
+      padding: 0.3125em 0;
+    }
+  }
+
+  .footer {
+    height: 1.4375em;
+    padding-top: 1.25em;
+
+    .arrow {
+      margin: 0 auto;
+      cursor: pointer;
+      transition: 0.5s fill;
+      border: 0;
+      background: none;
+      display: block;
+      padding: 0.15em;
+
+      svg {
+        height: 1em;
+        width: 1em;
+      }
+
+      &.left {
+        transform: rotate(180deg);
+      }
+
+      &:hover {
+        fill: $pinkColor;
+      }
+    }
+  }
+
+  a {
+    color: $pinkColor;
+    text-decoration: underline;
+  }
+}

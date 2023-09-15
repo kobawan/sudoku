@@ -1,0 +1,49 @@
+@import "../../styles/colors";
+
+.message-popup {
+  position: fixed;
+  right: 0;
+  top: 1.875em;
+  padding: 1.25em;
+  width: 16.25em;
+  background-color: $popupBackgroundColor;
+  box-shadow: 0 0 1.25em rgba(0, 0, 0, 0.45);
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  font-size: 1rem;
+  transform: translateX(0);
+
+  &.hidden {
+    transform: translateX(100%);
+    box-shadow: none;
+  }
+
+  .message {
+    font-size: 1.25em;
+    color: $blackColor;
+    cursor: default;
+    padding-bottom: 0.5em;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 5em;
+
+    .icon {
+      fill: $whiteColor;
+      cursor: pointer;
+      pointer-events: none;
+      width: 1em;
+      height: 1em;
+    }
+  }
+
+  @media (orientation: portrait) and (max-width: 400px) {
+    font-size: calc(0.5rem + 1.2vw);
+  }
+
+  @media (orientation: landscape) and (max-height: 450px) {
+    font-size: calc(0.5rem + 1.1vh);
+  }
+}

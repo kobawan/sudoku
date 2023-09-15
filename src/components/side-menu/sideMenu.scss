@@ -1,0 +1,112 @@
+@import "../../styles/colors";
+
+.side-menu-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.side-menu {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  transition: 0.2s ease-in-out;
+  pointer-events: all;
+
+  @media screen and (max-width: 400px) {
+    right: 0;
+  }
+
+  .hidden & {
+    transform: translateX(-100%);
+  }
+
+  .menu {
+    position: relative;
+    background-color: rgba($popupBackgroundColor, 0.95);
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1.25rem;
+    box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.45);
+    overflow: scroll;
+
+    .side-menu-logo {
+      font-size: 4rem;
+      user-select: none;
+      margin: 1rem 0 0 0;
+    }
+
+    .buttons-wrapper {
+      display: flex;
+      flex-flow: column nowrap;
+      margin: 1.875rem 0;
+
+      @media (orientation: landscape) and (max-height: 475px) {
+        margin: 0;
+      }
+
+      @media screen and (max-width: 400px) {
+        margin: 0;
+      }
+    }
+
+    @media screen and (max-width: 400px) {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .side-menu-button {
+    position: absolute;
+    left: 110%;
+    top: 1.875em;
+    fill: black;
+    font-size: 1rem;
+    border: 0;
+    background: none;
+    padding: 0 0.1875em;
+
+    svg {
+      width: 2em;
+      height: 2em;
+    }
+
+    @media (hover: hover) {
+      :hover {
+        cursor: pointer;
+        fill: $pinkColor;
+      }
+    }
+
+    &.opened {
+      @media screen and (max-width: 400px) {
+        display: none;
+      }
+    }
+  }
+}
+
+.side-menu-overlay {
+  width: 100%;
+  height: 100%;
+  pointer-events: all;
+
+  .opened & {
+    background-color: rgba($popupBackgroundColor, 0.5);
+  }
+
+  .hidden & {
+    display: none;
+  }
+}
